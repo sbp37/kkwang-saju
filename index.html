@@ -170,9 +170,9 @@ footer{text-align:center;font-size:10px;color:#8B8178;margin-top:28px;line-heigh
 
 /* ===== v3 실제 에셋 UI ===== */
 :root{--page:#F6E7C9;--card:#FFFEF9;--card2:#FFFDF5;--coral:#E96F4E;--brown:#55351F;--soft-line:#E7CFA8;--lift:0 13px 0 rgba(145,92,43,.045),0 18px 34px rgba(96,63,30,.12)}
-body{background-color:var(--page);background-image:linear-gradient(rgba(255,248,231,.68),rgba(255,248,231,.68)),url("assets/bg_main.jpg");background-size:cover;background-position:center top;background-attachment:fixed;color:var(--brown)}
-body[data-stage="chart"],body[data-stage="loading"]{background-image:linear-gradient(rgba(255,249,235,.72),rgba(255,249,235,.72)),url("assets/bg_detail.jpg")}
-body[data-stage="result"]{background-image:linear-gradient(rgba(255,249,235,.74),rgba(255,249,235,.74)),url("assets/bg_luck.jpg")}
+body{background-color:var(--page);background-image:linear-gradient(rgba(255,248,231,.68),rgba(255,248,231,.68)),url("assets/bg_main.webp");background-size:cover;background-position:center top;background-attachment:fixed;color:var(--brown)}
+body[data-stage="chart"],body[data-stage="loading"]{background-image:linear-gradient(rgba(255,249,235,.72),rgba(255,249,235,.72)),url("assets/bg_detail.webp")}
+body[data-stage="result"]{background-image:linear-gradient(rgba(255,249,235,.74),rgba(255,249,235,.74)),url("assets/bg_luck.webp")}
 body:before{background:rgba(255,248,234,.12);opacity:1}
 .app-shell{max-width:720px;padding:0 16px 120px}
 .topbar{padding:13px 3px 9px;position:relative;z-index:5}
@@ -207,7 +207,7 @@ select,input[type=number],input[type=password]{background:#fff;border-color:#E4C
 .loading-art{width:260px;height:240px}.loading-art img{width:100%;height:100%;object-fit:contain;animation:bob 1.5s ease-in-out infinite;filter:drop-shadow(0 12px 10px rgba(85,52,25,.12))}
 .result-hero{min-height:220px;color:var(--brown);border-radius:27px;padding:24px 44% 22px 21px;background:linear-gradient(135deg,#FFFEF9,#FFF3DD);overflow:hidden}.result-hero:after{display:none}.result-mascot{position:absolute;width:255px;right:-50px;bottom:-48px;filter:drop-shadow(0 11px 11px rgba(87,51,24,.12))}.result-kicker{color:var(--coral);opacity:1;font-weight:700}.result-hero h1{color:var(--brown)}.result-one{opacity:.78}.result-tags span{background:#FFF; border-color:#ECD8B6;color:#76604D}
 .today-line,.action-card,.evidence{background:rgba(255,254,250,.97)}
-#shareCard{background-image:linear-gradient(rgba(255,250,236,.78),rgba(255,250,236,.84)),url("assets/bg_luck.jpg");background-size:cover;background-position:center;border-color:#DDAA74}
+#shareCard{background-image:linear-gradient(rgba(255,250,236,.78),rgba(255,250,236,.84)),url("assets/bg_luck.webp");background-size:cover;background-position:center;border-color:#DDAA74}
 .lucktable .lk{background:#FFF2DE}.lucktable .lv{background:#fffefb}
 .bottom-nav{position:fixed;z-index:50;left:50%;bottom:0;transform:translateX(-50%);width:min(720px,100%);height:78px;padding:8px max(12px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,254,249,.95);border-top:1px solid #E4CCA5;box-shadow:0 -10px 30px rgba(87,52,25,.10);backdrop-filter:blur(12px)}.bottom-nav button{border:0;background:none;color:#88715F;display:grid;place-items:center;align-content:center;gap:1px;cursor:pointer}.bottom-nav button span{font-size:24px;line-height:1}.bottom-nav button b{font-size:9px;font-weight:500}.bottom-nav button.active{color:var(--coral)}.bottom-nav button.active b{font-weight:700}
 .app-toast{position:fixed;z-index:80;left:50%;bottom:92px;transform:translate(-50%,18px);padding:10px 15px;border-radius:999px;background:#5A3826;color:white;font-size:11px;opacity:0;pointer-events:none;transition:.22s;white-space:nowrap;box-shadow:0 8px 20px rgba(62,36,20,.2)}.app-toast.show{opacity:1;transform:translate(-50%,0)}
@@ -263,16 +263,16 @@ footer{margin-bottom:8px}
 .plain-title{display:block;font-size:10px;color:#D36545;font-weight:800;letter-spacing:.2px;margin-bottom:6px}
 .result-hero h1{font-size:25px}
 #shareCard{position:relative;overflow:hidden}
-#shareCard:after{content:'';position:absolute;width:100px;height:150px;right:-30px;bottom:-30px;background:url('assets/talisman.png') center/contain no-repeat;opacity:.11;pointer-events:none}
+#shareCard:after{content:'';position:absolute;width:100px;height:150px;right:-30px;bottom:-30px;background:url('assets/talisman.webp') center/contain no-repeat;opacity:.11;pointer-events:none}
 .lucktable{position:relative}
-.lucktable:after{content:'';position:absolute;width:74px;height:74px;right:-15px;bottom:-15px;background:url('assets/pouch.png') center/contain no-repeat;opacity:.10;pointer-events:none}
+.lucktable:after{content:'';position:absolute;width:74px;height:74px;right:-15px;bottom:-15px;background:url('assets/pouch.webp') center/contain no-repeat;opacity:.10;pointer-events:none}
 @media(max-width:430px){.consult-points{grid-template-columns:1fr}.consult-point{min-height:auto}.action-card{padding-right:78px}.action-card .asset-talisman{width:72px}.evidence{padding-right:80px}.evidence .asset-mountain{width:110px}.asset-plum-top{width:100px}.asset-cloud-top{width:92px}}
 
 
 /* ===== v4.1: 쉬운 풀이 + 실제 에셋 마무리 ===== */
 .yong-stamp{background:#FFFDF8!important;border:1px solid #E8D0AB;overflow:hidden;padding:5px}
 .yong-stamp img{width:100%;height:100%;object-fit:contain;display:block}
-.sc-seal{background:#FFF8EB!important;color:transparent!important;background-image:url('assets/tiger_wave.png')!important;background-position:center!important;background-size:130%!important;background-repeat:no-repeat!important;border:1px solid #E8D0AB}
+.sc-seal{background:#FFF8EB!important;color:transparent!important;background-image:url('assets/tiger_wave.webp')!important;background-position:center!important;background-size:130%!important;background-repeat:no-repeat!important;border:1px solid #E8D0AB}
 .flow-title{font-size:11px;font-weight:800;color:#5D4737;line-height:1.25;margin-top:2px}
 .flow-sub{font-size:8.5px;color:#9A7B60;margin-top:3px}
 .speech p{white-space:normal}
@@ -350,25 +350,25 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 <body>
 
 <div class="app-shell">
-  <div class="topbar" style="position:relative;overflow:visible"><img class="asset-decor asset-plum-top" src="assets/plum.png" alt=""><img class="asset-decor asset-cloud-top" src="assets/cloud.png" alt="">
-    <div class="brand"><img class="brand-logo" src="assets/logo.png" alt="크앙사주"></div>
+  <div class="topbar" style="position:relative;overflow:visible"><img class="asset-decor asset-plum-top" src="assets/plum.webp" alt=""><img class="asset-decor asset-cloud-top" src="assets/cloud.webp" alt="">
+    <div class="brand"><img class="brand-logo" src="assets/logo.webp" alt="크앙사주"></div>
     <button class="notify-btn" type="button" aria-label="알림">🔔<i></i></button>
   </div>
 
   <section id="scrInput">
     <div class="stepbar"><span class="on"></span><span></span><span></span></div>
-    <div class="hero-card"><img class="asset-decor asset-sun" src="assets/sun.png" alt=""><img class="asset-decor asset-cloud" src="assets/cloud.png" alt="">
+    <div class="hero-card"><img class="asset-decor asset-sun" src="assets/sun.webp" alt=""><img class="asset-decor asset-cloud" src="assets/cloud.webp" alt="">
       <div class="hero-copy">
         <span class="eyebrow">산신령 수련생 크앙</span>
         <h1>네 안의 다섯 기운,<br><em>귀엽지만 제대로</em><br>찾아볼게.</h1>
         <p>어려운 말은 빼고, 성향·일·돈·관계를 친구처럼 풀어줄게.</p>
       </div>
-      <div class="hero-art"><img class="hero-mascot" src="assets/tiger_wave.png" alt="인사하는 아기호랑이 크앙"></div>
+      <div class="hero-art"><img class="hero-mascot" src="assets/tiger_wave.webp" alt="인사하는 아기호랑이 크앙"></div>
     </div>
-    <div class="five-preview bright-card"><div class="section-cap"><b>다섯 기운</b><span>생일 속 목·화·토·금·수를 찾아볼게</span></div><div class="five-preview-row"><div><img src="assets/wood.png" alt="목"><b>목</b></div><div><img src="assets/fire.png" alt="화"><b>화</b></div><div><img src="assets/earth.png" alt="토"><b>토</b></div><div><img src="assets/metal.png" alt="금"><b>금</b></div><div><img src="assets/water.png" alt="수"><b>수</b></div></div></div>
-    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.png" alt="궁금해하는 크앙"></div><div class="bubble">생일을 알려주면 네 사주 족보를 차근차근 펼쳐볼게. 어려운 말은 줄이고 필요한 건 솔직하게 말해줄게!</div></div>
+    <div class="five-preview bright-card"><div class="section-cap"><b>다섯 기운</b><span>생일 속 목·화·토·금·수를 찾아볼게</span></div><div class="five-preview-row"><div><img src="assets/wood.webp" alt="목"><b>목</b></div><div><img src="assets/fire.webp" alt="화"><b>화</b></div><div><img src="assets/earth.webp" alt="토"><b>토</b></div><div><img src="assets/metal.webp" alt="금"><b>금</b></div><div><img src="assets/water.webp" alt="수"><b>수</b></div></div></div>
+    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.webp" alt="궁금해하는 크앙"></div><div class="bubble">생일을 알려주면 네 사주 족보를 차근차근 펼쳐볼게. 어려운 말은 줄이고 필요한 건 솔직하게 말해줄게!</div></div>
     <div class="form-grid">
-      <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.png" alt="">
+      <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
         <div class="panel-title"><span class="num">1</span><div><h2>태어난 날짜</h2><p>양력과 음력을 먼저 골라줘.</p></div></div>
         <label>달력 기준</label>
         <div class="toggle-group" id="calToggle"><button class="on" data-v="solar">양력</button><button data-v="lunar">음력</button></div>
@@ -376,7 +376,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
         <label>생년월일</label>
         <div class="row"><select id="inY"></select><select id="inM"></select><select id="inD"></select></div>
       </div>
-      <div class="panel"><img class="asset-decor asset-pouch" src="assets/pouch.png" alt="">
+      <div class="panel"><img class="asset-decor asset-pouch" src="assets/pouch.webp" alt="">
         <div class="panel-title"><span class="num">2</span><div><h2>태어난 시간</h2><p>모르면 세 기둥으로도 볼 수 있어.</p></div></div>
         <label>태어난 시각</label>
         <div class="row"><select id="inH"></select><select id="inMin"></select></div>
@@ -391,9 +391,9 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 
   <section id="scrChart" class="hidden">
     <div class="stepbar"><span class="on"></span><span class="on"></span><span></span></div>
-    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.png" alt="풀이를 시작하는 크앙"></div><div class="bubble" id="chartBubble">생일 속 기운을 펼쳐볼게!</div></div>
-    <div class="identity-card"><img class="identity-decor" src="assets/scroll.png" alt=""><img class="asset-decor asset-plum" src="assets/plum.png" alt=""><img class="asset-decor asset-moon" src="assets/moon.png" alt="">
-      <div class="identity-mark"><img id="identityIcon" src="assets/wood.png" alt="나의 중심 기운"></div>
+    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.webp" alt="풀이를 시작하는 크앙"></div><div class="bubble" id="chartBubble">생일 속 기운을 펼쳐볼게!</div></div>
+    <div class="identity-card"><img class="identity-decor" src="assets/scroll.webp" alt=""><img class="asset-decor asset-plum" src="assets/plum.webp" alt=""><img class="asset-decor asset-moon" src="assets/moon.webp" alt="">
+      <div class="identity-mark"><img id="identityIcon" src="assets/wood.webp" alt="나의 중심 기운"></div>
       <div class="identity-copy"><small>MY CORE ENERGY</small><h2 id="identityTitle">나를 움직이는 중심</h2><p id="identitySub">생일 속 중심 기운</p><div class="quick-tags" id="quickTags"></div></div>
     </div>
     <div class="panel">
@@ -425,50 +425,50 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 
   <section id="scrLoading" class="hidden">
     <div class="stepbar"><span class="on"></span><span class="on"></span><span class="on"></span></div>
-    <div class="loading-scene"><div class="loading-art"><img src="assets/tiger_read.png" alt="족보를 읽는 크앙"></div><div class="loading-dots"><i></i><i></i><i></i></div><h2>크앙이가 족보를 읽는 중</h2><p id="loadMsg">네 사주의 중심 기운을 찾는 중…</p></div>
+    <div class="loading-scene"><div class="loading-art"><img src="assets/tiger_read.webp" alt="족보를 읽는 크앙"></div><div class="loading-dots"><i></i><i></i><i></i></div><h2>크앙이가 족보를 읽는 중</h2><p id="loadMsg">네 사주의 중심 기운을 찾는 중…</p></div>
   </section>
 
   <section id="scrResult" class="hidden">
     <div class="stepbar"><span class="on"></span><span class="on"></span><span class="on"></span></div>
-    <div class="result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.png" alt=""><img class="asset-decor asset-plum-result" src="assets/plum.png" alt=""><img class="result-mascot" src="assets/tiger_pouch.png" alt="복주머니를 든 크앙">
+    <div class="result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt=""><img class="asset-decor asset-plum-result" src="assets/plum.webp" alt=""><img class="result-mascot" src="assets/tiger_pouch.webp" alt="복주머니를 든 크앙">
       <div class="result-kicker">크앙이가 읽어온 나의 사주</div>
       <h1 id="resultName">나의 사주</h1>
       <div class="result-one">“<span id="resultOneLine">나를 이해하는 한 문장</span>”</div>
       <div class="result-tags" id="resultTags"></div>
     </div>
     <div class="today-line" id="todayLine"></div>
-    <div class="consult-card" id="consultCard"><img class="asset-decor asset-plum-consult" src="assets/plum.png" alt=""><h3>크앙이가 콕 집은 ‘나 같은 포인트’</h3><div class="consult-points" id="consultPoints"></div></div>
-    <div class="action-card" id="actionCard"><img class="asset-decor asset-talisman" src="assets/talisman.png" alt=""></div>
-    <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.png" alt=""><h3>왜 이런 풀이가 나왔을까?</h3><div class="evidence-grid" id="evidenceGrid"></div></div>
-    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_pouch.png" alt="행운을 건네는 크앙"></div><div class="bubble" id="resultBubble">다 읽었어!</div></div>
+    <div class="consult-card" id="consultCard"><img class="asset-decor asset-plum-consult" src="assets/plum.webp" alt=""><h3>크앙이가 콕 집은 ‘나 같은 포인트’</h3><div class="consult-points" id="consultPoints"></div></div>
+    <div class="action-card" id="actionCard"><img class="asset-decor asset-talisman" src="assets/talisman.webp" alt=""></div>
+    <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>왜 이런 풀이가 나왔을까?</h3><div class="evidence-grid" id="evidenceGrid"></div></div>
+    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_pouch.webp" alt="행운을 건네는 크앙"></div><div class="bubble" id="resultBubble">다 읽었어!</div></div>
     <div id="sections"></div>
     <div class="result-layout">
       <div class="panel" id="graphPanel"><h2><span class="dot"></span>10년 단위 기운 변화</h2><svg id="lifeSvg" viewBox="0 0 320 130"></svg><div class="hint" id="graphNote"></div></div>
       <div class="panel" id="luckPanel"><h2><span class="dot"></span>내가 편해지는 보완 기운</h2><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><div id="yongStamp" class="yong-stamp"></div><div id="yongDesc" style="font-size:12px"></div></div><div class="lucktable" id="luckTable"></div></div>
     </div>
-    <div class="panel"><h2><span class="dot"></span>크앙의 오늘 부적</h2><div id="shareCard"><img class="share-plum" src="assets/plum.png" alt=""><img class="share-tiger" src="assets/tiger_wave.png" alt=""><div class="sc-top"><div><div class="sc-title">크앙사주</div><div class="sc-date" id="scDate"></div></div><div class="sc-seal">虎</div></div><div class="sc-pillars" id="scPillars"></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:8px 0 12px"><div id="scChar" class="yong-stamp" style="width:52px;height:52px;font-size:29px"></div><div id="scCharLabel" style="font-size:9px;color:var(--muted)"></div></div><div class="sc-sum" id="scSum"></div><div class="sc-foot">아기호랑이 크앙이가 물어온 오늘의 부적</div></div><button class="btn red" id="btnCard">부적 카드 저장하기</button><div id="cardImgWrap"></div></div>
+    <div class="panel"><h2><span class="dot"></span>크앙의 오늘 부적</h2><div id="shareCard"><img class="share-plum" src="assets/plum.webp" alt=""><img class="share-tiger" src="assets/tiger_wave.webp" alt=""><div class="sc-top"><div><div class="sc-title">크앙사주</div><div class="sc-date" id="scDate"></div></div><div class="sc-seal">虎</div></div><div class="sc-pillars" id="scPillars"></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:8px 0 12px"><div id="scChar" class="yong-stamp" style="width:52px;height:52px;font-size:29px"></div><div id="scCharLabel" style="font-size:9px;color:var(--muted)"></div></div><div class="sc-sum" id="scSum"></div><div class="sc-foot">아기호랑이 크앙이가 물어온 오늘의 부적</div></div><button class="btn red" id="btnCard">부적 카드 저장하기</button><div id="cardImgWrap"></div></div>
     <button class="btn ghost" id="btnOther">다른 말투로 다시 듣기</button><button class="btn ghost" id="btnRestart" style="margin-top:9px">처음부터 다시</button>
   </section>
 
 
   <section id="scrMatch" class="hidden">
-    <div class="hero-card match-hero"><img class="asset-decor asset-plum-top" src="assets/plum.png" alt="">
+    <div class="hero-card match-hero"><img class="asset-decor asset-plum-top" src="assets/plum.webp" alt="">
       <div class="hero-copy">
         <span class="eyebrow">둘의 기운 맞춰보기</span>
         <h1>우리 둘은<br><em>어떤 결</em>일까?</h1>
         <p>몇 점인지 매기지 않을게. 어디서 잘 맞고 어디서 부딪히는지만 짚어줄게.</p>
       </div>
-      <div class="hero-art"><img class="hero-mascot" src="assets/tiger_pouch.png" alt="복주머니를 든 크앙"></div>
+      <div class="hero-art"><img class="hero-mascot" src="assets/tiger_pouch.webp" alt="복주머니를 든 크앙"></div>
     </div>
 
-    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.png" alt="궁금해하는 크앙"></div><div class="bubble" id="matchBubble">먼저 네 생년월일이 있어야 해. 그다음 상대 생일을 알려줘!</div></div>
+    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.webp" alt="궁금해하는 크앙"></div><div class="bubble" id="matchBubble">먼저 네 생년월일이 있어야 해. 그다음 상대 생일을 알려줘!</div></div>
 
     <div class="panel" id="matchMePanel">
       <div class="panel-title"><span class="num">나</span><div><h2>내 사주</h2><p id="matchMeInfo">아직 없어</p></div></div>
       <button class="btn ghost" id="btnMatchGoInput">내 생년월일 입력하러 가기</button>
     </div>
 
-    <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.png" alt="">
+    <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
       <div class="panel-title"><span class="num">2</span><div><h2>상대 생년월일</h2><p>궁금한 사람의 생일을 알려줘.</p></div></div>
       <label>달력 기준</label>
       <div class="toggle-group" id="mCalToggle"><button class="on" data-v="solar">양력</button><button data-v="lunar">음력</button></div>
@@ -484,39 +484,39 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     </div>
 
     <div id="matchResult" class="hidden">
-      <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.png" alt="">
+      <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt="">
         <div class="result-kicker">크앙이가 본 둘의 궁합</div>
         <h1 id="matchTitle">우리 둘의 결</h1>
         <div class="result-one">“<span id="matchOneLine"></span>”</div>
         <div class="result-tags" id="matchTags"></div>
       </div>
       <div id="matchSections"></div>
-      <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.png" alt=""><h3>이건 뭘 보고 말한 거야?</h3><div class="evidence-grid" id="matchEvidence"></div></div>
+      <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>이건 뭘 보고 말한 거야?</h3><div class="evidence-grid" id="matchEvidence"></div></div>
       <div class="mini-note">궁합은 두 사람이 어떤 지점에서 서로 애써야 하는지를 보는 참고표예요. 맞고 안 맞고가 정해져 있다는 뜻이 아닙니다.</div>
       <button class="btn ghost" id="btnMatchAgain">다른 사람과 맞춰보기</button>
     </div>
   </section>
 
   <section id="scrToday" class="hidden">
-    <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.png" alt="">
+    <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt="">
       <div class="result-kicker" id="todayDate">오늘</div>
       <h1 id="todayHeadline">오늘의 흐름</h1>
       <div class="result-one">“<span id="todayGanzhi"></span>”</div>
     </div>
-    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.png" alt="윙크하는 크앙"></div><div class="bubble">오늘 기운이 네 사주를 어떻게 건드리는지 봤어. 하루 참고용이야!</div></div>
+    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.webp" alt="윙크하는 크앙"></div><div class="bubble">오늘 기운이 네 사주를 어떻게 건드리는지 봤어. 하루 참고용이야!</div></div>
     <div id="todaySections"></div>
-    <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.png" alt=""><h3>이건 뭘 보고 말한 거야?</h3><div class="evidence-grid" id="todayEvidence"></div></div>
+    <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>이건 뭘 보고 말한 거야?</h3><div class="evidence-grid" id="todayEvidence"></div></div>
     <div class="mini-note">오늘 운세는 하루의 기운이 내 사주와 어떻게 만나는지를 보는 참고표예요. 무슨 일이 일어날지 정해두는 게 아닙니다.</div>
   </section>
 
   <section id="scrMy" class="hidden">
-    <div class="hero-card"><img class="asset-decor asset-plum-top" src="assets/plum.png" alt="">
+    <div class="hero-card"><img class="asset-decor asset-plum-top" src="assets/plum.webp" alt="">
       <div class="hero-copy">
         <span class="eyebrow">마이</span>
         <h1>내 정보와<br><em>기억해 둔 것</em></h1>
         <p>이 기기에만 저장되고, 어디로도 보내지 않아.</p>
       </div>
-      <div class="hero-art"><img class="hero-mascot" src="assets/tiger_read.png" alt="책 읽는 크앙"></div>
+      <div class="hero-art"><img class="hero-mascot" src="assets/tiger_read.webp" alt="책 읽는 크앙"></div>
     </div>
     <div class="panel">
       <div class="panel-title"><span class="num">1</span><div><h2>저장된 내 사주</h2><p id="mySavedInfo">아직 저장된 게 없어</p></div></div>
@@ -552,7 +552,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 // ssaju가 팔자·지장간·십신·12운성·합충·신살·공망·대운을 계산하고,
 // KSaju가 시간 보정과 신강신약·용신·격국 판정을 맡는다. 전부 내장이라 네트워크가 필요 없다.
 const ELEM_COLOR_V4={목:'#62873A',화:'#E66B36',토:'#A97738',금:'#D79D22',수:'#3D86A8'};
-const ELEM_ASSET_PATH={목:'assets/wood.png',화:'assets/fire.png',토:'assets/earth.png',금:'assets/metal.png',수:'assets/water.png'};
+const ELEM_ASSET_PATH={목:'assets/wood.webp',화:'assets/fire.webp',토:'assets/earth.webp',금:'assets/metal.webp',수:'assets/water.webp'};
 
 function koGanzhi(s){ return KSaju.toKo([s[0],s[1]]).join(''); }
 
@@ -706,7 +706,7 @@ $('noTime').onchange = e=>{
   hSel.style.opacity = minSel.style.opacity = S.noTime? .4 : 1;
 };
 
-const ELEMENT_ASSETS={"목": "assets/wood.png", "화": "assets/fire.png", "토": "assets/earth.png", "금": "assets/metal.png", "수": "assets/water.png"};
+const ELEMENT_ASSETS={"목": "assets/wood.webp", "화": "assets/fire.webp", "토": "assets/earth.webp", "금": "assets/metal.webp", "수": "assets/water.webp"};
 // ===== 화면 전환 =====
 const screens=['scrInput','scrChart','scrLoading','scrResult','scrMatch','scrToday','scrMy'];
 function show(id){
@@ -976,14 +976,14 @@ const SEC_META=[
 function renderResult(){
   const rd=S.reading;
   $('todayLine').classList.remove('hidden');
-  $('todayLine').innerHTML = `<img class="inline-asset" src="assets/pouch.png" alt=""><b>오늘의 한 줄</b> · ${rd['오늘한줄']||''}`;
+  $('todayLine').innerHTML = `<img class="inline-asset" src="assets/pouch.webp" alt=""><b>오늘의 한 줄</b> · ${rd['오늘한줄']||''}`;
   $('resultBubble').textContent = `${S.level}로 봐줬어! 천천히 읽어봐, 크앙 🐾`;
   const box=$('sections'); box.innerHTML='';
   SEC_META.forEach(([k,ic,title])=>{
     if(!rd[k]) return;
     const d=document.createElement('div'); d.className='speech';
-    const assetMap={성격:'assets/plum.png',일과재능:'assets/scroll.png',재물:'assets/metal.png',애정:'assets/moon.png',초년운:'assets/sun.png',중년운:'assets/mountain.png',말년운:'assets/cloud.png',올해흐름:'assets/talisman.png'};
-    d.innerHTML=`<img class="section-asset" src="${assetMap[k]||'assets/cloud.png'}" alt=""><div class="sh"><span class="ic">${ic}</span><b>${title}</b></div><p><span class="plain-title">쉽게 풀어보면</span>${formatReadingText(rd[k])}</p>`;
+    const assetMap={성격:'assets/plum.webp',일과재능:'assets/scroll.webp',재물:'assets/metal.webp',애정:'assets/moon.webp',초년운:'assets/sun.webp',중년운:'assets/mountain.webp',말년운:'assets/cloud.webp',올해흐름:'assets/talisman.webp'};
+    d.innerHTML=`<img class="section-asset" src="${assetMap[k]||'assets/cloud.webp'}" alt=""><div class="sh"><span class="ic">${ic}</span><b>${title}</b></div><p><span class="plain-title">쉽게 풀어보면</span>${formatReadingText(rd[k])}</p>`;
     box.appendChild(d);
   });
   if(false && S.offline){
@@ -1068,7 +1068,7 @@ renderResult = function(){
   const rank=rankedGroups(y.g);
   $('resultTags').innerHTML=[PLAIN_GROUP[rank[0]],PLAIN_GROUP[rank[1]],`${y.elem} 역할이 균형을 도와줌`].map(x=>`<span>${x}</span>`).join('');
   $('consultPoints').innerHTML=(rd.맞춤포인트||[]).map((x,i)=>`<div class="consult-point"><b>${['결정할 때','지쳤을 때','두 가지 성향','반복되는 숙제'][i]||'나의 포인트'}</b><span>${x}</span></div>`).join('');
-  $('actionCard').innerHTML=`<img class="asset-decor asset-talisman" src="assets/talisman.png" alt=""><span class="action-label">오늘 바로 해볼 것</span><b>${LUCK[y.elem].habit}</b><small>${empty.length?`${empty.join('·')} 역할을 의식적으로 챙기는 아주 작은 연습이야.`:'지금의 균형을 무리 없이 유지하는 작은 연습이야.'}</small>`;
+  $('actionCard').innerHTML=`<img class="asset-decor asset-talisman" src="assets/talisman.webp" alt=""><span class="action-label">오늘 바로 해볼 것</span><b>${LUCK[y.elem].habit}</b><small>${empty.length?`${empty.join('·')} 역할을 의식적으로 챙기는 아주 작은 연습이야.`:'지금의 균형을 무리 없이 유지하는 작은 연습이야.'}</small>`;
   $('evidenceGrid').innerHTML=[
     ['타고난 중심',STEM_PERSONA[r.dayMaster.stem][0]],
     ['가장 큰 힘',PLAIN_GROUP[rank[0]]],
@@ -1339,10 +1339,10 @@ $('btnMatchGoInput').onclick=()=>show('scrInput');
 $('btnMatchAgain').onclick=()=>{ $('matchResult').classList.add('hidden'); window.scrollTo({top:0,behavior:'smooth'}); };
 
 const MATCH_SECTIONS=[
-  ['끌림','♡','처음에 끌리는 지점','assets/plum.png'],
-  ['같이있을때','☀','같이 있을 때 편한 것','assets/sun.png'],
-  ['부딪힘','☁','부딪히기 쉬운 지점','assets/cloud.png'],
-  ['오래가려면','符','오래 가려면','assets/talisman.png']
+  ['끌림','♡','처음에 끌리는 지점','assets/plum.webp'],
+  ['같이있을때','☀','같이 있을 때 편한 것','assets/sun.webp'],
+  ['부딪힘','☁','부딪히기 쉬운 지점','assets/cloud.webp'],
+  ['오래가려면','符','오래 가려면','assets/talisman.webp']
 ];
 
 $('btnMatch').onclick=()=>{
@@ -1558,21 +1558,21 @@ localReading=function(){
   };
 };
 const V5_SECTIONS=[
- ['한눈요약','🐯','너를 세 줄로 말하면','assets/tiger_wink.png','paragraph'],
- ['겉과속','❀','겉으로 보이는 너, 실제 속마음','assets/plum.png','paragraph'],
- ['이거너아니야','☁','이거 너 아니야?','assets/cloud.png','scenes'],
- ['잘할때','☀','네가 제일 잘할 때','assets/sun.png','paragraph'],
- ['흔들릴때','☾','반대로 쉽게 흔들리는 순간','assets/moon.png','paragraph'],
- ['일과재능','✎','일에서 자연스럽게 잘하는 것','assets/scroll.png','paragraph'],
- ['일하는방식','⛰','성과가 잘 나는 일하는 방식','assets/mountain.png','paragraph'],
- ['돈버는방식','◈','돈이 들어오는 방식','assets/metal.png','paragraph'],
- ['돈쓰는방식','囊','돈이 나가는 방식','assets/pouch.png','paragraph'],
- ['애정','♡','좋아하는 사람에게 보이는 모습','assets/plum.png','paragraph'],
- ['갈등과경계','符','서운함과 경계를 다루는 법','assets/talisman.png','paragraph'],
- ['회복방법','水','지쳤을 때 회복하는 순서','assets/water.png','paragraph'],
- ['올해흐름','火','올해 특히 커지는 주제','assets/fire.png','paragraph'],
- ['찔리는한마디','!', '크앙의 조금 찔리는 한마디','assets/tiger_curious.png','quote'],
- ['안맞는조언','×','너한테 별로 안 맞는 조언','assets/earth.png','quote']
+ ['한눈요약','🐯','너를 세 줄로 말하면','assets/tiger_wink.webp','paragraph'],
+ ['겉과속','❀','겉으로 보이는 너, 실제 속마음','assets/plum.webp','paragraph'],
+ ['이거너아니야','☁','이거 너 아니야?','assets/cloud.webp','scenes'],
+ ['잘할때','☀','네가 제일 잘할 때','assets/sun.webp','paragraph'],
+ ['흔들릴때','☾','반대로 쉽게 흔들리는 순간','assets/moon.webp','paragraph'],
+ ['일과재능','✎','일에서 자연스럽게 잘하는 것','assets/scroll.webp','paragraph'],
+ ['일하는방식','⛰','성과가 잘 나는 일하는 방식','assets/mountain.webp','paragraph'],
+ ['돈버는방식','◈','돈이 들어오는 방식','assets/metal.webp','paragraph'],
+ ['돈쓰는방식','囊','돈이 나가는 방식','assets/pouch.webp','paragraph'],
+ ['애정','♡','좋아하는 사람에게 보이는 모습','assets/plum.webp','paragraph'],
+ ['갈등과경계','符','서운함과 경계를 다루는 법','assets/talisman.webp','paragraph'],
+ ['회복방법','水','지쳤을 때 회복하는 순서','assets/water.webp','paragraph'],
+ ['올해흐름','火','올해 특히 커지는 주제','assets/fire.webp','paragraph'],
+ ['찔리는한마디','!', '크앙의 조금 찔리는 한마디','assets/tiger_curious.webp','quote'],
+ ['안맞는조언','×','너한테 별로 안 맞는 조언','assets/earth.webp','quote']
 ];
 function v5SectionHTML(value,type){
   const arr=Array.isArray(value)?value:[value];
@@ -1583,14 +1583,14 @@ function v5SectionHTML(value,type){
 renderResult=function(){
   const rd=S.reading,r=S.saju,y=S.yong,ranks=v5Rank(),dom=ranks[0],second=ranks[1];
   $('todayLine').classList.remove('hidden');
-  $('todayLine').innerHTML=`<img class="inline-asset" src="assets/pouch.png" alt=""><b>오늘의 한마디</b><span>${rd.오늘한줄}</span>`;
+  $('todayLine').innerHTML=`<img class="inline-asset" src="assets/pouch.webp" alt=""><b>오늘의 한마디</b><span>${rd.오늘한줄}</span>`;
   $('resultName').textContent=V5_SHORT[r.dayMaster.stem];
   $('resultOneLine').textContent=rd.총평;
   $('resultTags').innerHTML=[V5_GROUP_TAG[dom],V5_GROUP_TAG[second],V5_ELEMENT_PRACTICE[y.elem].title].map(x=>`<span>${x}</span>`).join('');
   $('resultBubble').textContent=rd.toneIntro;
   $('consultCard').querySelector('h3').textContent='크앙이가 먼저 짚은 “딱 너 같은 부분”';
   $('consultPoints').innerHTML=(rd.맞춤포인트||[]).map((x,i)=>`<div class="consult-point"><b>${['결정할 때','쉽게 지칠 때','같이 붙는 장점','반복되는 숙제'][i]}</b><span>${x}</span></div>`).join('');
-  $('actionCard').innerHTML=`<img class="asset-decor asset-talisman" src="assets/talisman.png" alt=""><span class="action-label">오늘 딱 하나만</span><b>${rd.오늘딱하나[0]}</b><small>거창하게 바꾸지 말고, 오늘 확인할 수 있는 크기로 해보자.</small>`;
+  $('actionCard').innerHTML=`<img class="asset-decor asset-talisman" src="assets/talisman.webp" alt=""><span class="action-label">오늘 딱 하나만</span><b>${rd.오늘딱하나[0]}</b><small>거창하게 바꾸지 말고, 오늘 확인할 수 있는 크기로 해보자.</small>`;
   document.querySelector('.evidence h3').textContent='크앙이는 이런 부분을 보고 풀었어';
   $('evidenceGrid').innerHTML=[['생일의 중심',V5_STEM[r.dayMaster.stem].name],['자주 쓰는 방식',V5_GROUP_NAME[dom]],['함께 붙는 장점',V5_GROUP_NAME[second]],['요즘 챙길 감각',V5_ELEMENT_PRACTICE[y.elem].title]].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
   const box=$('sections');box.innerHTML='';
@@ -1648,7 +1648,7 @@ renderGraph=function(){
     return `<div class="period-card ${i===nowIndex?'now':''}">`
       +`<div class="period-age">${d.age}세<br>전후${i===nowIndex?'<br><small>지금</small>':''}</div>`
       +`<div class="period-copy"><b>${t[0]}</b><span>${t[1]}${inner} ${stage}</span>${sal}</div>`
-      +`<img src="${i%2?'assets/cloud.png':'assets/mountain.png'}" alt=""></div>`;
+      +`<img src="${i%2?'assets/cloud.webp':'assets/mountain.webp'}" alt=""></div>`;
   }).join('');
   p.innerHTML=`<h2><span class="dot"></span>앞으로 반복될 큰 주제</h2>`
     +`<p class="chart-guide">좋고 나쁜 점수 대신, 나이대마다 어떤 문제가 자주 앞에 오는지 정리했어. 나이에 딱 맞춰 사건이 생긴다기보다 그 무렵부터 비슷한 주제가 반복된다고 보면 돼.</p>`

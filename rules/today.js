@@ -122,8 +122,8 @@ function buildTodaySlot(slot,t,limit){
 }
 
 const TODAY_SECTIONS=[
-  ['오늘주제','☀','오늘 앞에 나오는 기운','assets/sun.png'],
-  ['오늘잘통함','◈','오늘 잘 통하는 것','assets/metal.png'],
-  ['오늘조심','☁','오늘 조심할 것','assets/cloud.png'],
-  ['이번달','☾','이번 달 흐름','assets/moon.png']
+  ['오늘주제','☀','오늘 앞에 나오는 기운','assets/sun.webp'],
+  ['오늘잘통함','◈','오늘 잘 통하는 것','assets/metal.webp'],
+  ['오늘조심','☁','오늘 조심할 것','assets/cloud.webp'],
+  ['이번달','☾','이번 달 흐름','assets/moon.webp']
 ];

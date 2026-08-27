@@ -8,3 +8,4 @@ Google Fonts
 Gowun Batang, Gowun Dodum, Nanum Myeongjo are loaded from Google Fonts when internet access is available.
 
 All original 크앙사주 UI, local interpretation templates, and supplied image assets are packaged for this prototype.
+Image assets are stored as WebP, resized to the dimensions actually used on screen.
