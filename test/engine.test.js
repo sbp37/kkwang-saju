@@ -274,6 +274,58 @@ describe('음력 달력', () => {
 
 });
 
+describe('공유 링크', () => {
+
+  // index.html의 encodeBirth / decodeBirth와 같은 규칙.
+  // 서버가 없으므로 생년월일 자체를 주소에 담고, 링크를 연 쪽이 다시 계산한다.
+  const LEVELS = ['몽글몽글', '솔직하게 콕', '돌직구 크앙'];
+  const b64 = {
+    enc: str => Buffer.from(str, 'utf8').toString('base64')
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),
+    dec: t => Buffer.from(t.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8')
+  };
+  const encode = (b, level) => b64.enc([
+    '1',
+    `${b.rawY}${String(b.rawM).padStart(2, '0')}${String(b.rawD).padStart(2, '0')}`,
+    b.noTime ? '----' : `${String(b.hour).padStart(2, '0')}${String(b.minute).padStart(2, '0')}`,
+    b.gender,
+    b.calRaw === 'lunar' ? (b.leap ? 'L' : 'l') : 's',
+    String(LEVELS.indexOf(level))
+  ].join('|'));
+
+  it('생일과 말투가 그대로 돌아온다', () => {
+    const b = { rawY:2001, rawM:4, rawD:29, hour:23, minute:55, noTime:false,
+                gender:'M', calRaw:'lunar', leap:true };
+    eq(b64.dec(encode(b, '돌직구 크앙')), '1|20010429|2355|M|L|2');
+  });
+
+  it('시간을 모르면 시각 자리가 비어 나간다', () => {
+    const b = { rawY:1975, rawM:12, rawD:1, hour:null, minute:null, noTime:true,
+                gender:'F', calRaw:'solar', leap:false };
+    eq(b64.dec(encode(b, '몽글몽글')), '1|19751201|----|F|s|0');
+  });
+
+  it('링크로 들어온 생일이 같은 사주를 낸다', () => {
+    // 링크는 결과를 저장하지 않는다. 받은 쪽이 같은 입력으로 다시 계산할 뿐이다.
+    const a = chart({ year:2001, month:4, day:29, hour:23, minute:55, gender:'M',
+                      cal:'lunar', leap:true });
+    const raw = b64.dec(encode({ rawY:2001, rawM:4, rawD:29, hour:23, minute:55,
+                                 noTime:false, gender:'M', calRaw:'lunar', leap:true }, '몽글몽글'));
+    const [, ymd, hm, gender, cal] = raw.split('|');
+    const b = chart({ year:+ymd.slice(0,4), month:+ymd.slice(4,6), day:+ymd.slice(6,8),
+                      hour:+hm.slice(0,2), minute:+hm.slice(2,4), gender,
+                      cal: cal === 's' ? 'solar' : 'lunar', leap: cal === 'L' });
+    eq(pillarStr(b), pillarStr(a));
+  });
+
+  it('윤달 여부가 실제로 다른 사주가 된다 (링크가 이걸 잃으면 안 된다)', () => {
+    const 평달 = chart({ year:2001, month:4, day:15, hour:12, minute:0, gender:'F', cal:'lunar', leap:false });
+    const 윤달 = chart({ year:2001, month:4, day:15, hour:12, minute:0, gender:'F', cal:'lunar', leap:true });
+    ok(pillarStr(평달) !== pillarStr(윤달), '윤4월과 4월은 다른 날이다');
+  });
+
+});
+
 describe('알려진 엔진 제약', () => {
 
   it('solarToLunar는 일부 날짜에서 잘못된 값을 낸다 (앱은 쓰지 않음)', () => {
