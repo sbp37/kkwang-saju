@@ -292,6 +292,22 @@ var KSaju = (function () {
   var CHUNG = { 자:'오', 오:'자', 축:'미', 미:'축', 인:'신', 신:'인', 묘:'유', 유:'묘', 진:'술', 술:'진', 사:'해', 해:'사' };
   var YUKHAP = { 자:'축', 축:'자', 인:'해', 해:'인', 묘:'술', 술:'묘', 진:'유', 유:'진', 사:'신', 신:'사', 오:'미', 미:'오' };
   var SAMHAP = [['신','자','진','수'], ['해','묘','미','목'], ['인','오','술','화'], ['사','유','축','금']];
+  // 방합(계절의 합)은 인묘진·사오미·신유술·해자축이다.
+  // 셋이 다 있어야 온전한 방합이고, 둘만 있으면 반방합으로 본다.
+  // 반방합은 가운데 왕지(자·오·묘·유)가 있어야 성립한다. 인+진처럼 양끝만으로는 묶이지 않는다.
+  var BANGHAP = [['인','묘','진','목'], ['사','오','미','화'], ['신','유','술','금'], ['해','자','축','수']];
+  // 성립하면 { element, pair } 를 준다. pair는 인묘·묘진처럼 계절 순서대로 맞춘 글자다.
+  function banghapPair(a, b) {
+    for (var i = 0; i < BANGHAP.length; i++) {
+      var g = BANGHAP[i], wang = g[1];
+      if (a === b) continue;
+      var other = a === wang ? b : (b === wang ? a : null);
+      if (other === null) continue;
+      if (other === g[0]) return { element: g[3], pair: g[0] + wang };
+      if (other === g[2]) return { element: g[3], pair: wang + g[2] };
+    }
+    return null;
+  }
   function branchRelation(a, b) {
     if (!a || !b) return null;
     if (CHUNG[a] === b) return '충';
@@ -300,6 +316,7 @@ var KSaju = (function () {
       var g = SAMHAP[i];
       if (g.indexOf(a) !== -1 && g.indexOf(b) !== -1 && a !== b) return '삼합';
     }
+    if (banghapPair(a, b)) return '방합';
     return null;
   }
 
@@ -321,6 +338,6 @@ var KSaju = (function () {
     dstOffsetMinutes: dstOffsetMinutes, equationOfTime: equationOfTime,
     elementScore: elementScore, rootedElements: rootedElements,
     strength: strength, yongsin: yongsin, gyeokguk: gyeokguk, analyze: analyze,
-    branchRelation: branchRelation
+    branchRelation: branchRelation, banghapPair: banghapPair
   };
 })();

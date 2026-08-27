@@ -69,7 +69,7 @@ const RULES3 = [
   when:c => c.자리충.has('시'),
   text:c => `계획을 세워두고도 마지막에 방향을 틀어버린 적이 있어. 끝을 정해두는 걸 답답해하는 편이야.` },
 { id:'합-많음', slot:'겉과속', weight:68,
-  when:c => (c.관계.육합.length + c.관계.삼합.length + c.관계.반합.length) >= 3,
+  when:c => (c.관계.육합.length + c.관계.삼합.length + c.관계.반합.length + c.관계.방합.length) >= 3,
   text:c => `사주 안에서 글자들이 서로 잘 묶이는 편이야. 사람들 사이에서 조율하는 역할이 자연스럽게 돌아와. 대신 얽힌 관계를 끊어내는 건 어려워해.` },
 { id:'귀문원진', slot:'갈등과경계', weight:70,
   when:c => (c.관계.귀문.length + c.관계.원진.length) >= 2,
@@ -567,6 +567,17 @@ function buildContext() {
       관계[type].push({ 위치:'지지', 자리:[KEYMAP[k]].filter(Boolean), 설명:r.branchRelations[type][k] });
     });
   });
+  // ssaju의 방합은 인묘진처럼 셋이 다 모였을 때만 잡는다.
+  // 인묘·사오처럼 둘만 있는 반방합은 빠지므로 여기서 직접 채운다.
+  for (let i = 0; i < P.length; i++) {
+    for (let j = i + 1; j < P.length; j++) {
+      if (P[i].missing || P[j].missing) continue;
+      const bh = KSaju.banghapPair(P[i].branch, P[j].branch);
+      if (!bh) continue;
+      관계.방합.push({ 위치:'지지', 자리:[GUNG[i], GUNG[j]],
+        설명:`${bh.pair} 반방합 → ${bh.element} 기운` });
+    }
+  }
   const 자리충 = new Set(관계.충.filter(x => x.위치 === '지지').flatMap(x => x.자리));
 
   // 신살 — 어느 자리에 붙었는지까지 본다

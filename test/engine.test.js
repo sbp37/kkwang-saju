@@ -160,6 +160,32 @@ describe('지지 관계', () => {
     eq(KSaju.branchRelation('자', '인'), null);
   });
 
+  it('반방합은 왕지가 있어야 성립한다', () => {
+    // 인묘진·사오미·신유술·해자축에서 가운데 왕지(자오묘유)가 낀 짝만 묶인다.
+    eq(KSaju.branchRelation('인', '묘'), '방합');
+    eq(KSaju.branchRelation('묘', '진'), '방합');
+    eq(KSaju.branchRelation('신', '유'), '방합');
+    eq(KSaju.branchRelation('해', '자'), '방합');
+    eq(KSaju.branchRelation('인', '진'), null, '왕지 없는 양끝은 방합이 아니다');
+    eq(KSaju.branchRelation('사', '미'), null);
+    eq(KSaju.branchRelation('신', '술'), null);
+    eq(KSaju.branchRelation('해', '축'), null);
+  });
+
+  it('반방합 짝은 계절 순서대로 돌려준다', () => {
+    eq(KSaju.banghapPair('묘', '인'), { element:'목', pair:'인묘' });
+    eq(KSaju.banghapPair('진', '묘'), { element:'목', pair:'묘진' });
+    eq(KSaju.banghapPair('자', '해'), { element:'수', pair:'해자' });
+    eq(KSaju.banghapPair('인', '진'), null);
+  });
+
+  it('충 · 육합 · 삼합이 방합보다 먼저다', () => {
+    // 자축과 오미는 육합이면서 방합이기도 하다. 더 강한 쪽을 준다.
+    eq(KSaju.branchRelation('자', '축'), '육합');
+    eq(KSaju.branchRelation('오', '미'), '육합');
+    eq(KSaju.branchRelation('묘', '유'), '충');
+  });
+
   it('충은 대칭이다', () => {
     ['자오', '축미', '인신', '묘유', '진술', '사해'].forEach(pair => {
       eq(KSaju.branchRelation(pair[0], pair[1]), '충');
