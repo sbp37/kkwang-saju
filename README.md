@@ -104,6 +104,19 @@ node test/engine.test.js
 지장간 통근, 지지 관계, 입력 처리를 검사합니다. 외부 의존성 없이
 `node`만 있으면 돌아갑니다.
 
+코드를 정리할 때는 화면에 나오는 글이 바뀌지 않았는지도 같이 봅니다.
+
+```
+node test/render-snapshot.js before.txt
+# 수정
+node test/render-snapshot.js after.txt
+diff before.txt after.txt
+```
+
+사주 6건 × 말투 3종의 족보·결과 화면과 궁합·오늘·마이 화면 글을 전부
+떠서 비교합니다. 이쪽은 브라우저가 필요합니다
+(`npm i -D playwright && npx playwright install chromium`).
+
 ## 라이선스
 
 원본 저작물은 저작권자에게 모든 권리가 있습니다. `LICENSE`를 보세요.
