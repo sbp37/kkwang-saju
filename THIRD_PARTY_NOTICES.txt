@@ -1,0 +1,9 @@
+manseryeok 2.0.0
+Copyright (c) its contributors
+License: MIT
+Source package is loaded at runtime from jsDelivr when internet access is available.
+
+Google Fonts
+Gowun Batang, Gowun Dodum, Nanum Myeongjo are loaded from Google Fonts when internet access is available.
+
+All original 크앙사주 UI, local interpretation templates, and supplied image assets are packaged for this prototype.
