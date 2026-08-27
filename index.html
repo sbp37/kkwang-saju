@@ -214,7 +214,7 @@ footer{margin-bottom:8px}
 @media(min-width:680px){.hero-card{min-height:350px}.hero-copy{padding:45px 28px;width:60%}.hero-copy h1{font-size:38px}.hero-art{right:5px;width:44%}.hero-mascot{width:305px;right:-25px}}
 @media(max-width:430px){.app-shell{padding-left:11px;padding-right:11px}.brand{max-width:196px}.brand-logo{width:190px}.hero-card{min-height:298px}.hero-copy{padding:23px 14px 18px;width:61%}.hero-copy h1{font-size:25px;letter-spacing:-1px}.hero-copy p{font-size:10.5px}.hero-mascot{width:210px;right:-35px;bottom:3px}.five-preview-row img{height:51px}.panel{padding:16px}.mascot-small{width:72px;height:72px}.element-icon{height:49px}.result-hero{padding-right:42%;min-height:200px}.result-mascot{width:220px;right:-50px}}
 
-/* ===== v4: 민화 에셋 확장 + 상담형 결과 ===== */
+/* ===== 민화 에셋 · 상담형 결과 ===== */
 .topbar,.hero-card,.panel,.identity-card,.result-hero,.today-line,.action-card,.evidence,.speech,.loading-scene{isolation:isolate}
 .asset-decor{position:absolute;pointer-events:none;user-select:none;z-index:0;object-fit:contain;filter:drop-shadow(0 5px 7px rgba(92,56,25,.10))}
 .asset-cloud-top{width:112px;right:-25px;top:5px;opacity:.38}
@@ -268,7 +268,7 @@ footer{margin-bottom:8px}
 @media(max-width:430px){.consult-points{grid-template-columns:1fr}.consult-point{min-height:auto}.action-card{padding-right:78px}.action-card .asset-talisman{width:72px}.evidence{padding-right:80px}.evidence .asset-mountain{width:110px}.asset-plum-top{width:100px}.asset-cloud-top{width:92px}}
 
 
-/* ===== v4.1: 쉬운 풀이 + 실제 에셋 마무리 ===== */
+/* ===== 쉬운 풀이 · 에셋 마무리 ===== */
 .yong-stamp{background:#FFFDF8!important;border:1px solid #E8D0AB;overflow:hidden;padding:5px}
 .yong-stamp img{width:100%;height:100%;object-fit:contain;display:block}
 .sc-seal{background:#FFF8EB!important;color:transparent!important;background-image:url('assets/tiger_wave.webp')!important;background-position:center!important;background-size:130%!important;background-repeat:no-repeat!important;border:1px solid #E8D0AB}
@@ -534,14 +534,14 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
   </section>
 
 <nav class="bottom-nav" aria-label="하단 메뉴">
-  <button data-nav="home" class="active"><span>⌂</span><b>홈</b></button>
-  <button data-nav="today"><span>▣</span><b>오늘운세</b></button>
-  <button data-nav="analysis"><span>◉</span><b>사주분석</b></button>
-  <button data-nav="match"><span>♡</span><b>궁합</b></button>
-  <button data-nav="my"><span>♙</span><b>마이</b></button>
+  <button type="button" data-nav="home" class="active" aria-current="page"><span aria-hidden="true">⌂</span><b>홈</b></button>
+  <button type="button" data-nav="today"><span aria-hidden="true">☀</span><b>오늘</b></button>
+  <button type="button" data-nav="analysis"><span aria-hidden="true">◎</span><b>내 사주</b></button>
+  <button type="button" data-nav="match"><span aria-hidden="true">♡</span><b>궁합</b></button>
+  <button type="button" data-nav="my"><span aria-hidden="true">☺</span><b>마이</b></button>
 </nav>
 <div id="appToast" class="app-toast" role="status"></div>
-  <footer>사주는 미래를 확정하는 답이 아니라 나를 이해하는 참고표예요.<br>크앙사주 v4.1 · 어려운 용어를 생활 언어로 풀어쓴 상담형 버전 · 재미와 자기이해를 위한 참고용<br><small>온라인에서는 manseryeok 2.0.0(MIT) 정밀 계산을 사용하고, 연결되지 않으면 내장 계산기로 자동 전환합니다.</small></footer>
+  <footer>사주는 미래를 확정하는 답이 아니라, 나를 이해하는 참고표예요.<br>크앙사주 v5 · 쉬운 생활 언어로 풀어쓴 친구 상담형 버전<br><small>만세력·진태양시·서머타임 보정이 모두 앱 안에 들어 있어 인터넷 없이도 같은 결과가 나옵니다.</small></footer>
 </div>
 <script src="engine/ssaju.js"></script>
 <script src="engine/ksaju.js"></script>
@@ -549,8 +549,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 // ===== 계산 엔진 어댑터 =====
 // ssaju가 팔자·지장간·십신·12운성·합충·신살·공망·대운을 계산하고,
 // KSaju가 시간 보정과 신강신약·용신·격국 판정을 맡는다. 전부 내장이라 네트워크가 필요 없다.
-const ELEM_COLOR_V4={목:'#62873A',화:'#E66B36',토:'#A97738',금:'#D79D22',수:'#3D86A8'};
-const ELEM_ASSET_PATH={목:'assets/wood.webp',화:'assets/fire.webp',토:'assets/earth.webp',금:'assets/metal.webp',수:'assets/water.webp'};
+const ELEM_COLOR={목:'#62873A',화:'#E66B36',토:'#A97738',금:'#D79D22',수:'#3D86A8'};
 
 function koGanzhi(s){ return KSaju.toKo([s[0],s[1]]).join(''); }
 
@@ -618,7 +617,7 @@ function adaptSaju(res,noTime){
     pillars, elems, hasTime:!noTime, ksajuPillars:kp,
     dayMaster:{stem:d.stemKo,stemH:d.stem,elem:d.element.stem,yang:d.yinYang.stem==='양'},
     corrected:res.corrected, solar:res.solar, daeun,
-    elemColor:ELEM_COLOR_V4,
+    elemColor:ELEM_COLOR,
     voidBranches:(r.gongmang&&r.gongmang.branchesKo)||[],
     stemRelations:r.stemRelations||[],
     branchRelations:r.branchRelations||{},
@@ -687,7 +686,7 @@ function lunarMonthDays(year, month, leap){
 </script>
 <script>
 // ===== 상태 (메모리 전용) =====
-const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null, offline:false };
+const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null };
 
 // ===== 입력 초기화 =====
 const $ = id => document.getElementById(id);
@@ -745,7 +744,11 @@ function show(id){
   screens.forEach(s=>$(s).classList.toggle('hidden', s!==id));
   const stage=id==='scrInput'?'input':id==='scrChart'?'chart':id==='scrResult'?'result':id==='scrMatch'?'match':id==='scrToday'?'today':id==='scrMy'?'my':'loading';
   document.body.dataset.stage=stage;
-    document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('active', (stage==='input'&&b.dataset.nav==='home') || ((stage==='chart'||stage==='result')&&b.dataset.nav==='analysis') || (stage==='match'&&b.dataset.nav==='match') || (stage==='today'&&b.dataset.nav==='today') || (stage==='my'&&b.dataset.nav==='my')));
+    document.querySelectorAll('.bottom-nav button').forEach(b=>{
+      const on = (stage==='input'&&b.dataset.nav==='home') || ((stage==='chart'||stage==='result')&&b.dataset.nav==='analysis') || (stage==='match'&&b.dataset.nav==='match') || (stage==='today'&&b.dataset.nav==='today') || (stage==='my'&&b.dataset.nav==='my');
+      b.classList.toggle('active', on);
+      if(on) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    });
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -754,11 +757,6 @@ const GROUP_OF = { '비견':'비겁','겁재':'비겁','식신':'식상','상관
 const GEN = { '목':'화','화':'토','토':'금','금':'수','수':'목' };
 const CTRL = { '목':'토','토':'수','수':'화','화':'금','금':'목' };
 const ELEM_H = { 목:'木', 화:'火', 토:'土', 금:'金', 수:'水' };
-function groupElem(dayElem){ // 일간 오행 기준 각 십신 그룹의 오행
-  const revGen = Object.fromEntries(Object.entries(GEN).map(([a,b])=>[b,a]));
-  const revCtrl = Object.fromEntries(Object.entries(CTRL).map(([a,b])=>[b,a]));
-  return { 비겁:dayElem, 식상:GEN[dayElem], 재성:CTRL[dayElem], 관성:revCtrl[dayElem], 인성:revGen[dayElem] };
-}
 
 // 십신 그룹 카운트
 function findYongshin(r){
@@ -792,76 +790,6 @@ const LUCK = {
   수:{ color:'검정·남색', dir:'북쪽', num:'1, 6', season:'겨울', food:'물 자주 마시기, 해조류', item:'남색 머플러, 잉크 펜', habit:'자기 전 생각 한 줄 적고 흘려보내기', place:'강변, 바다' }
 };
 
-// ===== 원국 계산 =====
-$('btnCalc').onclick = async ()=>{
-  const btn=$('btnCalc'); const original=btn.textContent;
-  btn.disabled=true; btn.textContent='족보를 펼치는 중…';
-  try{
-    const rawY=+ySel.value, rawM=+mSel.value, rawD=+dSel.value;
-    const hour=S.noTime?12:+hSel.value;
-    const minute=S.noTime?0:+minSel.value;
-    const res=computeSaju({
-      year:rawY,month:rawM,day:rawD,hour,minute,
-      noTime:S.noTime,gender:S.gender,cal:S.cal,leap:$('isLeap').checked
-    });
-    const solar=res.solar;
-    S.birth={y:solar.year,m:solar.month,d:solar.day,rawY,rawM,rawD,
-             hour:S.noTime?null:hour,minute:S.noTime?null:minute,
-             noTime:S.noTime,gender:S.gender,calRaw:S.cal};
-    S.saju=adaptSaju(res,S.noTime);
-    S.engineMode='accurate';
-    S.yong=findYongshin(S.saju);
-    renderChart(); show('scrChart');
-  }catch(e){alert('앗, 계산하다가 넘어졌어 크앙… '+e.message);}
-  finally{btn.disabled=false;btn.textContent=original;}
-};
-
-function renderChart(){
-  const r=S.saju, EC=r.elemColor;
-  $('birthLabel').textContent = `${S.birth.y}.${S.birth.m}.${S.birth.d}` + (S.birth.noTime?' · 시간모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`);
-  const grid=$('pillarGrid'); grid.innerHTML='';
-  r.pillars.forEach((p,i)=>{
-    const div=document.createElement('div');
-    div.className='pillar'+(i===2?' me':'');
-    if(p.missing){
-      div.innerHTML=`<div class="pname">시주</div><div class="q">?</div><div class="tengod">시간 모름</div>`;
-    }else{
-      div.innerHTML=`
-        <div class="pname">${p.name}${i===2?' · 나':''}</div>
-        <div class="glyph" style="background:${EC[p.stemElem]}">${p.stem}<small>${p.stemElem} 기운</small></div>
-        <div class="glyph" style="background:${EC[p.branchElem]}">${p.branch}<small>${p.branchElem} 기운</small></div>
-        <div class="tengod">${PLAIN_GOD[p.stemGod]||p.stemGod}<br>${PLAIN_GOD[p.branchGod]||p.branchGod}</div>`;
-    }
-    grid.appendChild(div);
-  });
-  const total=Object.values(r.elems).reduce((a,b)=>a+b,0);
-  const bar=$('elemBar'); bar.innerHTML='';
-  const tags=$('elemTags'); tags.innerHTML='';
-  const missing=[];
-  ['목','화','토','금','수'].forEach(e=>{
-    const n=r.elems[e];
-    if(n>0){ const seg=document.createElement('div'); seg.style.width=(n/total*100)+'%'; seg.style.background=EC[e]; bar.appendChild(seg); }
-    else missing.push(e);
-    const t=document.createElement('span'); t.className='etag'+(n===0?' zero':'');
-    t.innerHTML=`<span class="sw" style="background:${EC[e]}"></span>${e} ${n}개`;
-    tags.appendChild(t);
-  });
-  $('missingNote').textContent = missing.length? `👀 이 사주엔 ${missing.join('·')} 기운이 비어 있어! 크앙이가 채우는 법도 알려줄게` : '오행이 골고루 있는 편이야! 균형이 좋아 🐾';
-  if(r.daeun){
-    const precise=r.daeun.precise;
-    $('daeunDir').textContent = precise ? `${precise.years}년 ${precise.months}개월 전후 시작 · ${r.daeun.forward?'앞으로 읽는 흐름':'거꾸로 읽는 흐름'}` : `${r.daeun.startAge}세 전후 시작`;
-    const sc=$('daeunScroll'); sc.innerHTML='';
-    r.daeun.list.forEach(d=>{
-      const grp=GROUP_OF[d.stemGod]||'비겁';
-      const c=document.createElement('div'); c.className='dchip';
-      c.innerHTML=`<div class="age">${d.age}세 전후</div><div class="flow-title">${GROUP_FLOW_TITLE[grp]}</div><div class="flow-sub">${GROUP_FLOW_SUB[grp]}</div>`;
-      sc.appendChild(c);
-    });
-  }
-  const dm=r.dayMaster;
-  $('chartBubble').textContent = `너의 중심은 ${STEM_PERSONA[dm.stem][0]}에 가까워! 계산표보다 생활 속 모습으로 쉽게 풀어줄게, 크앙 🐾`;
-}
-
 // ===== 수위 → 해설 =====
 document.querySelectorAll('.level-btn').forEach(b=>b.onclick=()=>{ S.level=b.dataset.level; saveBirth(); getReading(); });
 $('btnBack1').onclick=()=>show('scrInput');
@@ -877,7 +805,7 @@ async function getReading(){
   loadTimer=setInterval(()=>{ $('loadMsg').textContent=LOADMSGS[++i%LOADMSGS.length]; },1800);
   try{
     await new Promise(resolve=>setTimeout(resolve, 950));
-    S.reading = enrichReading(localReading());
+    S.reading = localReading();
     renderResult();
     show('scrResult');
   }catch(e){
@@ -891,8 +819,6 @@ async function getReading(){
 
 // ===== 상담형 풀이 엔진 =====
 
-const PLAIN_GROUP={비겁:'내 기준을 세우는 힘',식상:'생각을 결과로 만드는 힘',재성:'현실을 굴리는 힘',관성:'책임과 질서를 잡는 힘',인성:'배우고 회복하는 힘'};
-const PLAIN_GOD={비견:'내 기준을 지키는 힘',겁재:'사람과 경쟁하는 힘',식신:'꾸준히 만들고 표현하는 힘',상관:'새롭게 바꾸고 말하는 힘',편재:'기회를 넓게 잡는 힘',정재:'차근차근 관리하는 힘',편관:'압박 속에서 버티는 힘',정관:'규칙과 책임을 지키는 힘',편인:'남다르게 관찰하는 힘',정인:'배우고 정리하는 힘','일간(나)':'나의 중심'};
 const SEASON_BY_BRANCH={인:'봄의 시작',묘:'한창 자라는 봄',진:'봄에서 여름으로 넘어가는 때',사:'여름의 시작',오:'열기가 가장 강한 여름',미:'여름에서 가을로 넘어가는 때',신:'가을의 시작',유:'결과를 거두는 가을',술:'가을에서 겨울로 넘어가는 때',해:'겨울의 시작',자:'기운을 깊이 저장하는 겨울',축:'겨울에서 봄을 준비하는 때'};
 function rankedGroups(g){return Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([k])=>k)}
 function currentAge(){
@@ -902,18 +828,6 @@ function currentAge(){
   if(beforeBirthday) age--;
   return Math.max(0,age);
 }
-const STEM_PERSONA = {
-  '갑':['하늘로 쭉 뻗는 큰 나무','한번 마음먹으면 곧게 밀고 나가는 힘이 있어. 리더 기질이 있어서 사람들이 은근히 너를 따라오게 돼. 대신 꺾이는 건 잘 못 참아서, 안 되는 일 앞에서 유연하게 돌아가는 연습이 필요해'],
-  '을':['바위도 타고 오르는 들꽃 덩굴','부드러워 보여도 생명력이 어마어마해. 어떤 환경에 떨어져도 결국 적응해서 피어나는 타입이야. 다만 남 눈치를 보느라 하고 싶은 말을 삼킬 때가 많아'],
-  '병':['한낮의 쨍한 태양','존재감이 커서 숨으려 해도 숨겨지지 않아. 사람들을 환하게 만드는 재주가 있고 열정도 커. 대신 감정이 얼굴에 다 드러나고, 확 타올랐다 확 식는 게 고민일 거야'],
-  '정':['밤을 지키는 촛불','화려하진 않아도 오래오래 은은하게 타는 빛이야. 세심하게 사람을 챙기는 다정함이 있어. 다만 혼자 속으로 끙끙 앓는 버릇이 있지'],
-  '무':['묵직하게 자리를 지키는 큰 산','웬만한 일엔 흔들리지 않는 든든함이 있어. 사람들이 기대고 싶어 하는 타입이야. 대신 변화가 필요할 때도 그 자리에 버티고 있으려는 고집이 있어'],
-  '기':['무엇이든 품어 길러내는 논밭 흙','포용력이 좋아서 주변 사람을 잘 키워줘. 실속도 챙길 줄 알고. 다만 이것저것 다 받아주다 정작 자기 몫을 놓칠 때가 있어'],
-  '경':['단칼에 자르는 무쇠검','결단력이 좋고 의리가 있어. 아닌 건 아니라고 말할 수 있는 강단이 매력이야. 대신 말이 칼처럼 나가서 본의 아니게 상처 줄 때가 있지'],
-  '신':['세공된 반짝이는 보석','감각이 예민하고 미적 센스가 타고났어. 디테일을 보는 눈이 남달라. 다만 예민한 만큼 작은 말에도 속으로 오래 담아두는 편이야'],
-  '임':['어디로든 흘러가는 큰 바다','스케일이 크고 생각이 자유로워. 낯선 것도 겁 없이 받아들이는 개방성이 있어. 대신 마음이 넓은 만큼 종잡을 수 없다는 말도 들어'],
-  '계':['조용히 스며드는 새벽 이슬비','직관이 좋고 눈치가 빨라. 티 안 나게 스며들어 사람 마음을 움직이는 재주가 있어. 다만 생각이 많아서 혼자만의 동굴에 자주 들어가'],
-};
 const TODAY_TEXT = {
   비견:'오늘은 네 뜻대로 밀어붙여도 좋은 날이야', 겁재:'오늘은 지갑을 살짝 닫아두는 게 좋아',
   식신:'오늘은 맛있는 걸 먹고 사람을 만나면 복이 붙는 날이야', 상관:'오늘은 보내기 전에 메시지 한 번만 다시 읽어봐',
@@ -923,146 +837,11 @@ const TODAY_TEXT = {
 };
 
 
-const GROUP_FLOW_TITLE={
- 비겁:'내 선택이 커지는 시기',식상:'결과물을 밖으로 꺼내는 시기',재성:'현실과 돈을 정리하는 시기',관성:'자리와 책임이 커지는 시기',인성:'배우고 방향을 고치는 시기'
-};
-const GROUP_FLOW_SUB={비겁:'독립·사람·결정',식상:'표현·제작·성과',재성:'수입·일정·생활',관성:'직책·약속·기준',인성:'배움·회복·정리'};
-const ELEMENT_ROLE={목:'새로운 것을 시작하고 키우는 역할',화:'마음을 표현하고 존재감을 드러내는 역할',토:'흔들릴 때 중심을 잡고 마무리하는 역할',금:'복잡한 것을 잘라내고 정리하는 역할',수:'멈춰 생각하고 유연하게 방향을 바꾸는 역할'};
-const ELEMENT_WORK={목:'새 아이디어를 작은 시안으로 시작하기',화:'혼자 품지 말고 말이나 결과물로 보여주기',토:'할 일을 줄이고 하나를 끝까지 마무리하기',금:'기준 세 개를 정해 불필요한 것을 덜어내기',수:'바로 답하지 말고 생각할 여백을 확보하기'};
-const ELEMENT_RECOVERY={목:'밖으로 나가 걷거나 새로운 장소를 보는 것',화:'햇빛을 받고 좋아하는 사람과 웃는 것',토:'공간과 일정 하나를 정리해 안정감을 만드는 것',금:'연락과 할 일을 줄여 머릿속 소음을 끊는 것',수:'혼자 조용히 쉬며 생각을 글로 흘려보내는 것'};
 function currentPillarInfo(){
  const year=HoraengSaju.yearPillarOf(new Date().getFullYear()).pillar;
  const day=HoraengSaju.todayGapja().day;
  return {year,day,yearGod:HoraengSaju.pillarGods(S.saju.dayMaster.stem,year),dayGod:HoraengSaju.pillarGods(S.saju.dayMaster.stem,day)};
 }
-function formatReadingText(text){
- const parts=String(text||'').split(/\n\n+/).filter(Boolean);
- const labels=['핵심 모습','실제로는 이렇게 보여','크앙의 현실 조언','기억할 점'];
- return parts.map((part,i)=>`<span class="reading-block"><b>${labels[i]||'한 걸음 더'}</b><span>${part}</span></span>`).join('');
-}
-
-function daeunScore(d, yong, dayElem){
-  const ge = groupElem(dayElem);
-  const grp = GROUP_OF[d.stemGod];
-  let s = 55;
-  if(ge[grp]===yong.elem) s+=25;
-  else if(yong.strong && ['식상','재성','관성'].includes(grp)) s+=10;
-  else if(!yong.strong && ['비겁','인성'].includes(grp)) s+=10;
-  else s-=12;
-  return Math.max(22, Math.min(95, s));
-}
-function renderGraph(){
-  const r=S.saju;
-  if(!r.daeun){ $('graphPanel').classList.add('hidden'); return; }
-  $('graphPanel').classList.remove('hidden');
-  const list=r.daeun.list;
-  const nowAge=currentAge();
-  const W=320,H=130,PX=26,PY=16;
-  const xs=i=> PX + i*(W-PX*2)/(list.length-1);
-  const scoreArr=list.map(d=>daeunScore(d,S.yong,r.dayMaster.elem));
-  const ys=v=> H-PY - (v-15)/85*(H-PY*2);
-  let path='', area=`M ${xs(0)} ${H-PY} `;
-  list.forEach((d,i)=>{ const x=xs(i),y=ys(scoreArr[i]); path+=(i?'L':'M')+` ${x} ${y} `; area+=`L ${x} ${y} `; });
-  area+=`L ${xs(list.length-1)} ${H-PY} Z`;
-  // 현재 위치
-  let curI=0; list.forEach((d,i)=>{ if(d.age<=nowAge) curI=i; });
-  const labels=list.map((d,i)=>`<text x="${xs(i)}" y="${H-2}" text-anchor="middle" font-size="8.5" fill="#5A4E44">${d.age}</text>`).join('');
-  const dots=list.map((d,i)=>`<circle cx="${xs(i)}" cy="${ys(scoreArr[i])}" r="3" fill="${i===curI?'#C8442A':'#2E4B6B'}"/>`).join('');
-  const eras=`<text x="${xs(0)}" y="10" font-size="8.5" fill="#B0862F">초년</text><text x="${W/2}" y="10" text-anchor="middle" font-size="8.5" fill="#B0862F">중년</text><text x="${xs(list.length-1)}" y="10" text-anchor="end" font-size="8.5" fill="#B0862F">말년</text>`;
-  $('lifeSvg').innerHTML = `
-    <path d="${area}" fill="rgba(46,75,107,.12)"/>
-    <path d="${path}" fill="none" stroke="#2E4B6B" stroke-width="2" stroke-linecap="round"/>
-    ${dots}${labels}${eras}
-    <text x="${xs(curI)}" y="${ys(scoreArr[curI])-8}" text-anchor="middle" font-size="11">🐾</text>`;
-  const best=list[scoreArr.indexOf(Math.max(...scoreArr))];
-  const bestGrp=GROUP_OF[best.stemGod]||'비겁';
-  $('graphNote').textContent = `발자국은 지금 머무는 구간이야. ${best.age}세 전후에는 ‘${GROUP_FLOW_TITLE[bestGrp]}’ 역할을 비교적 자연스럽게 쓰기 쉬워 보여. 그래프는 사건을 맞히는 점수가 아니라, 어떤 역할이 편한지 보여주는 참고선이야.`;
-}
-
-// ===== 개운법 표 =====
-function renderLuck(){
-  const yong=S.yong, L=LUCK[yong.elem];
-  $('yongStamp').innerHTML=`<img src="${ELEMENT_ASSETS[yong.elem]}" alt="${yong.elem} 기운">`;
-  $('yongDesc').innerHTML=`지금의 균형을 조금 더 편하게 만드는 건 <b>${yong.elem} 역할</b>이야. 쉽게 말하면 ${ELEMENT_ROLE[yong.elem]}을 생활에 조금씩 넣어주는 거야. 이건 미래를 결정하는 정답이 아니라, 과한 힘과 덜 쓰는 힘을 맞추기 위한 생활 힌트야.`;
-  $('luckTable').innerHTML = [
-    ['일할 때', ELEMENT_WORK[yong.elem]],
-    ['지쳤을 때', ELEMENT_RECOVERY[yong.elem]],
-    ['작은 습관', L.habit],
-    ['잘 맞는 공간', L.place],
-    ['재미로 보는 색', L.color],
-    ['곁에 둘 소품', L.item]
-  ].map(([k,v])=>`<div class="lrow"><div class="lk">${k}</div><div class="lv">${v}</div></div>`).join('');
-}
-
-// ===== 결과 렌더 =====
-const SEC_META=[
-  ['성격','✦','타고난 결 — 나는 어떤 사람인가'],
-  ['재물','◈','돈과 현실 감각 — 어떻게 쌓는가'],
-  ['애정','❀','관계와 애정 — 어떤 인연이 편한가'],
-  ['초년운','○','초년 흐름 — 기반을 만드는 때'],
-  ['중년운','●','중년 흐름 — 힘을 쓰는 때'],
-  ['말년운','◐','후반 흐름 — 거두고 정리하는 때'],
-  ['올해흐름','↗','올해의 흐름 — '+new Date().getFullYear()],
-];
-function renderResult(){
-  const rd=S.reading;
-  $('todayLine').classList.remove('hidden');
-  $('todayLine').innerHTML = `<img class="inline-asset" src="assets/pouch.webp" alt=""><b>오늘의 한 줄</b> · ${rd['오늘한줄']||''}`;
-  $('resultBubble').textContent = `${S.level}로 봐줬어! 천천히 읽어봐, 크앙 🐾`;
-  const box=$('sections'); box.innerHTML='';
-  SEC_META.forEach(([k,ic,title])=>{
-    if(!rd[k]) return;
-    const d=document.createElement('div'); d.className='speech';
-    const assetMap={성격:'assets/plum.webp',일과재능:'assets/scroll.webp',재물:'assets/metal.webp',애정:'assets/moon.webp',초년운:'assets/sun.webp',중년운:'assets/mountain.webp',말년운:'assets/cloud.webp',올해흐름:'assets/talisman.webp'};
-    d.innerHTML=`<img class="section-asset" src="${assetMap[k]||'assets/cloud.webp'}" alt=""><div class="sh"><span class="ic">${ic}</span><b>${title}</b></div><p><span class="plain-title">쉽게 풀어보면</span>${formatReadingText(rd[k])}</p>`;
-    box.appendChild(d);
-  });
-  renderGraph();
-  renderLuck();
-  // 부적 카드
-  const r=S.saju, EC=r.elemColor;
-  $('scDate').textContent = `${S.birth.y}.${S.birth.m}.${S.birth.d} 생 · ${S.level}`;
-  const sp=$('scPillars'); sp.innerHTML='';
-  r.pillars.forEach(p=>{
-    const d=document.createElement('div'); d.className='sc-p';
-    d.innerHTML = p.missing
-      ? `<div class="g" style="background:#8C8C94">?</div><div class="n">시간 미상</div>`
-      : `<div class="g" style="background:${EC[p.stemElem]}">${p.stem}${p.branch}</div><div class="n">${p.name}</div>`;
-    sp.appendChild(d);
-  });
-  $('scChar').innerHTML = `<img src="${ELEMENT_ASSETS[S.yong.elem]}" alt="${S.yong.elem} 역할">`;
-  $('scCharLabel').textContent = `나를 편하게 돕는 역할 · ${S.yong.elem}`;
-  $('scSum').textContent = `“${rd['총평']||rd['오늘한줄']||''}”`;
-  $('cardImgWrap').innerHTML='';
-}
-
-
-// ===== v2 콘텐츠 보강 =====
-function dominantGroup(){
-  const g=S.yong.g;
-  return Object.keys(g).reduce((a,b)=>g[a]>=g[b]?a:b);
-}
-function enrichReading(rd){ return rd; }
-
-// 상세 섹션에 일과 재능 삽입
-SEC_META.splice(2,0,['일과재능','◇','일과 재능 — 어디에서 힘이 나는가']);
-
-const _renderChart = renderChart;
-renderChart = function(){
-  _renderChart();
-  const r=S.saju, dm=r.dayMaster, y=S.yong;
-  const dom=dominantGroup();
-  const empty=['목','화','토','금','수'].filter(e=>r.elems[e]===0);
-  $('identityIcon').src=ELEM_ASSET_PATH[dm.elem];
-  $('identityTitle').textContent=STEM_PERSONA[dm.stem][0];
-  $('identitySub').textContent=`${dm.elem} 역할을 중심으로 움직이는 사람`;
-  $('quickTags').innerHTML=[PLAIN_GROUP[dom], empty.length?`${empty.join('·')} 역할은 일부러 챙기기`:'다섯 역할을 모두 쓰는 편', `${S.yong.elem} 역할을 쓰면 균형이 편해짐`].map(x=>`<span>${x}</span>`).join('');
-  $('chartGuide').textContent='생일을 네 가지 기둥과 다섯 역할로 바꾼 계산표야. 한자는 숨기고, 실제 생활에서 어떤 모습으로 나타나는지 먼저 보여줄게.';
-  $('engineBadge').textContent=S.saju.engine||'내장 만세력 엔진';
-  $('technicalSummary').textContent=`전문 계산표: ${r.pillars.map(p=>p.missing?'시간 미상':p.stemH+p.branchH).join(' · ')} / 빈 가지 표시: ${(r.voidBranches||[]).join('·')||'없음'} / 균형 보조 기운은 여러 해석법 중 하나를 단순화한 참고값이야.`;
-  renderElementCards();
-};
-
 function renderElementCards(){
   const r=S.saju, total=Object.values(r.elems).reduce((a,b)=>a+b,0)||1;
   const names={목:'자라기',화:'표현하기',토:'버티기',금:'정리하기',수:'흐르기'};
@@ -1076,37 +855,6 @@ function renderElementCards(){
     </div>`;
   }).join('');
 }
-
-const _renderResult = renderResult;
-renderResult = function(){
-  _renderResult();
-  const r=S.saju, rd=S.reading, y=S.yong, dom=dominantGroup();
-  const empty=['목','화','토','금','수'].filter(e=>r.elems[e]===0);
-  $('resultName').textContent=STEM_PERSONA[r.dayMaster.stem][0];
-  $('resultOneLine').textContent=rd['총평']||'내 방식을 알고 쓰면 더 편해지는 사람';
-  const rank=rankedGroups(y.g);
-  $('resultTags').innerHTML=[PLAIN_GROUP[rank[0]],PLAIN_GROUP[rank[1]],`${y.elem} 역할이 균형을 도와줌`].map(x=>`<span>${x}</span>`).join('');
-  $('consultPoints').innerHTML=(rd.맞춤포인트||[]).map((x,i)=>`<div class="consult-point"><b>${['결정할 때','지쳤을 때','두 가지 성향','반복되는 숙제'][i]||'나의 포인트'}</b><span>${x}</span></div>`).join('');
-  $('actionCard').innerHTML=`<img class="asset-decor asset-talisman" src="assets/talisman.webp" alt=""><span class="action-label">오늘 바로 해볼 것</span><b>${LUCK[y.elem].habit}</b><small>${empty.length?`${empty.join('·')} 역할을 의식적으로 챙기는 아주 작은 연습이야.`:'지금의 균형을 무리 없이 유지하는 작은 연습이야.'}</small>`;
-  $('evidenceGrid').innerHTML=[
-    ['타고난 중심',STEM_PERSONA[r.dayMaster.stem][0]],
-    ['가장 큰 힘',PLAIN_GROUP[rank[0]]],
-    ['함께 쓰는 힘',PLAIN_GROUP[rank[1]]],
-    ['균형을 돕는 역할',`${y.elem} 역할`]
-  ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
-  setupAccordions();
-};
-
-function setupAccordions(){
-  document.querySelectorAll('#sections .speech').forEach((el,i)=>{
-    el.classList.toggle('open',i<2);
-    const head=el.querySelector('.sh');
-    if(!head.querySelector('.acc-mark')) head.insertAdjacentHTML('beforeend','<span class="acc-mark">+</span>');
-    head.onclick=()=>el.classList.toggle('open');
-  });
-}
-
-// 공유 카드에 캐릭터 워터마크 추가
 
 // ===== 카드 저장 (외부 라이브러리 없이 직접 그리기) =====
 function roundRect(ctx,x,y,w,h,r){
@@ -1768,7 +1516,6 @@ renderLuck=function(){
   const panel=$('luckPanel');
   panel.innerHTML=`<h2><span class="dot"></span>내가 조금 더 편해지는 방법</h2><div class="luck-intro"><div class="yong-stamp"><img src="${ELEMENT_ASSETS[y]}" alt=""></div><p><b>${p.title}</b><br>${p.intro}<br><small>운명을 바꾸는 처방이 아니라, 지금 덜 지치게 도와주는 생활 힌트야.</small></p></div><div class="lucktable">${[['일 시작할 때',p.work],['지쳤을 때',p.tired],['관계에서',p.relation],['공간 정리',p.space],['이번 주',p.week],['재미로 보는 소품',L.item]].map(([k,v])=>`<div class="lrow"><div class="lk">${k}</div><div class="lv">${v}</div></div>`).join('')}</div>`;
 };
-const v5BaseRenderChart=renderChart;
 renderChart=function(){
   const r=S.saju,dm=r.dayMaster,ranks=v5Rank(),dom=ranks[0],second=ranks[1];
   $('birthLabel').textContent=`${S.birth.y}.${S.birth.m}.${S.birth.d}${S.birth.noTime?' · 시간 모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`}`;
@@ -1826,7 +1573,6 @@ renderChart=function(){
   }
   $('chartBubble').textContent=`계산은 끝났어. 이제 ${V5_STEM[dm.stem].name}이 실제 생활에서 어떻게 나타나는지 친구처럼 풀어줄게.`;
 };
-// 정밀 엔진은 3.5초 안에 연결되지 않으면 내장 계산기로 바로 전환
 $('btnCalc').onclick=async()=>{
   const btn=$('btnCalc'),original=btn.textContent;btn.disabled=true;btn.textContent='족보를 펼치는 중…';
   try{
@@ -1834,14 +1580,10 @@ $('btnCalc').onclick=async()=>{
     const res=computeSaju({year:rawY,month:rawM,day:rawD,hour,minute,noTime:S.noTime,gender:S.gender,cal:S.cal,leap:$('isLeap').checked});
     const solar=res.solar;
     S.birth={y:solar.year,m:solar.month,d:solar.day,rawY,rawM,rawD,hour:S.noTime?null:hour,minute:S.noTime?null:minute,noTime:S.noTime,gender:S.gender,calRaw:S.cal};
-    S.saju=adaptSaju(res,S.noTime);S.engineMode='accurate';
+    S.saju=adaptSaju(res,S.noTime);
     S.yong=findYongshin(S.saju);saveBirth();renderChart();show('scrChart');
   }catch(e){alert('앗, 계산하다가 넘어졌어… '+e.message)}finally{btn.disabled=false;btn.textContent=original}
 };
-// 하단 메뉴를 더 친근한 아이콘으로
-const v5Nav=[['home','⌂','홈'],['today','☀','오늘'],['analysis','◎','내 사주'],['match','♡','궁합'],['my','☺','마이']];
-document.querySelectorAll('.bottom-nav button').forEach((b,i)=>{if(v5Nav[i])b.innerHTML=`<span>${v5Nav[i][1]}</span><b>${v5Nav[i][2]}</b>`});
-const footer=document.querySelector('footer');if(footer)footer.innerHTML='사주는 미래를 확정하는 답이 아니라, 나를 이해하는 참고표예요.<br>크앙사주 v5 · 쉬운 생활 언어로 풀어쓴 친구 상담형 버전<br><small>만세력·진태양시·서머타임 보정이 모두 앱 안에 들어 있어 인터넷 없이도 같은 결과가 나옵니다.</small>';
 
 </script>
 </body>
