@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F6E7C9">
 <title>크앙사주 v5 — 친구처럼 풀어주는 사주 상담</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,7 +63,7 @@ button{touch-action:manipulation}
 .panel-title p{font-size:11px;color:var(--muted);margin-top:2px}
 .panel h2{font-family:'Gowun Batang',serif;font-size:17px;display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .panel h2 .dot{width:7px;height:7px;background:var(--red);border-radius:50%}
-label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:14px 0 6px}
+label,.field-label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:14px 0 6px}
 .row{display:flex;gap:8px}
 select,input[type=number],input[type=password]{width:100%;height:48px;padding:0 12px;border:1.5px solid rgba(38,33,30,.16);border-radius:13px;background:#FFFEFA;color:var(--ink);outline:none}
 select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,118,98,.10)}
@@ -72,6 +72,7 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .toggle-group button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 3px 10px rgba(38,33,30,.08)}
 .check{display:flex;align-items:flex-start;gap:9px;margin-top:12px;font-size:12px;color:var(--muted)}
 .check input{width:18px;height:18px;margin-top:1px;accent-color:var(--red);flex:0 0 auto}
+.check label{display:inline;font-size:inherit;font-weight:400;color:inherit;margin:0;cursor:pointer}
 .btn{width:100%;border:0;border-radius:15px;min-height:52px;padding:12px 18px;margin-top:17px;background:var(--ink);color:#fff;font-family:'Gowun Batang',serif;font-size:16px;font-weight:700;letter-spacing:.3px;cursor:pointer;box-shadow:0 7px 0 #0F0D0C;transition:.15s}
 .btn:active{transform:translateY(4px);box-shadow:0 3px 0 #0F0D0C}
 .btn.red{background:var(--red);box-shadow:0 7px 0 #8F3028}
@@ -178,8 +179,6 @@ body:before{background:rgba(255,248,234,.12);opacity:1}
 .topbar{padding:13px 3px 9px;position:relative;z-index:5}
 .brand{height:58px;max-width:230px;overflow:hidden;align-items:center}
 .brand-logo{display:block;width:210px;height:78px;object-fit:contain;object-position:left center;transform:scale(1.05)}
-.notify-btn{width:44px;height:44px;border:1.5px solid var(--soft-line);border-radius:50%;background:rgba(255,254,249,.96);color:var(--brown);font-size:22px;box-shadow:0 8px 18px rgba(101,65,30,.10);position:relative}
-.notify-btn i{position:absolute;width:8px;height:8px;background:var(--coral);border-radius:50%;right:5px;top:5px;border:2px solid #fff}
 .stepbar{margin:4px 1px 13px;gap:9px}.stepbar span{height:5px;background:rgba(94,59,31,.10)}.stepbar span.on{background:var(--coral)}
 .hero-card,.panel,.five-preview,.identity-card,.today-line,.action-card,.evidence,.speech,.result-hero{background:rgba(255,254,249,.97);border:1.5px solid rgba(207,166,111,.55);box-shadow:var(--lift)}
 .hero-card{min-height:324px;border-radius:29px;margin-bottom:15px;background:linear-gradient(145deg,rgba(255,255,252,.99),rgba(255,251,239,.98));overflow:hidden}
@@ -291,7 +290,7 @@ footer{margin-bottom:8px}
 :root{--v5-card:rgba(255,255,252,.97);--v5-shadow:0 16px 34px rgba(86,56,30,.14),inset 0 1px 0 rgba(255,255,255,.96)}
 body{font-size:17px;line-height:1.78;letter-spacing:-.12px}
 .app-shell{padding-bottom:128px}
-.topbar{padding-top:20px}.brand-logo{width:220px;max-width:64vw}.notify-btn{font-size:22px}
+.topbar{padding-top:20px}.brand-logo{width:220px;max-width:64vw}
 .hero-card,.panel,.bright-card,.identity-card,.result-hero,.today-line,.consult-card,.action-card,.evidence,.speech,#shareCard{
   background-color:var(--v5-card);border-color:rgba(216,183,139,.72);box-shadow:var(--v5-shadow)
 }
@@ -299,7 +298,7 @@ body{font-size:17px;line-height:1.78;letter-spacing:-.12px}
 .section-cap b{font-size:19px}.section-cap span{font-size:13px}.five-preview-row b{font-size:15px}.five-preview-row img{height:68px}
 .bubble{font-size:15px;line-height:1.68;padding:15px 17px}.mascot-small{width:94px;height:94px}
 .panel{padding:24px;margin-bottom:18px;border-radius:26px}.panel-title h2,.panel h2{font-size:21px}.panel-title p{font-size:14px;line-height:1.55}.num{width:34px;height:34px;font-size:14px}
-label{font-size:15px;margin:17px 0 8px}.hint,.mini-note,.check{font-size:13.5px;line-height:1.7}
+label,.field-label{font-size:15px;margin:17px 0 8px}.hint,.mini-note,.check{font-size:13.5px;line-height:1.7}
 select,input[type=number],input[type=password]{height:55px;font-size:16px;border-radius:15px}.toggle-group button{height:48px;font-size:15px}.btn{min-height:59px;font-size:18px;border-radius:17px}
 .identity-card{grid-template-columns:98px 1fr;padding:24px;border-radius:28px}.identity-mark{width:98px;height:98px}.identity-mark img{width:84px;height:84px}.identity-copy small{font-size:12px}.identity-copy h2{font-size:26px}.identity-copy p{font-size:15px}.quick-tags span,.result-tags span{font-size:13px;padding:7px 10px}
 .chart-guide{font-size:15px;line-height:1.72}.engine-badge{font-size:12px;padding:8px 11px}.pillars{gap:10px}.pillar{padding:12px 7px;border-radius:18px}.pname{font-size:13px}.pillar .tengod{font-size:12.5px;line-height:1.55}.pillar-v5-icons{display:flex;justify-content:center;align-items:center;gap:4px;margin:8px 0}.pillar-v5-icons img{width:43px;height:43px;object-fit:contain}.flow-stage{margin-top:3px;font-size:9px;color:#9B8B76}
@@ -352,7 +351,6 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 <div class="app-shell">
   <div class="topbar" style="position:relative;overflow:visible"><img class="asset-decor asset-plum-top" src="assets/plum.webp" alt=""><img class="asset-decor asset-cloud-top" src="assets/cloud.webp" alt="">
     <div class="brand"><img class="brand-logo" src="assets/logo.webp" alt="크앙사주"></div>
-    <button class="notify-btn" type="button" aria-label="알림">🔔<i></i></button>
   </div>
 
   <section id="scrInput">
@@ -370,23 +368,23 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     <div class="form-grid">
       <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
         <div class="panel-title"><span class="num">1</span><div><h2>태어난 날짜</h2><p>양력과 음력을 먼저 골라줘.</p></div></div>
-        <label>달력 기준</label>
-        <div class="toggle-group" id="calToggle"><button class="on" data-v="solar">양력</button><button data-v="lunar">음력</button></div>
-        <div class="check hidden" id="leapWrap"><input type="checkbox" id="isLeap"><span>윤달에 태어났어요</span></div>
-        <label>생년월일</label>
-        <div class="row"><select id="inY"></select><select id="inM"></select><select id="inD"></select></div>
+        <span class="field-label" id="lblCal">달력 기준</span>
+        <div class="toggle-group" id="calToggle" role="group" aria-labelledby="lblCal"><button type="button" class="on" data-v="solar" aria-pressed="true">양력</button><button type="button" data-v="lunar" aria-pressed="false">음력</button></div>
+        <div class="check hidden" id="leapWrap"><input type="checkbox" id="isLeap"><label for="isLeap">윤달에 태어났어요</label></div>
+        <span class="field-label" id="lblBirth">생년월일</span>
+        <div class="row" role="group" aria-labelledby="lblBirth"><select id="inY" aria-label="태어난 연도"></select><select id="inM" aria-label="태어난 월"></select><select id="inD" aria-label="태어난 일"></select></div>
       </div>
       <div class="panel"><img class="asset-decor asset-pouch" src="assets/pouch.webp" alt="">
         <div class="panel-title"><span class="num">2</span><div><h2>태어난 시간</h2><p>모르면 세 기둥으로도 볼 수 있어.</p></div></div>
-        <label>태어난 시각</label>
-        <div class="row"><select id="inH"></select><select id="inMin"></select></div>
-        <div class="check"><input type="checkbox" id="noTime"><span>태어난 시간을 몰라요</span></div>
-        <label>성별 <small style="font-weight:400">· 10년 흐름 계산용</small></label>
-        <div class="toggle-group" id="genToggle"><button class="on" data-v="F">여성</button><button data-v="M">남성</button></div>
+        <span class="field-label" id="lblTime">태어난 시각</span>
+        <div class="row" role="group" aria-labelledby="lblTime"><select id="inH" aria-label="태어난 시"></select><select id="inMin" aria-label="태어난 분"></select></div>
+        <div class="check"><input type="checkbox" id="noTime"><label for="noTime">태어난 시간을 몰라요</label></div>
+        <span class="field-label" id="lblGen">성별 <small style="font-weight:400">· 10년 흐름 계산용</small></span>
+        <div class="toggle-group" id="genToggle" role="group" aria-labelledby="lblGen"><button type="button" class="on" data-v="F" aria-pressed="true">여성</button><button type="button" data-v="M" aria-pressed="false">남성</button></div>
         <button class="btn" id="btnCalc">내 사주 족보 펼치기</button>
       </div>
     </div>
-    <div class="mini-note">온라인에서는 서울 경도·균시차·과거 표준시까지 반영하는 정밀 계산을 사용해. 연결되지 않으면 내장 계산기로 자동 전환하고, 태어난 시간을 모르면 시간 기둥은 빼고 조심스럽게 풀어줘.</div>
+    <div class="mini-note">계산은 전부 네 폰 안에서 해. 서울 경도·균시차·과거 표준시(서머타임 포함)까지 반영하고, 태어난 시간을 모르면 시간 기둥은 빼고 조심스럽게 풀어줘.</div>
   </section>
 
   <section id="scrChart" class="hidden">
@@ -470,16 +468,16 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 
     <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
       <div class="panel-title"><span class="num">2</span><div><h2>상대 생년월일</h2><p>궁금한 사람의 생일을 알려줘.</p></div></div>
-      <label>달력 기준</label>
-      <div class="toggle-group" id="mCalToggle"><button class="on" data-v="solar">양력</button><button data-v="lunar">음력</button></div>
-      <div class="check hidden" id="mLeapWrap"><input type="checkbox" id="mIsLeap"><span>윤달에 태어났어요</span></div>
-      <label>생년월일</label>
-      <div class="row"><select id="mY"></select><select id="mM"></select><select id="mD"></select></div>
-      <label>태어난 시각</label>
-      <div class="row"><select id="mH"></select><select id="mMin"></select></div>
-      <div class="check"><input type="checkbox" id="mNoTime"><span>태어난 시간을 몰라요</span></div>
-      <label>성별</label>
-      <div class="toggle-group" id="mGenToggle"><button class="on" data-v="M">남성</button><button data-v="F">여성</button></div>
+      <span class="field-label" id="mLblCal">달력 기준</span>
+      <div class="toggle-group" id="mCalToggle" role="group" aria-labelledby="mLblCal"><button type="button" class="on" data-v="solar" aria-pressed="true">양력</button><button type="button" data-v="lunar" aria-pressed="false">음력</button></div>
+      <div class="check hidden" id="mLeapWrap"><input type="checkbox" id="mIsLeap"><label for="mIsLeap">윤달에 태어났어요</label></div>
+      <span class="field-label" id="mLblBirth">생년월일</span>
+      <div class="row" role="group" aria-labelledby="mLblBirth"><select id="mY" aria-label="상대 태어난 연도"></select><select id="mM" aria-label="상대 태어난 월"></select><select id="mD" aria-label="상대 태어난 일"></select></div>
+      <span class="field-label" id="mLblTime">태어난 시각</span>
+      <div class="row" role="group" aria-labelledby="mLblTime"><select id="mH" aria-label="상대 태어난 시"></select><select id="mMin" aria-label="상대 태어난 분"></select></div>
+      <div class="check"><input type="checkbox" id="mNoTime"><label for="mNoTime">태어난 시간을 몰라요</label></div>
+      <span class="field-label" id="mLblGen">성별</span>
+      <div class="toggle-group" id="mGenToggle" role="group" aria-labelledby="mLblGen"><button type="button" class="on" data-v="M" aria-pressed="true">남성</button><button type="button" data-v="F" aria-pressed="false">여성</button></div>
       <button class="btn" id="btnMatch">둘의 결 맞춰보기</button>
     </div>
 
@@ -689,7 +687,7 @@ function lunarMonthDays(year, month, leap){
 </script>
 <script>
 // ===== 상태 (메모리 전용) =====
-const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null, offline:false, apiKey:null, engineModule:null };
+const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null, offline:false };
 
 // ===== 입력 초기화 =====
 const $ = id => document.getElementById(id);
@@ -722,11 +720,15 @@ for(let h=0;h<24;h++) hSel.add(new Option(String(h).padStart(2,'0')+'시', h));
 hSel.value=12;
 for(let mi=0;mi<60;mi+=5) minSel.add(new Option(String(mi).padStart(2,'0')+'분', mi));
 
-function bindToggle(el, cb){
-  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{
-    el.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on'); cb(b.dataset.v);
+function setToggle(el, v){
+  el.querySelectorAll('button').forEach(x=>{
+    const on = x.dataset.v===v;
+    x.classList.toggle('on', on);
+    x.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
+}
+function bindToggle(el, cb){
+  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{ setToggle(el, b.dataset.v); cb(b.dataset.v); });
 }
 bindToggle($('calToggle'), v=>{ S.cal=v; refreshDate(); });
 bindToggle($('genToggle'), v=>{ S.gender=v; });
@@ -876,7 +878,6 @@ async function getReading(){
   try{
     await new Promise(resolve=>setTimeout(resolve, 950));
     S.reading = enrichReading(localReading());
-    S.offline = false;
     renderResult();
     show('scrResult');
   }catch(e){
@@ -1016,18 +1017,6 @@ function renderResult(){
     d.innerHTML=`<img class="section-asset" src="${assetMap[k]||'assets/cloud.webp'}" alt=""><div class="sh"><span class="ic">${ic}</span><b>${title}</b></div><p><span class="plain-title">쉽게 풀어보면</span>${formatReadingText(rd[k])}</p>`;
     box.appendChild(d);
   });
-  if(false && S.offline){
-    const n=document.createElement('div'); n.className='panel'; n.style.borderStyle='dashed';
-    n.innerHTML=`<h2><span class="dot"></span>크앙이 직접 풀이 모드</h2>
-      <div class="hint" style="margin-top:0">지금은 AI 연결이 안 닿아서 크앙이가 족보(만세력 계산)만으로 풀었어!
-      클로드 아티팩트 안에서 열면 AI 산신령 할아버지가 더 길고 사람마다 다르게 풀어줘.<br>
-      Anthropic API 키가 있다면 아래에 넣으면 여기서도 AI 풀이를 들을 수 있어. (저장 안 해!)</div>
-      <label>API 키 (선택)</label>
-      <input type="password" id="keyIn" placeholder="sk-ant-..." style="width:100%;padding:11px 10px;font-size:15px;font-family:inherit;background:#FFFDF7;border:1.5px solid rgba(43,35,32,.22);border-radius:9px">
-      <button class="btn ghost" id="btnKey" style="margin-top:10px">키로 AI 할아버지 깨우기</button>`;
-    box.appendChild(n);
-    $('btnKey').onclick=()=>{ const v=$('keyIn').value.trim(); if(!v) return alert('키를 넣어줘!'); S.apiKey=v; getReading(); };
-  }
   renderGraph();
   renderLuck();
   // 부적 카드
@@ -1225,7 +1214,7 @@ function restoreSaved(){
   S.remember=true;
   try{
     S.cal=d.cal||'solar';
-    document.querySelectorAll('#calToggle button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.cal));
+    setToggle($('calToggle'), S.cal);
     ySel.value=d.rawY; mSel.value=d.rawM;
     syncLeapBox();
     if(d.leap && !$('leapWrap').classList.contains('hidden')) $('isLeap').checked=true;
@@ -1235,7 +1224,7 @@ function restoreSaved(){
     hSel.disabled=minSel.disabled=S.noTime;
     hSel.style.opacity=minSel.style.opacity=S.noTime?.45:1;
     S.gender=d.gender||'F';
-    document.querySelectorAll('#genToggle button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.gender));
+    setToggle($('genToggle'), S.gender);
     if(d.level) S.savedLevel=d.level;
   }catch(e){ return false; }
   return true;
