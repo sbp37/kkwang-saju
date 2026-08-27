@@ -1,0 +1,46 @@
+크앙사주 (kkwang-saju)
+Copyright (c) 2026 sbp37. All rights reserved.
+
+이 저장소의 원본 저작물 — 화면 마크업과 스타일, 해석 규칙과 문안,
+한국 시간 보정·판정 코드(engine/ksaju.js), 캐릭터와 이미지 자산 —
+에 대한 모든 권리는 저작권자에게 있습니다.
+
+저작권자의 사전 서면 동의 없이 다음을 할 수 없습니다.
+  · 복제, 배포, 공개 전송, 2차적 저작물 작성
+  · 상업적 이용
+  · 전체 또는 일부를 다른 서비스·앱·저장소에 포함
+
+개인적인 열람과 참고용 로컬 실행은 허용합니다.
+
+이 저작물에는 별도 라이선스로 배포되는 제3자 구성요소가 포함되어
+있으며, 해당 부분은 각자의 라이선스를 따릅니다. 자세한 내용은
+THIRD_PARTY_NOTICES.txt를 참고하세요.
+
+  · engine/ssaju.js — ssaju 0.2.0, MIT License,
+    Copyright (c) golbin and contributors
+
+문의: sbpark0307@gmail.com
+
+---
+
+크앙사주 (kkwang-saju)
+Copyright (c) 2026 sbp37. All rights reserved.
+
+All rights in the original works in this repository — the markup and
+styles, the interpretation rules and copy, the Korean time-correction
+and judgment code (engine/ksaju.js), and the character and image
+assets — are reserved by the copyright holder.
+
+Without prior written permission you may not reproduce, distribute,
+publicly transmit, create derivative works from, use commercially, or
+include any part of this work in another service, app, or repository.
+Viewing the source and running it locally for personal reference is
+permitted.
+
+This work bundles third-party components under their own licenses; see
+THIRD_PARTY_NOTICES.txt.
+
+  · engine/ssaju.js — ssaju 0.2.0, MIT License,
+    Copyright (c) golbin and contributors
+
+Contact: sbpark0307@gmail.com
