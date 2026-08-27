@@ -326,6 +326,63 @@ describe('공유 링크', () => {
 
 });
 
+describe('단톡사주 링크', () => {
+
+  // index.html의 encodeGroup / decodeGroup과 같은 규칙.
+  // 여러 사람의 생일을 담으므로 이름에 구분자가 섞이면 안 된다.
+  const enc = str => Buffer.from(str, 'utf8').toString('base64')
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const dec = t => Buffer.from(t.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8');
+  const encodeGroup = people => enc(['1'].concat(people.map(p => [
+    p.name.replace(/[|~]/g, ''),
+    `${p.y}${String(p.m).padStart(2, '0')}${String(p.d).padStart(2, '0')}`,
+    p.noTime ? '----' : `${String(p.hour).padStart(2, '0')}${String(p.minute).padStart(2, '0')}`,
+    p.gender
+  ].join('~'))).join('|'));
+
+  const 사람들 = [
+    { name:'지훈', y:1989, m:3,  d:7,  hour:7,  minute:0,  noTime:false, gender:'M' },
+    { name:'수연', y:1993, m:7,  d:15, hour:14, minute:30, noTime:false, gender:'F' },
+    { name:'막내', y:2001, m:5,  d:9,  hour:null, minute:null, noTime:true, gender:'F' }
+  ];
+
+  it('한글 별명이 그대로 돌아온다', () => {
+    eq(dec(encodeGroup(사람들)),
+       '1|지훈~19890307~0700~M|수연~19930715~1430~F|막내~20010509~----~F');
+  });
+
+  it('별명에 구분자를 넣어도 형식이 깨지지 않는다', () => {
+    const 장난 = [{ name:'가|나~다', y:1990, m:1, d:1, hour:0, minute:0, noTime:false, gender:'M' }];
+    const raw = dec(encodeGroup(장난));
+    eq(raw.split('|').length, 2, '구분자가 늘어나면 안 된다');
+    eq(raw.split('|')[1].split('~').length, 4, '항목 수가 유지돼야 한다');
+    eq(raw.split('|')[1].split('~')[0], '가나다');
+  });
+
+  it('링크에 담긴 생일이 같은 사주를 낸다', () => {
+    const raw = dec(encodeGroup(사람들));
+    raw.split('|').slice(1).forEach((chunk, i) => {
+      const [, ymd, hm, gender] = chunk.split('~');
+      const p = 사람들[i];
+      const noTime = hm === '----';
+      const a = chart({ year:p.y, month:p.m, day:p.d, hour:noTime ? 12 : p.hour,
+                        minute:noTime ? 0 : p.minute, noTime, gender:p.gender });
+      const b = chart({ year:+ymd.slice(0,4), month:+ymd.slice(4,6), day:+ymd.slice(6,8),
+                        hour:noTime ? 12 : +hm.slice(0,2), minute:noTime ? 0 : +hm.slice(2,4),
+                        noTime, gender });
+      eq(pillarStr(b), pillarStr(a), `${p.name}의 사주`);
+    });
+  });
+
+  it('여섯 명을 담아도 링크가 카카오톡에서 잘리지 않을 길이다', () => {
+    const 여섯 = [];
+    for (let i = 0; i < 6; i++) 여섯.push({ name:'사람' + i, y:1990 + i, m:6, d:15, hour:12, minute:0, noTime:false, gender:'F' });
+    const url = 'https://example.com/#g=' + encodeGroup(여섯);
+    ok(url.length < 300, `링크 길이 ${url.length}자`);
+  });
+
+});
+
 describe('알려진 엔진 제약', () => {
 
   it('solarToLunar는 일부 날짜에서 잘못된 값을 낸다 (앱은 쓰지 않음)', () => {

@@ -143,6 +143,34 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .result-kicker{font-size:10px;letter-spacing:1.3px;opacity:.7}.result-hero h1{font-family:'Nanum Myeongjo',serif;font-size:26px;line-height:1.25;margin-top:5px}.result-hero h1 span{color:#F6C96F}
 .result-one{font-size:13px;margin-top:8px;opacity:.88}.result-tags{position:relative;z-index:2}
 .today-line{background:#fff7e8;border:1px solid rgba(183,139,61,.35);border-radius:16px;padding:13px 14px;font-size:12px;margin-bottom:12px}.today-line b{color:#8D6023}
+.entry-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin-bottom:14px;padding:15px 16px;background:linear-gradient(140deg,#FFF7E6,#FFEFD6);border:1px solid #E8CFA4;border-radius:20px;box-shadow:0 6px 18px rgba(58,43,28,.06);cursor:pointer;font-family:inherit;color:var(--brown)}
+.entry-card img{flex:0 0 auto;width:52px;height:52px;object-fit:contain}
+.entry-card b{display:block;font-family:'Gowun Batang',serif;font-size:15px;margin-bottom:3px}
+.entry-card em{display:block;font-style:normal;font-size:11.5px;line-height:1.6;color:var(--muted)}
+.entry-card i{flex:0 0 auto;margin-left:auto;font-style:normal;font-size:19px;color:var(--red)}
+.mode-toggle{margin-bottom:14px}
+.group-add{margin-bottom:9px}
+.group-add input{width:100%;padding:12px 12px;font-size:15px;font-family:inherit;background:#FFFDF7;border:1.5px solid rgba(43,35,32,.2);border-radius:11px;color:var(--ink)}
+.group-row{display:flex;align-items:center;gap:10px;padding:11px 12px;margin-bottom:8px;background:#FFFDF7;border:1px solid var(--line);border-radius:14px}
+.group-row b{font-family:'Gowun Batang',serif;font-size:15px}
+.group-row span{font-size:11.5px;color:var(--muted);margin-left:auto}
+.group-row button{flex:0 0 auto;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:#fff;color:var(--muted);font-size:17px;line-height:1;cursor:pointer}
+.role-card{display:flex;gap:12px;padding:14px 0;border-bottom:1px dashed rgba(120,100,80,.22)}
+.role-card:last-child{border-bottom:0;padding-bottom:0}
+.role-who{flex:0 0 62px;font-family:'Gowun Batang',serif;font-size:15px;color:var(--red);padding-top:1px;word-break:keep-all}
+.role-body b{display:block;font-family:'Gowun Batang',serif;font-size:16px;margin-bottom:4px}
+.role-body p{font-size:12.5px;line-height:1.7;color:var(--brown)}
+.room-line{font-size:12.5px;line-height:1.75;color:var(--brown);margin-bottom:9px}
+.room-line:last-child{margin-bottom:0}
+.room-bars{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:13px}
+.room-bar{text-align:center;font-size:11px;color:var(--muted)}
+.room-bar i{display:block;height:52px;margin-bottom:5px;border-radius:7px;background:#EDE4D5;position:relative;overflow:hidden}
+.room-bar i em{position:absolute;left:0;right:0;bottom:0;display:block;border-radius:7px}
+.pair-note{font-size:12.5px;line-height:1.75;color:var(--brown);padding:11px 0;border-bottom:1px dashed rgba(120,100,80,.22)}
+.pair-note:last-child{border-bottom:0;padding-bottom:0}
+.pair-note b{color:var(--red)}
+.group-share .punch-line{font-size:13.5px;opacity:.85}
+.share-note{position:relative;z-index:2;margin-top:10px;font-size:10.5px;line-height:1.6;color:rgba(255,253,247,.62)}
 .punch{position:relative;overflow:hidden;background:linear-gradient(150deg,#2B3A33,#4A6355);color:#FFFDF7;border-radius:22px;padding:20px;margin-bottom:13px;box-shadow:var(--shadow)}
 .punch-text{position:relative;z-index:2;padding-right:96px;min-height:96px}
 .punch-tiger{position:absolute;width:112px;right:-8px;top:6px;opacity:.95;pointer-events:none}
@@ -247,6 +275,7 @@ footer{margin-bottom:8px}
 .today-line,.action-card,.evidence{position:relative;overflow:hidden}
 .today-line .inline-asset{width:72px;height:72px;object-fit:contain;float:left;margin:-7px 10px -10px -5px}
 .action-card{padding-right:94px}
+.entry-card{padding:18px}.entry-card img{width:60px;height:60px}.entry-card b{font-size:17px}.entry-card em{font-size:13.5px}
 .punch{padding:24px}.punch-text{padding-right:120px;min-height:118px}.punch-line{font-size:20px}.punch-tiger{width:138px}.punch-label{font-size:11.5px}.punch-actions .btn{font-size:14.5px;padding:13px 10px}.from-friend{font-size:14px}.from-friend b{font-size:16px}
 .action-card .asset-talisman{width:86px;right:5px;bottom:-11px;opacity:.82}
 .evidence{padding-right:105px}
@@ -403,6 +432,14 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
         <button class="btn" id="btnCalc">내 사주 족보 펼치기</button>
       </div>
     </div>
+    <button type="button" class="entry-card" id="btnGoGroup">
+      <img src="assets/tiger_wave.webp" alt="">
+      <span>
+        <b>단톡방 사람들이랑 같이 보기</b>
+        <em>생일만 넣으면 이 방에서 각자 어떤 자리인지 짚어줄게. 나쁘게 말하는 결과는 없어.</em>
+      </span>
+      <i aria-hidden="true">→</i>
+    </button>
     <div class="mini-note">계산은 전부 네 폰 안에서 해. 서울 경도·균시차·과거 표준시(서머타임 포함)까지 반영하고, 태어난 시간을 모르면 시간 기둥은 빼고 조심스럽게 풀어줘.</div>
   </section>
 
@@ -494,14 +531,19 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
       <div class="hero-art"><img class="hero-mascot" src="assets/tiger_pouch.webp" alt="복주머니를 든 크앙"></div>
     </div>
 
-    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.webp" alt="궁금해하는 크앙"></div><div class="bubble" id="matchBubble">먼저 네 생년월일이 있어야 해. 그다음 상대 생일을 알려줘!</div></div>
+    <div class="toggle-group mode-toggle" id="relToggle" role="group" aria-label="관계 보기 방식">
+      <button type="button" class="on" data-v="two" aria-pressed="true">둘이 보기</button>
+      <button type="button" data-v="group" aria-pressed="false">우리끼리</button>
+    </div>
 
-    <div class="panel" id="matchMePanel">
+    <div class="mascot-line two-only"><div class="mascot-small"><img src="assets/tiger_curious.webp" alt="궁금해하는 크앙"></div><div class="bubble" id="matchBubble">먼저 네 생년월일이 있어야 해. 그다음 상대 생일을 알려줘!</div></div>
+
+    <div class="panel two-only" id="matchMePanel">
       <div class="panel-title"><span class="num">나</span><div><h2>내 사주</h2><p id="matchMeInfo">아직 없어</p></div></div>
       <button class="btn ghost" id="btnMatchGoInput">내 생년월일 입력하러 가기</button>
     </div>
 
-    <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
+    <div class="panel two-only"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
       <div class="panel-title"><span class="num">2</span><div><h2>상대 생년월일</h2><p>궁금한 사람의 생일을 알려줘.</p></div></div>
       <span class="field-label" id="mLblCal">달력 기준</span>
       <div class="toggle-group" id="mCalToggle" role="group" aria-labelledby="mLblCal"><button type="button" class="on" data-v="solar" aria-pressed="true">양력</button><button type="button" data-v="lunar" aria-pressed="false">음력</button></div>
@@ -516,7 +558,64 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
       <button class="btn" id="btnMatch">둘의 결 맞춰보기</button>
     </div>
 
-    <div id="matchResult" class="hidden">
+    <div id="groupWrap" class="hidden">
+      <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.webp" alt="장난스러운 크앙"></div><div class="bubble">단톡방 사람들 생일을 넣어봐. 이 방에서 각자 어떤 자리인지 짚어줄게. 나쁘게 말하는 결과는 없어!</div></div>
+
+      <div class="panel">
+        <div class="panel-title"><span class="num">＋</span><div><h2>사람 추가</h2><p>2명부터 6명까지. 생일만 알면 돼.</p></div></div>
+        <div id="groupList"></div>
+        <div class="row group-add">
+          <input type="text" id="gName" maxlength="8" placeholder="별명 (예: 지훈, 막내)" aria-label="별명">
+        </div>
+        <div class="row"><select id="gY" aria-label="태어난 연도"></select><select id="gM" aria-label="태어난 월"></select><select id="gD" aria-label="태어난 일"></select></div>
+        <div class="check"><input type="checkbox" id="gKnowTime"><label for="gKnowTime">태어난 시간도 알아</label></div>
+        <div class="row hidden" id="gTimeRow"><select id="gH" aria-label="태어난 시"></select><select id="gMin" aria-label="태어난 분"></select></div>
+        <span class="field-label" id="gLblGen">성별</span>
+        <div class="toggle-group" id="gGenToggle" role="group" aria-labelledby="gLblGen">
+          <button type="button" class="on" data-v="F" aria-pressed="true">여성</button>
+          <button type="button" data-v="M" aria-pressed="false">남성</button>
+        </div>
+        <button type="button" class="btn ghost" id="btnGroupAdd" style="margin-top:12px">이 사람 추가</button>
+        <button type="button" class="btn" id="btnGroupGo">우리끼리 보기</button>
+        <div class="hint" id="groupHint">두 명부터 볼 수 있어.</div>
+      </div>
+
+      <div id="groupResult" class="hidden">
+        <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt="">
+          <div class="result-kicker">크앙이가 본 우리 방</div>
+          <h1 id="groupTitle">우리끼리 사주</h1>
+          <div class="result-one">“<span id="groupOneLine"></span>”</div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="num">1</span><div><h2>이 방에서 각자의 자리</h2><p>같이 보는 사람이 바뀌면 자리도 바뀌어.</p></div></div>
+          <div id="groupRoles"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span class="num">2</span><div><h2>이 방의 기운</h2><p>다 합쳐서 보면 어떤 방인지.</p></div></div>
+          <div id="groupRoom"></div>
+        </div>
+        <div class="panel hidden" id="groupPairPanel">
+          <div class="panel-title"><span class="num">3</span><div><h2>둘씩 묶어보면</h2><p>특히 눈에 띄는 조합만.</p></div></div>
+          <div id="groupPairs"></div>
+        </div>
+        <div class="punch group-share">
+          <img class="punch-tiger" src="assets/tiger_wave.webp" alt="">
+          <div class="punch-text">
+            <span class="punch-label">단톡방에 던지기</span>
+            <p class="punch-line" id="groupShareLine">각자 자리가 한 장에 다 들어간 카드야.</p>
+          </div>
+          <div class="punch-actions">
+            <button type="button" class="btn red" id="btnGroupShare">카드 공유하기</button>
+            <button type="button" class="btn ghost" id="btnGroupLink">링크 복사</button>
+          </div>
+          <div id="groupImgWrap"></div>
+          <p class="share-note">링크에는 넣은 생일이 담겨 있어. 그 방에만 보내줘.</p>
+        </div>
+        <button type="button" class="btn ghost" id="btnGroupReset">사람 다시 넣기</button>
+      </div>
+    </div>
+
+    <div id="matchResult" class="two-only hidden">
       <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt="">
         <div class="result-kicker">크앙이가 본 둘의 궁합</div>
         <h1 id="matchTitle">우리 둘의 결</h1>
@@ -1285,6 +1384,7 @@ function renderToday(){
 
 </script>
 <script src="rules/match.js"></script>
+<script src="rules/group.js"></script>
 <script>
 // ===== 궁합 화면 동작 =====
 const M = { cal:'solar', gender:'M', noTime:false };
@@ -1326,6 +1426,274 @@ const M = { cal:'solar', gender:'M', noTime:false };
   });
 })();
 
+// ===== 단톡사주 =====
+const G = { people: [], gender: 'F', result: null };
+const GROUP_MAX = 6;
+
+(function initGroupForm(){
+  const y=$('gY'), mo=$('gM'), d=$('gD'), h=$('gH'), mi=$('gMin');
+  if(!y) return;
+  for(let v=new Date().getFullYear(); v>=1930; v--) y.add(new Option(v+'년', v));
+  y.value=1995;
+  for(let v=1;v<=12;v++) mo.add(new Option(v+'월', v));
+  mo.value=6;
+  for(let v=0;v<=23;v++) h.add(new Option(String(v).padStart(2,'0')+'시', v));
+  h.value=12;
+  for(let v=0;v<60;v+=5) mi.add(new Option(String(v).padStart(2,'0')+'분', v));
+  function fillG(){
+    const last=new Date(+y.value, +mo.value, 0).getDate(), cur=+d.value||15;
+    d.innerHTML='';
+    for(let v=1;v<=last;v++) d.add(new Option(v+'일', v));
+    d.value=Math.min(cur,last);
+  }
+  y.onchange=fillG; mo.onchange=fillG; fillG();
+  bindToggle($('gGenToggle'), v=>{ G.gender=v; });
+  $('gKnowTime').addEventListener('change', e=>{
+    $('gTimeRow').classList.toggle('hidden', !e.target.checked);
+  });
+})();
+
+function groupPersonLabel(p){
+  const t = p.noTime ? '시간 모름' : `${String(p.hour).padStart(2,'0')}:${String(p.minute).padStart(2,'0')}`;
+  return `${p.y}.${p.m}.${p.d} · ${t} · ${p.gender==='F'?'여':'남'}`;
+}
+function renderGroupList(){
+  $('groupList').innerHTML = G.people.map((p,i)=>
+    `<div class="group-row"><b>${escapeHtml(p.name)}</b><span>${groupPersonLabel(p)}</span>` +
+    `<button type="button" data-i="${i}" aria-label="${escapeHtml(p.name)} 빼기">×</button></div>`).join('');
+  $('groupList').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    G.people.splice(+b.dataset.i,1); G.result=null;
+    $('groupResult').classList.add('hidden');
+    renderGroupList();
+  });
+  const n=G.people.length;
+  $('btnGroupAdd').disabled = n>=GROUP_MAX;
+  $('btnGroupGo').disabled = n<2;
+  $('groupHint').textContent = n>=GROUP_MAX ? `${GROUP_MAX}명까지 볼 수 있어.`
+    : n<2 ? `두 명부터 볼 수 있어. (지금 ${n}명)` : `${n}명 넣었어. 더 넣어도 되고 지금 봐도 돼.`;
+}
+function escapeHtml(t){
+  return String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function addGroupPerson(){
+  const name = $('gName').value.trim() || `${G.people.length+1}번`;
+  if(G.people.some(p=>p.name===name)) return toast('별명이 겹쳐. 다르게 적어줘');
+  const knowTime = $('gKnowTime').checked;
+  G.people.push({
+    name,
+    y:+$('gY').value, m:+$('gM').value, d:+$('gD').value,
+    hour: knowTime ? +$('gH').value : null,
+    minute: knowTime ? +$('gMin').value : null,
+    noTime: !knowTime, gender: G.gender
+  });
+  G.result=null;
+  $('groupResult').classList.add('hidden');
+  $('gName').value='';
+  renderGroupList();
+  toast(`${name} 추가했어 🐾`);
+}
+
+// 사람 하나를 계산 결과로 바꾼다
+function groupChart(p){
+  const res = computeSaju({ year:p.y, month:p.m, day:p.d,
+    hour: p.noTime?12:p.hour, minute: p.noTime?0:p.minute,
+    noTime:p.noTime, gender:p.gender, cal:'solar', leap:false });
+  const saju = adaptSaju(res, p.noTime);
+  return { name:p.name, saju, yong: findYongshin(saju) };
+}
+
+const ROOM_COLOR = { 목:'#62873A', 화:'#E66B36', 토:'#A97738', 금:'#D79D22', 수:'#3D86A8' };
+
+function runGroup(){
+  if(G.people.length < 2) return;
+  let charts;
+  try{ charts = G.people.map(groupChart); }
+  catch(e){ return toast('계산하다 넘어졌어… '+e.message); }
+  const r = analyzeGroup(charts);
+  G.result = r;
+
+  $('groupTitle').textContent = `${G.people.length}명이 모인 방`;
+  $('groupOneLine').textContent = `${r.room.많} 기운이 도는 방`;
+
+  $('groupRoles').innerHTML = r.roles.map(x =>
+    `<div class="role-card"><div class="role-who">${escapeHtml(x.name)}</div>` +
+    `<div class="role-body"><b>${x.role.name}</b><p>${x.role.desc}</p></div></div>`).join('');
+
+  const max = Math.max(1, ...Object.values(r.room.merged));
+  $('groupRoom').innerHTML =
+    `<div class="room-bars">${['목','화','토','금','수'].map(e=>{
+      const n=r.room.merged[e], pct=Math.round(n/max*100);
+      return `<div class="room-bar"><i><em style="height:${Math.max(6,pct)}%;background:${ROOM_COLOR[e]}"></em></i>${e} ${n}</div>`;
+    }).join('')}</div>` +
+    r.room.lines.map(l=>`<p class="room-line">${l}</p>`).join('');
+
+  $('groupPairPanel').classList.toggle('hidden', !r.pairs.length);
+  $('groupPairs').innerHTML = r.pairs.map(x=>
+    `<p class="pair-note"><b>${escapeHtml(x.a)} × ${escapeHtml(x.b)}</b><br>${escapeHtml(x.text)}</p>`).join('');
+
+  $('groupImgWrap').innerHTML='';
+  $('groupResult').classList.remove('hidden');
+  $('groupResult').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ----- 단톡사주 공유 -----
+// 결과를 저장하지 않는다. 넣은 사람들의 생일만 주소 뒤에 담고,
+// 링크를 연 브라우저가 같은 계산을 다시 한다. # 뒤는 서버로 가지 않는다.
+function encodeGroup(people){
+  const raw = ['1'].concat(people.map(p => [
+    p.name.replace(/[|~]/g, ''),
+    `${p.y}${String(p.m).padStart(2,'0')}${String(p.d).padStart(2,'0')}`,
+    p.noTime ? '----' : `${String(p.hour).padStart(2,'0')}${String(p.minute).padStart(2,'0')}`,
+    p.gender
+  ].join('~'))).join('|');
+  return btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeGroup(token){
+  try{
+    const raw = decodeURIComponent(escape(atob(token.replace(/-/g,'+').replace(/_/g,'/'))));
+    const parts = raw.split('|');
+    if(parts.shift() !== '1') return null;
+    if(parts.length < 2 || parts.length > GROUP_MAX) return null;
+    const out = [];
+    for(const chunk of parts){
+      const [name, ymd, hm, gender] = chunk.split('~');
+      if(!name || !/^\d{8}$/.test(ymd) || !/^(\d{4}|----)$/.test(hm)) return null;
+      if(gender !== 'F' && gender !== 'M') return null;
+      const noTime = hm === '----';
+      const y = +ymd.slice(0,4), m = +ymd.slice(4,6), d = +ymd.slice(6,8);
+      if(y < 1930 || y > new Date().getFullYear() || m < 1 || m > 12 || d < 1 || d > 31) return null;
+      const hour = noTime ? null : +hm.slice(0,2), minute = noTime ? null : +hm.slice(2,4);
+      if(!noTime && (hour > 23 || minute > 59)) return null;
+      out.push({ name: name.slice(0,8), y, m, d, hour, minute, noTime, gender });
+    }
+    return out;
+  }catch(e){ return null; }
+}
+function groupShareUrl(){
+  return `${location.href.split('#')[0]}#g=${encodeGroup(G.people)}`;
+}
+function openSharedGroup(){
+  const m = /[#&]g=([A-Za-z0-9_-]+)/.exec(location.hash);
+  if(!m) return false;
+  const people = decodeGroup(m[1]);
+  if(!people){ toast('링크가 오래됐거나 잘못됐어'); return false; }
+  G.people = people;
+  setToggle($('relToggle'), 'group');
+  document.querySelectorAll('#scrMatch .two-only').forEach(el=>{
+    el.dataset.wasHidden = el.classList.contains('hidden') ? '1' : '0';
+    el.classList.add('hidden');
+  });
+  $('groupWrap').classList.remove('hidden');
+  renderGroupList();
+  show('scrMatch');
+  runGroup();
+  return true;
+}
+
+async function drawGroupCard(){
+  const W = 1080, H = 1350;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const SERIF = "'Gowun Batang','Nanum Myeongjo',serif";
+  const SANS  = "'Gowun Dodum',sans-serif";
+
+  const g = ctx.createLinearGradient(0, 0, W, H);
+  g.addColorStop(0, '#2B3A33'); g.addColorStop(1, '#4A6355');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(255,253,247,.22)'; ctx.lineWidth = 4;
+  roundRect(ctx, 44, 44, W-88, H-88, 40); ctx.stroke();
+
+  ctx.fillStyle = '#F6C96F'; ctx.font = `700 32px ${SANS}`;
+  ctx.fillText('크앙사주 · 우리끼리', 92, 152);
+  ctx.fillStyle = '#FFFDF7'; ctx.font = `700 58px ${SERIF}`;
+  ctx.fillText(`${G.people.length}명이 모인 방`, 92, 228);
+  ctx.fillStyle = 'rgba(255,253,247,.66)'; ctx.font = `30px ${SANS}`;
+  ctx.fillText(`${G.result.room.많} 기운이 도는 방`, 92, 280);
+
+  // 각자의 자리. 인원이 적어도 허전하지 않게 남는 공간의 가운데에 놓는다.
+  const roles = G.result.roles;
+  const zoneTop = 336, zoneBottom = H - 292;
+  const step = Math.max(104, Math.min(168, (zoneBottom - zoneTop) / roles.length));
+  const rowH = step - 14;
+  const startY = zoneTop + ((zoneBottom - zoneTop) - step * roles.length) / 2;
+  roles.forEach((x, i) => {
+    const y = startY + i * step;
+    ctx.fillStyle = 'rgba(255,253,247,.09)';
+    roundRect(ctx, 92, y, W - 184, rowH, 20); ctx.fill();
+    const baseline = y + rowH / 2 + 13;
+    ctx.fillStyle = '#F6C96F'; ctx.font = `700 34px ${SERIF}`;
+    ctx.fillText(x.name, 122, baseline);
+    ctx.fillStyle = '#FFFDF7'; ctx.font = `700 38px ${SERIF}`;
+    ctx.fillText(x.role.name, 300, baseline);
+  });
+
+  ctx.strokeStyle = 'rgba(255,253,247,.18)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(92, H - 250); ctx.lineTo(W - 92, H - 250); ctx.stroke();
+
+  ctx.fillStyle = 'rgba(255,253,247,.72)'; ctx.font = `28px ${SANS}`;
+  wrapLines(ctx, G.result.room.lines[0], W - 380).slice(0, 2)   // 오른쪽 아래 크앙을 피한다
+    .forEach((t, i) => ctx.fillText(t, 92, H - 190 + i * 42));
+
+  try{
+    const img = await new Promise((ok, no) => {
+      const im = new Image();
+      im.onload = () => ok(im); im.onerror = no;
+      im.src = CARD_TIGER.uri;
+    });
+    const h = 168, w = Math.round(CARD_TIGER.w * h / CARD_TIGER.h);
+    ctx.drawImage(img, W - w - 84, H - h - 46, w, h);
+  }catch(e){ /* 그림이 없어도 카드는 나온다 */ }
+
+  ctx.fillStyle = '#FFFDF7'; ctx.font = `700 34px ${SERIF}`;
+  ctx.fillText('크앙사주', 92, H - 86);
+  ctx.fillStyle = 'rgba(255,253,247,.55)'; ctx.font = `25px ${SANS}`;
+  ctx.fillText('우리 방도 보러 가기 →', 92, H - 48);
+  return canvas;
+}
+
+async function shareGroup(){
+  if(!G.result) return;
+  const btn = $('btnGroupShare'), label = btn.textContent;
+  btn.disabled = true; btn.textContent = '카드를 그리는 중…';
+  try{
+    const canvas = await drawGroupCard();
+    const blob = await new Promise(ok => canvas.toBlob(ok, 'image/png'));
+    const file = blob ? new File([blob], '크앙사주_우리끼리.png', { type:'image/png' }) : null;
+    const text = G.result.roles.map(x => `${x.name} — ${x.role.name}`).join('\n');
+    if(file && navigator.canShare && navigator.canShare({ files:[file] })){
+      await navigator.share({ files:[file], text, url: groupShareUrl() });
+    } else {
+      const url = canvas.toDataURL('image/png');
+      $('groupImgWrap').innerHTML = `<img src="${url}" alt="우리끼리 사주 카드"><div class="hint">이미지를 길게 눌러 저장하거나 공유해줘 🐾</div>`;
+      const a = document.createElement('a');
+      a.href = url; a.download = '크앙사주_우리끼리.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+  }catch(e){
+    if(!e || e.name !== 'AbortError') toast('카드를 못 만들었어… ' + (e.message || ''));
+  }
+  btn.disabled = false; btn.textContent = label;
+}
+
+async function copyGroupLink(){
+  const url = groupShareUrl();
+  try{
+    if(navigator.share && !navigator.canShare){ await navigator.share({ url, text:'우리 방 사주야' }); return; }
+    await navigator.clipboard.writeText(url);
+    toast('링크를 복사했어! 방에 붙여넣기 해줘 🐾');
+  }catch(e){
+    if(e && e.name === 'AbortError') return;
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast('링크를 복사했어! 🐾'); }
+    catch(e2){ prompt('이 링크를 복사해줘', url); }
+    ta.remove();
+  }
+}
+
 function matchMeSummary(){
   const p=$('matchMeInfo'), btn=$('btnMatchGoInput');
   if(S.saju){
@@ -1338,6 +1706,41 @@ function matchMeSummary(){
     $('matchBubble').textContent='먼저 네 생년월일이 있어야 해. 그다음 상대 생일을 알려줘!';
   }
 }
+// 궁합 화면은 "둘이 보기"와 "우리끼리" 두 모드를 같이 쓴다.
+// 둘이 보기 전용 블록에는 two-only가 붙어 있다.
+bindToggle($('relToggle'), v=>{
+  const group = v==='group';
+  document.querySelectorAll('#scrMatch .two-only').forEach(el=>{
+    // 결과 패널은 원래 숨어 있을 수 있으므로 상태를 기억해 둔다
+    if(group){ el.dataset.wasHidden = el.classList.contains('hidden') ? '1' : '0'; el.classList.add('hidden'); }
+    else if(el.dataset.wasHidden !== '1') el.classList.remove('hidden');
+  });
+  $('groupWrap').classList.toggle('hidden', !group);
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+$('btnGroupAdd').onclick=addGroupPerson;
+$('btnGroupGo').onclick=runGroup;
+$('btnGoGroup').onclick=()=>{
+  setToggle($('relToggle'), 'group');
+  document.querySelectorAll('#scrMatch .two-only').forEach(el=>{
+    el.dataset.wasHidden = el.classList.contains('hidden') ? '1' : '0';
+    el.classList.add('hidden');
+  });
+  $('groupWrap').classList.remove('hidden');
+  renderGroupList();
+  show('scrMatch');
+};
+$('btnGroupShare').onclick=shareGroup;
+$('btnGroupLink').onclick=copyGroupLink;
+$('btnGroupReset').onclick=()=>{
+  G.people=[]; G.result=null;
+  $('groupResult').classList.add('hidden');
+  renderGroupList();
+  $('groupWrap').scrollIntoView({behavior:'smooth',block:'start'});
+};
+$('gName').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); addGroupPerson(); } });
+renderGroupList();
+
 $('btnMatchGoInput').onclick=()=>show('scrInput');
 $('btnMatchAgain').onclick=()=>{ $('matchResult').classList.add('hidden'); window.scrollTo({top:0,behavior:'smooth'}); };
 
@@ -1824,10 +2227,11 @@ $('btnCalc').onclick=async()=>{
 
 // 공유 링크로 들어온 경우 바로 그 결과를 연다.
 // 렌더 함수가 전부 정의된 뒤여야 해서 파일 맨 끝에 둔다.
-openSharedResult();
+function openShared(){ return openSharedResult() || openSharedGroup(); }
+openShared();
 // 앱을 이미 열어둔 상태에서 링크를 누르면 주소의 # 뒤만 바뀌고 새로 뜨지 않는다.
 // 그때도 결과가 열리게 한다.
-window.addEventListener('hashchange', openSharedResult);
+window.addEventListener('hashchange', openShared);
 
 </script>
 </body>
