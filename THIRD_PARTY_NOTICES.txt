@@ -1,7 +1,8 @@
-manseryeok 2.0.0
-Copyright (c) its contributors
+ssaju 0.2.0
+Copyright (c) golbin and contributors
 License: MIT
-Source package is loaded at runtime from jsDelivr when internet access is available.
+https://github.com/golbin/ssaju
+The library is bundled into index.html so the app runs without network access.
 
 Google Fonts
 Gowun Batang, Gowun Dodum, Nanum Myeongjo are loaded from Google Fonts when internet access is available.
