@@ -497,6 +497,44 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     </div>
   </section>
 
+  <section id="scrToday" class="hidden">
+    <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.png" alt="">
+      <div class="result-kicker" id="todayDate">오늘</div>
+      <h1 id="todayHeadline">오늘의 흐름</h1>
+      <div class="result-one">“<span id="todayGanzhi"></span>”</div>
+    </div>
+    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.png" alt="윙크하는 크앙"></div><div class="bubble">오늘 기운이 네 사주를 어떻게 건드리는지 봤어. 하루 참고용이야!</div></div>
+    <div id="todaySections"></div>
+    <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.png" alt=""><h3>이건 뭘 보고 말한 거야?</h3><div class="evidence-grid" id="todayEvidence"></div></div>
+    <div class="mini-note">오늘 운세는 하루의 기운이 내 사주와 어떻게 만나는지를 보는 참고표예요. 무슨 일이 일어날지 정해두는 게 아닙니다.</div>
+  </section>
+
+  <section id="scrMy" class="hidden">
+    <div class="hero-card"><img class="asset-decor asset-plum-top" src="assets/plum.png" alt="">
+      <div class="hero-copy">
+        <span class="eyebrow">마이</span>
+        <h1>내 정보와<br><em>기억해 둔 것</em></h1>
+        <p>이 기기에만 저장되고, 어디로도 보내지 않아.</p>
+      </div>
+      <div class="hero-art"><img class="hero-mascot" src="assets/tiger_read.png" alt="책 읽는 크앙"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><span class="num">1</span><div><h2>저장된 내 사주</h2><p id="mySavedInfo">아직 저장된 게 없어</p></div></div>
+      <div id="myDetail" class="hidden"></div>
+      <button class="btn ghost" id="btnMyGoInput">생년월일 다시 입력하기</button>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><span class="num">2</span><div><h2>이 기기에 기억하기</h2><p>다음에 열 때 생년월일을 다시 안 넣어도 돼.</p></div></div>
+      <div class="check"><input type="checkbox" id="myRemember"><span>생년월일과 말투를 이 기기에 저장</span></div>
+      <div class="mini-note" style="margin:12px 0 0">브라우저 안에만 저장돼. 서버로 보내지 않고, 다른 기기에서는 보이지 않아. 아래 버튼으로 언제든 지울 수 있어.</div>
+      <button class="btn ghost" id="btnMyClear" style="margin-top:12px">저장된 내용 지우기</button>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><span class="num">3</span><div><h2>크앙사주는</h2><p>이 앱이 무엇을 보고 풀이하는지</p></div></div>
+      <div id="myAbout"></div>
+    </div>
+  </section>
+
 <nav class="bottom-nav" aria-label="하단 메뉴">
   <button data-nav="home" class="active"><span>⌂</span><b>홈</b></button>
   <button data-nav="today"><span>▣</span><b>오늘운세</b></button>
@@ -918,6 +956,12 @@ function adaptSaju(res,noTime){
       stem:KSaju.toKo([x.stem,'자'])[0], branch:KSaju.toKo(['갑',x.branch])[1],
       stemGod:x.tenGodStem, branchGod:x.tenGodBranch, stage12:x.stage12
     })),
+    wolun:(r.wolun||[]).map(x=>({
+      month:x.month, name:x.monthName, pillar:koGanzhi(x.ganzhi),
+      branch:KSaju.toKo(['갑',x.branch])[1],
+      stemGod:x.stemTenGod, branchGod:x.branchTenGod, stage12:x.stage12
+    })),
+    codes:(r.reference&&r.reference.codes)||{},
     daeunCurrent:r.daeun&&r.daeun.current?{
       age:r.daeun.current.startAge, pillar:koGanzhi(r.daeun.current.ganzhi),
       branch:KSaju.toKo(['갑',r.daeun.current.branch])[1],
@@ -991,12 +1035,12 @@ $('noTime').onchange = e=>{
 
 const ELEMENT_ASSETS={"목": "assets/wood.png", "화": "assets/fire.png", "토": "assets/earth.png", "금": "assets/metal.png", "수": "assets/water.png"};
 // ===== 화면 전환 =====
-const screens=['scrInput','scrChart','scrLoading','scrResult','scrMatch'];
+const screens=['scrInput','scrChart','scrLoading','scrResult','scrMatch','scrToday','scrMy'];
 function show(id){
   screens.forEach(s=>$(s).classList.toggle('hidden', s!==id));
-  const stage=id==='scrInput'?'input':id==='scrChart'?'chart':id==='scrResult'?'result':id==='scrMatch'?'match':'loading';
+  const stage=id==='scrInput'?'input':id==='scrChart'?'chart':id==='scrResult'?'result':id==='scrMatch'?'match':id==='scrToday'?'today':id==='scrMy'?'my':'loading';
   document.body.dataset.stage=stage;
-    document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('active', (stage==='input'&&b.dataset.nav==='home') || ((stage==='chart'||stage==='result')&&b.dataset.nav==='analysis') || (stage==='match'&&b.dataset.nav==='match')));
+    document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('active', (stage==='input'&&b.dataset.nav==='home') || ((stage==='chart'||stage==='result')&&b.dataset.nav==='analysis') || (stage==='match'&&b.dataset.nav==='match') || (stage==='today'&&b.dataset.nav==='today') || (stage==='my'&&b.dataset.nav==='my')));
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1114,7 +1158,7 @@ function renderChart(){
 }
 
 // ===== 수위 → 해설 =====
-document.querySelectorAll('.level-btn').forEach(b=>b.onclick=()=>{ S.level=b.dataset.level; getReading(); });
+document.querySelectorAll('.level-btn').forEach(b=>b.onclick=()=>{ S.level=b.dataset.level; saveBirth(); getReading(); });
 $('btnBack1').onclick=()=>show('scrInput');
 $('btnOther').onclick=()=>show('scrChart');
 $('btnRestart').onclick=()=>show('scrInput');
@@ -1439,7 +1483,267 @@ $('btnCard').onclick = async ()=>{
 // ===== 하단 메뉴 =====
 function toast(msg){ const t=$('appToast'); t.textContent=msg; t.classList.add('show'); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>t.classList.remove('show'),1800); }
 
-  // ===== 궁합 =====
+  
+
+// ===== 마이 · 이 기기에 기억하기 =====
+// 생년월일은 개인정보라 기본으로 저장하지 않는다.
+// 사용자가 마이 화면에서 켤 때만 이 브라우저의 localStorage에 남고, 서버로는 아무것도 보내지 않는다.
+const STORE_KEY='kkwang.saju.v1';
+
+function storeAvailable(){
+  try{ const k='__kkwang_t'; localStorage.setItem(k,'1'); localStorage.removeItem(k); return true; }
+  catch(e){ return false; }   // 시크릿 모드나 사이트 데이터 차단
+}
+function loadSaved(){
+  if(!storeAvailable()) return null;
+  try{ const raw=localStorage.getItem(STORE_KEY); return raw?JSON.parse(raw):null; }
+  catch(e){ return null; }
+}
+function saveBirth(){
+  if(!S.remember||!S.birth||!storeAvailable()) return;
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      rawY:S.birth.rawY, rawM:S.birth.rawM, rawD:S.birth.rawD,
+      hour:S.birth.hour, minute:S.birth.minute,
+      noTime:S.birth.noTime, gender:S.birth.gender, cal:S.birth.calRaw,
+      leap:$('isLeap').checked, level:S.level||null, savedAt:new Date().toISOString()
+    }));
+  }catch(e){ /* 저장 실패는 조용히 넘긴다 — 기능이 막히면 안 된다 */ }
+}
+function clearSaved(){
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  S.remember=false;
+}
+
+// 저장된 값이 있으면 입력 폼을 미리 채워둔다 (자동 계산까지는 하지 않는다)
+function restoreSaved(){
+  const d=loadSaved();
+  if(!d) return false;
+  S.remember=true;
+  try{
+    S.cal=d.cal||'solar';
+    document.querySelectorAll('#calToggle button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.cal));
+    $('leapWrap').classList.toggle('hidden', S.cal!=='lunar');
+    if(d.leap) $('isLeap').checked=true;
+    ySel.value=d.rawY; mSel.value=d.rawM; fillDays(); dSel.value=d.rawD;
+    S.noTime=!!d.noTime; $('noTime').checked=S.noTime;
+    if(!S.noTime){ hSel.value=d.hour; minSel.value=d.minute; }
+    hSel.disabled=minSel.disabled=S.noTime;
+    hSel.style.opacity=minSel.style.opacity=S.noTime?.45:1;
+    S.gender=d.gender||'F';
+    document.querySelectorAll('#genToggle button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.gender));
+    if(d.level) S.savedLevel=d.level;
+  }catch(e){ return false; }
+  return true;
+}
+
+function renderMy(){
+  const saved=loadSaved();
+  const box=$('mySavedInfo'), detail=$('myDetail');
+  if(S.saju){
+    box.textContent=`${S.birth.rawY}.${S.birth.rawM}.${S.birth.rawD}${S.birth.noTime?' · 시간 모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`} · ${S.birth.gender==='F'?'여성':'남성'}`;
+    detail.classList.remove('hidden');
+    detail.innerHTML=`<div class="evidence-grid">${[
+      ['사주', S.saju.pillars.map(p=>p.missing?'시간미상':p.stem+p.branch).join(' ')],
+      ['중심 기운', `${S.saju.dayMaster.stem}(${S.saju.dayMaster.elem})`],
+      ['사주 유형', S.yong.gyeokguk.name],
+      ['강약', S.yong.label],
+      ['용신', `${S.yong.elem}(${S.yong.hanja})`],
+      ['말투', S.level||'아직 안 고름']
+    ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>`;
+  }else if(saved){
+    box.textContent=`${saved.rawY}.${saved.rawM}.${saved.rawD} · 저장됨 (아직 안 펼침)`;
+    detail.classList.add('hidden');
+  }else{
+    box.textContent='아직 저장된 게 없어';
+    detail.classList.add('hidden');
+  }
+
+  const cb=$('myRemember');
+  if(!storeAvailable()){
+    cb.checked=false; cb.disabled=true;
+    cb.parentElement.querySelector('span').textContent='이 브라우저에서는 저장을 쓸 수 없어 (시크릿 모드이거나 사이트 데이터가 꺼져 있어)';
+  }else{
+    cb.checked=!!S.remember;
+  }
+
+  $('myAbout').innerHTML=`<div class="evidence-grid">${[
+    ['만세력','ssaju 0.2.0 내장 · 인터넷 없이도 같은 결과'],
+    ['시간 보정','서울 진태양시 · 균시차 · 한국 서머타임 · 과거 표준시'],
+    ['해석 기준','억부 우선, 계절이 극단이면 조후 우선'],
+    ['보는 것','격국 · 궁위 · 통근 · 합충 · 12운성 · 신살 · 공망 · 대운 · 세운']
+  ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>`;
+}
+
+$('btnMyGoInput').onclick=()=>show('scrInput');
+$('myRemember').addEventListener('change',e=>{
+  S.remember=e.target.checked;
+  if(S.remember){ saveBirth(); toast(S.birth?'이 기기에 기억해 둘게!':'생년월일을 넣으면 그때 저장할게!'); }
+  else { clearSaved(); toast('저장하지 않을게.'); }
+  renderMy();
+});
+$('btnMyClear').onclick=()=>{
+  clearSaved();
+  $('myRemember').checked=false;
+  renderMy();
+  toast('저장된 내용을 지웠어.');
+};
+
+// ===== 오늘운세 =====
+// 오늘 일진이 내 사주를 어떻게 건드리는지 본다.
+// 천간 십신 하나로만 보던 기존 "오늘의 한마디"보다 훨씬 구체적으로 나온다.
+function buildToday(){
+  const r=S.saju, dm=r.dayMaster;
+  const codes=r.codes||{};
+  const todayH=codes.today||'';
+  const monthH=codes.thisMonth||'';
+  if(!todayH) return null;
+  const [ts,tb]=KSaju.toKo([todayH[0],todayH[1]]);
+  const stemGod=KSaju.tenGod(dm.stem,ts);
+  const hid=KSaju.HIDDEN[tb];
+  const branchGod=hid?KSaju.tenGod(dm.stem,hid[hid.length-1][0]):'';
+
+  // 오늘 지지가 원국 어느 자리를 건드리나
+  const 이름=['연','월','일','시'];
+  const 건드림=[];
+  r.pillars.forEach((p,i)=>{
+    if(p.missing) return;
+    const rel=KSaju.branchRelation(tb,p.branch);
+    if(rel) 건드림.push({자리:이름[i],관계:rel,글자:p.branch});
+  });
+
+  // 오늘 기운이 내 용신인지
+  const todayElem=KSaju.STEM_EL[ts];
+  const branchElem=KSaju.BRANCH_EL[tb];
+  const 용신날=(todayElem===S.yong.elem||branchElem===S.yong.elem);
+
+  // 공망일인지
+  const 공망일=(r.voidBranches||[]).indexOf(tb)!==-1;
+
+  // 이번 달 흐름
+  let 이번달=null;
+  if(monthH && r.wolun && r.wolun.length){
+    const mb=KSaju.toKo([monthH[0],monthH[1]])[1];
+    이번달=r.wolun.filter(x=>x.branch===mb)[0]||null;
+    // ssaju의 monthName은 "신월(7월)"처럼 절기월 번호가 붙어 실제 달과 어긋나 보인다
+    if(이번달) 이번달=Object.assign({},이번달,{name:String(이번달.name||'').replace(/\(.*\)/,'')});
+  }
+
+  return {
+    간지:ts+tb, 간지H:todayH, 천간:ts, 지지:tb,
+    stemGod, branchGod, 건드림, 용신날, 공망일, 이번달,
+    날짜:new Date().toLocaleDateString('ko-KR',{month:'long',day:'numeric',weekday:'long'})
+  };
+}
+
+const TODAY_GOD_TOPIC={
+  비견:['내 페이스를 지키는 날','남 속도에 휘둘리지 말고 내 순서대로 가면 돼.'],
+  겁재:['사람이 붙는 날','같이 하자는 얘기가 들어오기 쉬워. 몫은 그 자리에서 정해둬.'],
+  식신:['꾸준히 만드는 날','벌여둔 것 중 하나를 끝까지 밀어보기 좋아.'],
+  상관:['말이 잘 나오는 날','하고 싶던 말을 꺼내기 좋은 날인데, 세기 조절만 신경 써.'],
+  편재:['기회가 보이는 날','새로운 게 눈에 들어와. 다만 오늘 바로 지르지는 말자.'],
+  정재:['정리하기 좋은 날','돈·일정처럼 숫자로 된 걸 손보면 잘 풀려.'],
+  편관:['책임이 몰리는 날','일이 몰려도 하나씩 처리하면 돼. 무리한 약속만 피해.'],
+  정관:['약속과 책임의 날','문서·연락·공식적인 일이 앞에 나와. 확인 한 번 더가 이득이야.'],
+  편인:['혼자 파고드는 날','새로 궁금해지는 게 생겨. 몰입하기 좋은 날이야.'],
+  정인:['배우고 쉬는 날','무리해서 밀어붙이기보다 채우는 쪽이 남는 게 많아.']
+};
+
+const TODAY_RULES=[
+{ id:'오늘-주제', slot:'오늘주제', weight:98,
+  when:t=>!!TODAY_GOD_TOPIC[t.stemGod],
+  text:t=>`오늘은 ${TODAY_GOD_TOPIC[t.stemGod][0]}이야. ${TODAY_GOD_TOPIC[t.stemGod][1]}` },
+{ id:'오늘-속주제', slot:'오늘주제', weight:88,
+  when:t=>!!TODAY_GOD_TOPIC[t.branchGod]&&t.branchGod!==t.stemGod,
+  text:t=>`속으로는 ${TODAY_GOD_TOPIC[t.branchGod][0].replace(' 날','')} 기운이 같이 움직여서, 겉으로 하는 일과 마음이 가는 곳이 다를 수 있어.` },
+{ id:'오늘-용신', slot:'오늘잘통함', weight:96,
+  when:t=>t.용신날,
+  text:t=>`오늘 기운이 네게 필요한 ${S.yong.elem} 쪽이야. 평소보다 컨디션이 잘 붙는 날이라, 미뤄둔 일 하나 꺼내기 좋아.` },
+{ id:'오늘-합', slot:'오늘잘통함', weight:90,
+  when:t=>t.건드림.some(x=>x.관계==='육합'||x.관계==='삼합'),
+  text:t=>{const g=t.건드림.filter(x=>x.관계!=='충').map(x=>x.자리);
+    const 말={연:'집안이나 오래된 인연',월:'일과 사회 쪽',일:'가까운 사람',시:'앞으로의 계획'};
+    return `오늘 기운이 ${g.map(x=>말[x]).join(', ')}과 잘 맞물려. 그쪽으로 연락하거나 손대면 수월하게 풀려.`;} },
+{ id:'오늘-무난', slot:'오늘잘통함', weight:40, fallback:true,
+  when:t=>true,
+  text:t=>`특별히 크게 밀어주는 기운은 없는 날이야. 그래서 오히려 평소 하던 걸 그대로 하기 좋아.` },
+{ id:'오늘-충', slot:'오늘조심', weight:96,
+  when:t=>t.건드림.some(x=>x.관계==='충'),
+  text:t=>{const g=t.건드림.filter(x=>x.관계==='충').map(x=>x.자리);
+    const 말={연:'오래된 관계나 집안일',월:'일과 사회 쪽',일:'가까운 사람과의 일상',시:'세워둔 계획'};
+    return `오늘 기운이 ${말[g[0]]}을 정면으로 건드려. 예정이 틀어지거나 말이 부딪히기 쉬우니, 큰 결정은 하루 미루는 게 나아.`;} },
+{ id:'오늘-공망', slot:'오늘조심', weight:88,
+  when:t=>t.공망일,
+  text:t=>`오늘은 네 사주 기준으로 비어 있는 자리에 해당해. 애써도 손에 안 잡히는 느낌이 들 수 있는데, 결과를 재촉하지 않으면 그만이야.` },
+{ id:'오늘-편관', slot:'오늘조심', weight:76,
+  when:t=>t.stemGod==='편관'||t.branchGod==='편관',
+  text:t=>`부담스러운 연락이나 갑작스러운 요청이 올 수 있어. 바로 답하지 말고 한 박자 두는 게 좋아.` },
+{ id:'오늘-겁재', slot:'오늘조심', weight:74,
+  when:t=>t.stemGod==='겁재'||t.branchGod==='겁재',
+  text:t=>`돈 얘기가 오가기 쉬운 날이야. 빌려주거나 함께 쓰는 결정은 오늘 하지 않는 게 안전해.` },
+{ id:'오늘-무난조심', slot:'오늘조심', weight:40, fallback:true,
+  when:t=>true,
+  text:t=>`딱히 조심할 자리는 없는 날이야. 무리하지만 않으면 평범하게 지나가.` },
+{ id:'이번달', slot:'이번달', weight:90,
+  when:t=>!!t.이번달&&!!TODAY_GOD_TOPIC[t.이번달.stemGod],
+  text:t=>`이번 달(${t.이번달.name})은 ${TODAY_GOD_TOPIC[t.이번달.stemGod][0].replace(' 날','')} 흐름이야. ${TODAY_GOD_TOPIC[t.이번달.stemGod][1]}` },
+{ id:'이번달-운성', slot:'이번달', weight:80,
+  when:t=>!!t.이번달&&!!t.이번달.stage12,
+  text:t=>{const up=['장생','관대','건록','제왕','태','양'];
+    return up.indexOf(t.이번달.stage12)!==-1
+      ?`이번 달은 기운이 올라오는 구간이라, 시작하거나 벌여도 감당이 되는 편이야.`
+      :`이번 달은 기운을 모으는 구간이라, 새로 벌이기보다 정리하고 마무리하는 쪽이 결과가 좋아.`;} }
+];
+
+function buildTodaySlot(slot,t,limit){
+  const hits=[], backup=[];
+  TODAY_RULES.forEach(r=>{
+    if(r.slot!==slot) return;
+    let ok=false; try{ok=r.when(t)}catch(e){ok=false}
+    if(!ok) return;
+    let x; try{x=typeof r.text==='function'?r.text(t):r.text}catch(e){return}
+    if(!x) return;
+    (r.fallback?backup:hits).push({w:r.weight,t:x});
+  });
+  const use=hits.length?hits:backup;
+  use.sort((a,b)=>b.w-a.w);
+  return use.slice(0,limit||2).map(h=>h.t);
+}
+
+const TODAY_SECTIONS=[
+  ['오늘주제','☀','오늘 앞에 나오는 기운','assets/sun.png'],
+  ['오늘잘통함','◈','오늘 잘 통하는 것','assets/metal.png'],
+  ['오늘조심','☁','오늘 조심할 것','assets/cloud.png'],
+  ['이번달','☾','이번 달 흐름','assets/moon.png']
+];
+
+function renderToday(){
+  const t=buildToday();
+  if(!t){ toast('오늘 운세를 계산하지 못했어…'); return false; }
+  $('todayDate').textContent=t.날짜;
+  $('todayGanzhi').textContent=`오늘의 일진 ${t.간지H}(${t.간지})`;
+  $('todayHeadline').textContent=(TODAY_GOD_TOPIC[t.stemGod]||['오늘의 흐름'])[0];
+  const box=$('todaySections'); box.innerHTML='';
+  TODAY_SECTIONS.forEach(([key,icon,title,asset],i)=>{
+    const lines=buildTodaySlot(key,t,2);
+    if(!lines.length) return;
+    const el=document.createElement('div'); el.className='speech'+(i<3?' open':'');
+    el.innerHTML=`<img class="section-asset" src="${asset}" alt="">`
+      +`<div class="sh"><span class="ic">${icon}</span><b>${title}</b><span class="acc-mark">+</span></div>`
+      +`<div class="v5-body">${lines.map(x=>`<p>${x}</p>`).join('')}</div>`;
+    el.querySelector('.sh').onclick=()=>el.classList.toggle('open');
+    box.appendChild(el);
+  });
+  $('todayEvidence').innerHTML=[
+    ['오늘 일진',`${t.간지H}(${t.간지})`],
+    ['나에게 오는 역할',`${t.stemGod}${t.branchGod&&t.branchGod!==t.stemGod?' · '+t.branchGod:''}`],
+    ['원국과의 관계',t.건드림.length?t.건드림.map(x=>x.자리+' '+x.관계).join(', '):'특별한 관계 없음'],
+    ['오늘 기운',t.용신날?'내게 필요한 기운':t.공망일?'비어 있는 자리':'보통']
+  ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
+  return true;
+}
+
+// ===== 궁합 =====
 // 점수를 매기지 않는다. 이 앱은 대운도 좋고 나쁨 대신 "어떤 주제가 반복되는지"로 보여준다.
 // 궁합도 같은 원칙으로, 몇 점이 아니라 "어떤 결의 관계인지"를 설명한다.
 
@@ -1619,7 +1923,7 @@ const MATCH_RULES = [
 { id:'같이-강약보완', slot:'같이있을때', weight:64,
   when:m => (m.aStrong === '신강' && m.bStrong === '신약') || (m.aStrong === '신약' && m.bStrong === '신강'),
   text:m => `한쪽은 자기 힘으로 밀고 가고 다른 쪽은 환경을 빌려 쓰는 편이야. 역할이 자연스럽게 나뉘어서, 서로의 방식을 인정하면 손발이 잘 맞아.` },
-{ id:'같이-기본', slot:'같이있을때', weight:38,
+{ id:'같이-기본', slot:'같이있을때', weight:38, fallback:true,
   when:m => true,
   text:m => `두 사람 사이에 특별히 묶이거나 부딪히는 자리가 뚜렷하지 않아. 타고난 궁합보다 서로 맞춰가며 만드는 부분이 큰 관계라고 보면 돼.` },
 { id:'같이-격국같음', slot:'같이있을때', weight:70,
@@ -1665,7 +1969,7 @@ const MATCH_RULES = [
     };
     return T[m.aToB] || '';
   } },
-{ id:'갈등-기본', slot:'부딪힘', weight:40,
+{ id:'갈등-기본', slot:'부딪힘', weight:40, fallback:true,
   when:m => true,
   text:m => `크게 부딪히는 자리가 뚜렷하지는 않아. 그래서 문제가 생겨도 늦게 알아차리기 쉬운 조합이야. 별일 없을 때 서로 어떤지 물어보는 습관이 이 관계에는 특히 도움이 돼.` },
 { id:'갈등-빈오행겹침', slot:'부딪힘', weight:68,
@@ -1708,14 +2012,14 @@ const MATCH_RULES = [
 { id:'오래-띠충', slot:'오래가려면', weight:62,
   when:m => m.yearRel === '충',
   text:m => `자란 환경이나 기본 전제가 서로 다를 수 있어. "왜 저러지"가 나올 때 배경을 한 번 물어보는 게 이 조합에는 특히 잘 들어.` },
-{ id:'오래-기본', slot:'오래가려면', weight:50,
+{ id:'오래-기본', slot:'오래가려면', weight:50, fallback:true,
   when:m => true,
   text:m => `궁합은 맞고 안 맞고가 정해져 있다기보다, 어떤 지점에서 서로 애써야 하는지를 알려주는 쪽에 가까워. 위에 나온 부딪히는 지점만 알고 있어도 대부분은 넘어가.` }
 
 ];
 
 function buildMatchSlot(slot, m, limit) {
-  const hits = [];
+  const hits = [], backup = [];
   for (let i = 0; i < MATCH_RULES.length; i++) {
     const r = MATCH_RULES[i];
     if (r.slot !== slot) continue;
@@ -1724,10 +2028,14 @@ function buildMatchSlot(slot, m, limit) {
     if (!ok) continue;
     let t;
     try { t = typeof r.text === 'function' ? r.text(m) : r.text; } catch (e) { continue; }
-    if (t) hits.push({ w: r.weight, t: t });
+    if (!t) continue;
+    (r.fallback ? backup : hits).push({ w: r.weight, t: t });
   }
-  hits.sort((a, b) => b.w - a.w);
-  return hits.slice(0, limit || 3).map(h => h.t);
+  // "특별한 게 없다"는 기본 문장이 구체적인 문장과 같이 나오면 서로 모순된다.
+  // 다른 규칙이 하나도 안 맞았을 때만 쓴다.
+  const use = hits.length ? hits : backup;
+  use.sort((a, b) => b.w - a.w);
+  return use.slice(0, limit || 3).map(h => h.t);
 }
 
 
@@ -1845,8 +2153,14 @@ document.querySelectorAll('.bottom-nav button').forEach(btn=>btn.addEventListene
     return;
   }
   if(n==='match'){ matchMeSummary(); show('scrMatch'); return; }
-  toast(n==='today'?'오늘운세는 다음 버전에서 열릴 예정이야!':'내 기록 기능은 준비 중이야!');
+  if(n==='today'){
+    if(!S.saju){ toast('먼저 생년월일을 알려줘, 크앙!'); show('scrInput'); return; }
+    if(renderToday()) show('scrToday');
+    return;
+  }
+  if(n==='my'){ renderMy(); show('scrMy'); return; }
 }));
+restoreSaved();
 document.body.dataset.stage='input';
 </script>
 <script>
@@ -2803,7 +3117,7 @@ $('btnCalc').onclick=async()=>{
     const solar=res.solar;
     S.birth={y:solar.year,m:solar.month,d:solar.day,rawY,rawM,rawD,hour:S.noTime?null:hour,minute:S.noTime?null:minute,noTime:S.noTime,gender:S.gender,calRaw:S.cal};
     S.saju=adaptSaju(res,S.noTime);S.engineMode='accurate';
-    S.yong=findYongshin(S.saju);renderChart();show('scrChart');
+    S.yong=findYongshin(S.saju);saveBirth();renderChart();show('scrChart');
   }catch(e){alert('앗, 계산하다가 넘어졌어… '+e.message)}finally{btn.disabled=false;btn.textContent=original}
 };
 // 하단 메뉴를 더 친근한 아이콘으로
