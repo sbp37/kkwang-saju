@@ -16,7 +16,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{
+html{overflow-x:clip}
+body{overflow-x:clip;
   min-height:100vh;color:var(--ink);font-family:'Gowun Dodum',sans-serif;line-height:1.65;
   background:
     radial-gradient(circle at 10% 8%,rgba(229,138,53,.13),transparent 23rem),
@@ -320,7 +321,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 @media(max-width:520px){
   .app-shell{padding-left:12px;padding-right:12px}.brand-logo{width:198px}.hero-card{min-height:340px}.hero-copy{width:65%;padding:25px 15px 20px}.hero-copy h1{font-size:30px;line-height:1.28}.hero-copy p{font-size:14.5px}.hero-mascot{width:225px;right:-25px;bottom:7px}.five-preview-row img{height:55px}.five-preview-row b{font-size:13px}
   .panel{padding:19px}.row{gap:6px}.mascot-small{width:80px;height:80px}.bubble{font-size:14px}.identity-card{grid-template-columns:82px 1fr;padding:19px}.identity-mark{width:82px;height:82px}.identity-mark img{width:72px;height:72px}.identity-copy h2{font-size:23px}.identity-copy p{font-size:14px}.pillars{grid-template-columns:repeat(2,1fr)}.element-grid{grid-template-columns:repeat(5,1fr)}.element-icon{height:49px}.element-top b{font-size:14px}.element-name{font-size:9.5px}
-  .result-hero{padding:24px 41% 23px 18px;min-height:236px}.result-hero h1{font-size:27px}.result-one{font-size:14.5px}.result-mascot{width:225px;right:-38px}.consult-points{grid-template-columns:1fr}.consult-point{min-height:auto}.evidence{padding-right:78px}.action-card{padding-right:84px}.speech .sh b{font-size:18.5px}.speech .v5-body p{font-size:16px}.speech .v5-scene{font-size:15px}.period-card{grid-template-columns:67px 1fr}.lucktable .lrow{grid-template-columns:94px 1fr}
+  .result-hero{padding:24px 55% 23px 18px;min-height:236px}.result-hero h1{font-size:27px}.result-one{font-size:14.5px}.result-mascot{width:210px;right:-34px}.consult-points{grid-template-columns:1fr}.consult-point{min-height:auto}.evidence{padding-right:78px}.action-card{padding-right:84px}.speech .sh b{font-size:18.5px}.speech .v5-body p{font-size:16px}.speech .v5-scene{font-size:15px}.period-card{grid-template-columns:67px 1fr}.lucktable .lrow{grid-template-columns:94px 1fr}
 }
 .speech .v5-body{max-height:0;opacity:0;overflow:hidden;padding:0 19px;transition:max-height .4s ease,opacity .2s,padding .3s}
 .speech.open .v5-body{max-height:4200px;opacity:1;padding:0 19px 20px}
@@ -328,6 +329,13 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 .v5-quote{font-family:'Gowun Batang',serif!important;font-size:18px!important;font-weight:700;color:#704831!important;background:#FFF3E1;border-left:5px solid #E27651;border-radius:0 16px 16px 0;padding:16px!important}
 .today-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.today-line span{flex:1;min-width:220px}
 
+
+/* 아주 좁은 화면에서 마스코트가 총평 문장을 덮지 않게 */
+@media(max-width:340px){
+  .result-hero{padding:22px 62% 21px 16px;min-height:230px}
+  .result-mascot{width:175px;right:-26px}
+  .hero-mascot{width:180px}
+}
 </style>
 </head>
 <body>
@@ -1420,6 +1428,502 @@ function v5CurrentYearTopic(god){
   if(['정인','편인'].includes(god)) return '배우고 회복하면서 방향을 다시 잡는 일';
   return '사람 관계와 내 선택의 기준을 다시 세우는 일';
 }
+
+// ================= 2단계: 해석축 확장 =================
+// ===== 격국 11종 =====
+// 월지가 일간에게 어떤 역할인지로 갈리는 유형. 사주의 성격을 가장 크게 좌우한다.
+const GYEOK = {
+  정관격: { 이름:'기준을 지켜 신뢰를 얻는 유형',
+    핵심:'규칙과 절차가 분명할 때 가장 안정적으로 실력이 나와. 남들이 믿고 맡기는 데는 이유가 있어.',
+    함정:'기준이 흐릿한 상황에서 유독 크게 지쳐. 다 맞추려다 정작 네 몫을 놓칠 수 있어.',
+    일:'품질과 마감을 책임지는 자리, 제도와 체계를 다루는 일이 잘 맞아.' },
+  편관격: { 이름:'압박 속에서 실력이 나오는 유형',
+    핵심:'편한 환경보다 요구가 분명한 곳에서 오히려 집중력이 올라가. 위기에 강한 편이야.',
+    함정:'긴장을 연료로 쓰다 보니 쉬는 법을 잘 몰라. 몸이 먼저 신호를 보낼 수 있어.',
+    일:'문제를 정면으로 처리하는 일, 책임 범위가 큰 자리에서 진가가 보여.' },
+  정재격: { 이름:'차곡차곡 쌓아 현실을 만드는 유형',
+    핵심:'눈에 보이는 결과와 꾸준한 관리에 강해. 무리하지 않고도 오래 가는 힘이 있어.',
+    함정:'안전한 선택을 반복하다 기회의 크기를 스스로 줄일 수 있어.',
+    일:'자원과 일정을 관리하고 실제로 굴러가게 만드는 일에 강해.' },
+  편재격: { 이름:'기회를 넓게 잡는 유형',
+    핵심:'흐름을 빨리 읽고 판을 크게 보는 감각이 있어. 사람과 돈이 활발하게 오가.',
+    함정:'벌리는 폭이 넓어 관리가 뒤따라가지 못할 때가 있어. 마무리 담당이 꼭 필요해.',
+    일:'영업·기획·중개처럼 사람과 기회를 연결하는 일에서 힘이 나.' },
+  식신격: { 이름:'한 가지를 오래 파서 결과로 만드는 유형',
+    핵심:'꾸준히 만들어내는 힘이 있어. 시간이 쌓일수록 실력이 눈에 보이게 드러나.',
+    함정:'재미가 떨어지면 속도가 확 줄어. 반복만 남으면 금방 지쳐.',
+    일:'전문 기술, 제작, 연구처럼 깊이가 쌓이는 일이 잘 맞아.' },
+  상관격: { 이름:'하던 방식을 갈아엎는 유형',
+    핵심:'남이 정한 틀을 그대로 따르기보다 더 나은 방법을 찾아내. 표현력과 순발력이 좋아.',
+    함정:'맞는 말이라도 세게 나가서 손해를 볼 때가 있어. 말의 온도만 조절하면 돼.',
+    일:'기획·창작·강의처럼 자기 관점을 드러내는 일에서 강해.' },
+  정인격: { 이름:'이해가 돼야 움직이는 유형',
+    핵심:'깊이 파고들어 자기 언어로 정리하는 힘이 있어. 배운 게 오래 남는 편이야.',
+    함정:'준비가 길어져서 기회가 지나갈 때가 있어. 80%면 출발해도 괜찮아.',
+    일:'분석·교육·문서처럼 정리하고 설명하는 일이 잘 맞아.' },
+  편인격: { 이름:'남들 안 보는 걸 들여다보는 유형',
+    핵심:'관점이 남달라서 같은 걸 봐도 다른 걸 찾아내. 몰입할 땐 깊이가 남달라.',
+    함정:'관심이 옮겨가는 속도가 빨라. 시작한 것들이 흩어지기 쉬워.',
+    일:'전문 분야를 깊게 파는 일, 남들이 안 하는 틈새에서 빛나.' },
+  건록격: { 이름:'내 힘으로 서는 유형',
+    핵심:'기댈 곳 없이도 스스로 방향을 잡고 밀고 가. 독립심이 타고났어.',
+    함정:'혼자 다 하려다 도움받는 타이밍을 놓쳐. 부탁하는 것도 능력이야.',
+    일:'내 이름으로 하는 일, 전문성이 곧 신용이 되는 일이 잘 맞아.' },
+  양인격: { 이름:'세게 밀어붙이는 힘이 있는 유형',
+    핵심:'결단이 빠르고 추진력이 세. 남들이 망설이는 지점을 그냥 넘어가.',
+    함정:'속도가 붙으면 브레이크가 늦어. 감정이 실릴 때 특히 조심해야 해.',
+    일:'현장을 이끌거나 위기를 돌파하는 자리에서 힘을 제대로 써.' },
+  월겁격: { 이름:'사람과 함께 커지는 유형',
+    핵심:'혼자보다 같이 할 때 판이 커져. 사람을 모으는 힘이 있어.',
+    함정:'돈과 공을 미리 나눠 정하지 않으면 관계가 상할 수 있어.',
+    일:'협업·팀·공동 사업처럼 여럿이 굴리는 구조가 잘 맞아.' }
+};
+
+// ===== 궁위 =====
+// 같은 십신이라도 어느 자리에 앉았는지에 따라 의미가 완전히 달라진다.
+const GUNG_LABEL = { 연:'어릴 때와 집안', 월:'일과 사회', 일:'나와 가까운 사람', 시:'나중과 결과' };
+const GOD_SHORT = {
+  비견:'내 기준', 겁재:'경쟁과 나눔', 식신:'꾸준한 표현', 상관:'바꾸는 표현',
+  편재:'큰 기회', 정재:'꾸준한 관리', 편관:'압박과 책임', 정관:'규칙과 자리',
+  편인:'남다른 관점', 정인:'배움과 기댐'
+};
+
+function 자리에(ctx, god) {           // 그 십신이 앉은 자리들
+  const out = [];
+  ['연','월','일','시'].forEach(g => {
+    const p = ctx.궁위[g];
+    if (!p || p.missing) return;
+    if (p.stemGod === god || p.branchGod === god) out.push(g);
+  });
+  return out;
+}
+function 그룹자리(ctx, group) {
+  const out = [];
+  ['연','월','일','시'].forEach(g => {
+    const p = ctx.궁위[g];
+    if (!p || p.missing) return;
+    if (p.stemGroup === group || p.branchGroup === group) out.push(g);
+  });
+  return out;
+}
+const 일지십신 = ctx => (ctx.궁위.일 && !ctx.궁위.일.missing) ? ctx.궁위.일.branchGod : null;
+
+// 받침 유무에 따라 조사를 고른다. "큰 기회이야" 같은 어색한 문장을 막는다.
+function hasJong(s){
+  if(!s) return false;
+  const c=s.charCodeAt(s.length-1);
+  if(c<0xAC00||c>0xD7A3) return false;
+  return (c-0xAC00)%28!==0;
+}
+function josa(w,pair){
+  const p=pair.split('/');
+  return w+(hasJong(w)?p[0]:p[1]);
+}
+
+// ===== 규칙 =====
+const RULES = [
+
+// ---------- 한눈요약 : 격국이 정체성을 준다 ----------
+{ id:'격국-핵심', slot:'한눈요약', weight:98,
+  when:c => !!GYEOK[c.격국.name],
+  text:c => `${GYEOK[c.격국.name].이름}이야. ${GYEOK[c.격국.name].핵심}` },
+{ id:'격국-투출', slot:'한눈요약', weight:74,
+  when:c => c.격국.투출 && !!GYEOK[c.격국.name],
+  text:c => `이 성향이 속에만 있는 게 아니라 겉으로도 드러나 있어. 처음 보는 사람도 네 이런 면을 비교적 빨리 알아채는 편이야.` },
+{ id:'격국-비투출', slot:'한눈요약', weight:70,
+  when:c => !c.격국.투출 && !!GYEOK[c.격국.name],
+  text:c => `다만 이 성향이 겉으로 잘 안 드러나. 겪어본 사람만 아는 강점이라, 네가 먼저 보여주지 않으면 지나칠 수 있어.` },
+{ id:'강약-신강', slot:'한눈요약', weight:62,
+  when:c => c.강약.strong,
+  text:c => `자기 힘이 충분한 편이라 남에게 기대기보다 직접 하는 게 편해. 대신 그 힘을 어디에 쓸지 정해두지 않으면 엉뚱한 데서 소모돼.` },
+{ id:'강약-신약', slot:'한눈요약', weight:62,
+  when:c => c.강약.weak,
+  text:c => `혼자 다 짊어지기보다 도구·사람·환경을 잘 빌릴 때 성과가 훨씬 좋아져. 이건 약한 게 아니라 네게 맞는 방식이야.` },
+{ id:'강약-중화', slot:'한눈요약', weight:62,
+  when:c => !c.강약.strong && !c.강약.weak,
+  text:c => `한쪽으로 크게 치우치지 않아서 상황에 따라 방식을 바꿀 수 있어. 대신 "나는 이런 사람"이 늦게 잡히는 편이야.` },
+
+// ---------- 겉과속 : 월지(사회)와 일지(속마음)의 차이 ----------
+{ id:'겉속-월일차이', slot:'겉과속', weight:92,
+  when:c => c.궁위.월 && c.궁위.일 && !c.궁위.일.missing && c.궁위.월.branchGroup !== c.궁위.일.branchGroup,
+  text:c => `밖에서는 ${josa(GOD_SHORT[c.궁위.월.branchGod]||'맡은 역할','을/를')} 앞세우는데, 속에서 편한 건 ${josa(GOD_SHORT[c.궁위.일.branchGod]||'다른 쪽','이야/야')}. 그래서 일할 때와 쉴 때의 모습이 꽤 다르게 보여.` },
+{ id:'겉속-월일일치', slot:'겉과속', weight:88,
+  when:c => c.궁위.월 && c.궁위.일 && !c.궁위.일.missing && c.궁위.월.branchGroup === c.궁위.일.branchGroup,
+  text:c => `밖에서 보이는 모습과 속마음이 같은 방향이야. 앞뒤가 같다는 말을 자주 듣지만, 그만큼 쉴 때도 일 모드가 잘 안 꺼져.` },
+{ id:'겉속-무근천간', slot:'겉과속', weight:70,
+  when:c => c.무근천간.length > 0,
+  text:c => `${c.무근천간[0].자리}쪽에 ${josa(GOD_SHORT[c.무근천간[0].십신]||'어떤 역할','이/가')} 보이는데 받쳐주는 뿌리가 없어. 그래서 마음은 그쪽으로 가는데 실제로 오래 붙들지는 못하는 편이야.` },
+{ id:'겉속-일간무근', slot:'겉과속', weight:76,
+  when:c => c.일간무근,
+  text:c => `네 중심 기운이 사주 안에 뿌리를 못 두고 있어. 주변 상황에 따라 컨디션 차이가 큰 편이라, 환경을 고르는 게 의지보다 중요해.` },
+
+// ---------- 이거 너 아니야 : 자리·합충·신살에서 나오는 구체적 장면 ----------
+{ id:'장면-일지충', slot:'이거너아니야', weight:94,
+  when:c => c.자리충.has('일'),
+  text:c => `편안한 상태가 오래가면 오히려 안절부절못하고, 뭔가를 바꾸고 싶어진 적 있지?` },
+{ id:'장면-월지충', slot:'이거너아니야', weight:88,
+  when:c => c.자리충.has('월'),
+  text:c => `자리를 옮기거나 하던 일을 바꾸는 결정을, 남들보다 빠르고 과감하게 내린 적이 있어.` },
+{ id:'장면-역마', slot:'이거너아니야', weight:82,
+  when:c => !!c.신살['역마살'],
+  text:c => `한곳에 오래 머무르면 답답해져서, 이유를 붙여서라도 자꾸 움직일 일을 만들어.` },
+{ id:'장면-도화', slot:'이거너아니야', weight:80,
+  when:c => !!c.신살['도화살'],
+  text:c => `굳이 애쓰지 않아도 시선이 모이는 편인데, 정작 본인은 그걸 부담스러워할 때가 있어.` },
+{ id:'장면-화개', slot:'이거너아니야', weight:78,
+  when:c => !!c.신살['화개살'],
+  text:c => `사람들 사이에 있다가도 갑자기 혼자만의 시간이 간절해져서 연락을 줄인 적이 있어.` },
+{ id:'장면-공망일시', slot:'이거너아니야', weight:76,
+  when:c => c.공망자리.indexOf('시') !== -1,
+  text:c => `열심히 해서 결과를 냈는데도 "이게 다인가" 싶어 허전해질 때가 있어.` },
+{ id:'장면-공망연월', slot:'이거너아니야', weight:72,
+  when:c => c.공망자리.indexOf('연') !== -1 || c.공망자리.indexOf('월') !== -1,
+  text:c => `주변에서 당연하게 여기는 기준이 너한테는 잘 안 와닿아서, 혼자 다른 길을 재본 적이 있어.` },
+{ id:'장면-겁재많음', slot:'이거너아니야', weight:70,
+  when:c => c.십신.겁재 >= 2,
+  text:c => `같이 하자는 말에 쉽게 응했다가, 나중에 몫을 나눌 때 서운해진 적이 있어.` },
+{ id:'장면-상관많음', slot:'이거너아니야', weight:70,
+  when:c => c.십신.상관 >= 2,
+  text:c => `틀린 걸 보고 그냥 못 넘어가서, 굳이 말했다가 분위기가 어색해진 적이 있어.` },
+{ id:'장면-인성없음', slot:'이거너아니야', weight:66,
+  when:c => c.그룹수.인성 === 0,
+  text:c => `쉬는 시간을 아까워하다가 한꺼번에 방전돼서 며칠을 통째로 날린 적이 있어.` },
+{ id:'장면-재성없음', slot:'이거너아니야', weight:66,
+  when:c => c.그룹수.재성 === 0,
+  text:c => `좋아하는 일에는 시간을 아끼지 않는데, 그게 돈이 되는지는 나중에야 계산해봐.` },
+
+// ---------- 일과 재능 : 격국 + 월지 ----------
+{ id:'일-격국', slot:'일과재능', weight:96,
+  when:c => !!GYEOK[c.격국.name],
+  text:c => GYEOK[c.격국.name].일 },
+{ id:'일-월지십신', slot:'일과재능', weight:84,
+  when:c => c.궁위.월 && !c.궁위.월.missing && !!GOD_SHORT[c.궁위.월.branchGod],
+  text:c => `사회에서 자연스럽게 쓰게 되는 건 ${josa(GOD_SHORT[c.궁위.월.branchGod],'이야/야')}. 애써 배운 게 아니라 그냥 그렇게 하게 되는 쪽이라 힘이 덜 들어.` },
+{ id:'일-식상투출', slot:'일과재능', weight:76,
+  when:c => c.투출.some(t => t.십신 === '식신' || t.십신 === '상관'),
+  text:c => `속에 있던 재주가 겉으로 드러난 구조야. 만든 걸 보여주는 방식으로 일할 때 기회가 더 빨리 와.` },
+{ id:'일-관성무', slot:'일과재능', weight:70,
+  when:c => c.그룹수.관성 === 0,
+  text:c => `대신 누가 마감을 잡아주지 않으면 중요한 일이 급한 일에 계속 밀려. 마감을 밖에 걸어두는 게 실력만큼 중요해.` },
+{ id:'일-시주식상', slot:'일과재능', weight:68,
+  when:c => 그룹자리(c,'식상').indexOf('시') !== -1,
+  text:c => `나중으로 갈수록 네가 만든 걸 내놓는 일이 커져. 지금 쌓는 게 뒤에 형태를 갖출 가능성이 높아.` },
+
+// ---------- 일하는 방식 ----------
+{ id:'방식-격국함정', slot:'일하는방식', weight:94,
+  when:c => !!GYEOK[c.격국.name],
+  text:c => GYEOK[c.격국.name].함정 },
+{ id:'방식-신강', slot:'일하는방식', weight:78,
+  when:c => c.강약.strong,
+  text:c => `방법까지 정해주는 곳보다 목표만 주고 맡기는 곳에서 성과가 잘 나. 대신 방향 점검은 주기적으로 필요해.` },
+{ id:'방식-신약', slot:'일하는방식', weight:78,
+  when:c => c.강약.weak,
+  text:c => `혼자 버티는 구조보다 함께 확인해 줄 사람이 있는 구조가 훨씬 잘 맞아. 중간 점검이 있는 곳을 고르는 게 좋아.` },
+{ id:'방식-월지충', slot:'일하는방식', weight:72,
+  when:c => c.자리충.has('월'),
+  text:c => `한 자리에 오래 머무는 것보다 변화가 있는 환경이 오히려 안정적으로 느껴져. 이직이 잦아도 이상한 게 아니야.` },
+{ id:'방식-괴강양인', slot:'일하는방식', weight:70,
+  when:c => !!c.신살['괴강살'] || c.격국.name === '양인격',
+  text:c => `애매하게 걸치는 일보다 책임을 확실히 지는 자리가 편해. 어중간한 역할에서 제일 답답해져.` },
+
+// ---------- 돈이 들어오는 방식 : 재성이 어느 자리에 있는가 ----------
+{ id:'돈-재성월', slot:'돈버는방식', weight:92,
+  when:c => 그룹자리(c,'재성').indexOf('월') !== -1,
+  text:c => `돈이 직업 자리에 붙어 있어. 부업이나 투자보다 본업을 키우는 쪽이 확실히 빨라.` },
+{ id:'돈-재성시', slot:'돈버는방식', weight:90,
+  when:c => 그룹자리(c,'재성').indexOf('시') !== -1,
+  text:c => `돈 이야기가 초년보다 뒤로 갈수록 커지는 자리야. 지금 안 모인다고 조급해할 필요 없어.` },
+{ id:'돈-재성일', slot:'돈버는방식', weight:86,
+  when:c => 그룹자리(c,'재성').indexOf('일') !== -1,
+  text:c => `돈이 생활과 가까운 자리에 있어. 크게 버는 것보다 씀씀이를 잡는 쪽이 실제 체감이 커.` },
+{ id:'돈-재성연', slot:'돈버는방식', weight:82,
+  when:c => 그룹자리(c,'재성').indexOf('연') !== -1,
+  text:c => `일찍부터 돈을 의식하게 되는 자리야. 집안이나 어릴 때 환경이 금전 감각에 영향을 줬을 가능성이 커.` },
+{ id:'돈-재성무', slot:'돈버는방식', weight:88,
+  when:c => c.그룹수.재성 === 0,
+  text:c => `사주에 돈 자리가 뚜렷하지 않아. 돈을 좇기보다 잘하는 걸 남이 살 수 있는 형태로 바꿔두는 쪽이 훨씬 잘 맞아.` },
+{ id:'돈-편재', slot:'돈버는방식', weight:74,
+  when:c => c.십신.편재 >= 1 && c.십신.편재 >= c.십신.정재,
+  text:c => `한 곳에서 꾸준히보다, 여러 통로에서 크게 들어왔다 나가는 흐름이야. 들어올 통로를 늘리는 게 관리보다 먼저야.` },
+{ id:'돈-정재', slot:'돈버는방식', weight:74,
+  when:c => c.십신.정재 >= 1 && c.십신.정재 > c.십신.편재,
+  text:c => `한 방보다 정기적으로 들어오는 구조가 잘 맞아. 수입이 일정할 때 판단력도 같이 좋아져.` },
+{ id:'돈-식상생재', slot:'돈버는방식', weight:80,
+  when:c => c.그룹수.식상 >= 1 && c.그룹수.재성 >= 1,
+  text:c => `만드는 힘과 파는 힘이 같이 있어. 네가 만든 걸 직접 내놓는 구조에서 수입이 가장 자연스럽게 생겨.` },
+
+// ---------- 돈이 나가는 방식 ----------
+{ id:'지출-겁재', slot:'돈쓰는방식', weight:88,
+  when:c => c.십신.겁재 >= 1,
+  text:c => `사람 때문에 예상 밖의 지출이 생기기 쉬워. 부탁받았을 때 그 자리에서 답하지 않는 하루가 돈을 지켜줘.` },
+{ id:'지출-상관', slot:'돈쓰는방식', weight:80,
+  when:c => c.십신.상관 >= 1,
+  text:c => `새로운 도구와 경험에 지갑이 쉽게 열려. "지금 필요한가, 재밌어서 사고 싶은가"만 구분해도 충분해.` },
+{ id:'지출-정인', slot:'돈쓰는방식', weight:78,
+  when:c => c.십신.정인 >= 1 || c.십신.편인 >= 1,
+  text:c => `배움과 자료에는 아끼지 않는 편이야. 한 달 뒤에 실제로 썼는지만 확인해도 낭비가 크게 줄어.` },
+{ id:'지출-관성많음', slot:'돈쓰는방식', weight:76,
+  when:c => c.그룹수.관성 >= 3,
+  text:c => `책임감 때문에 남의 몫까지 떠안는 지출이 생겨. 네 몫의 여유 비용도 예산에 먼저 넣어둬.` },
+{ id:'지출-재성과다', slot:'돈쓰는방식', weight:74,
+  when:c => c.그룹수.재성 >= 3,
+  text:c => `돈이 크게 오가는 만큼 새는 곳도 커. 통장을 용도별로 쪼개는 게 절약 결심보다 훨씬 잘 들어.` },
+
+// ---------- 애정 : 일지가 배우자 자리 ----------
+{ id:'애정-일지십신', slot:'애정', weight:96,
+  when:c => !!일지십신(c),
+  text:c => {
+    const g = 일지십신(c);
+    const M = {
+      비견:'친구처럼 편하고 서로의 영역을 존중해 주는 사람과 오래가.',
+      겁재:'솔직하게 부딪히고 금방 푸는 사이가 편해. 속으로 삭이는 관계는 오래 못 가.',
+      식신:'같이 웃고 편하게 떠들 수 있는 사람에게 마음이 열려. 분위기가 무거워지면 지쳐.',
+      상관:'대화가 통하고 자극을 주는 사람에게 끌려. 뻔해지는 순간 마음도 같이 식어.',
+      편재:'생활 감각이 잘 맞고 함께 뭔가를 벌일 수 있는 사람이 편해.',
+      정재:'약속을 지키고 생활이 안정적인 사람에게 마음이 놓여. 말보다 행동을 봐.',
+      편관:'끌리는 사람에게 확 빠지는 편이야. 강한 사람에게 끌리지만 그만큼 부딪히기도 해.',
+      정관:'예의와 책임이 분명한 사람이 편해. 관계에서도 선이 지켜지는 걸 중요하게 봐.',
+      편인:'말이 잘 통하고 혼자 있는 시간을 존중해 주는 사람에게 마음이 가.',
+      정인:'재촉하지 않고 끝까지 들어주는 사람과 있을 때 마음이 열려.'
+    };
+    return M[g] || '';
+  } },
+{ id:'애정-일지충', slot:'애정', weight:90,
+  when:c => c.자리충.has('일'),
+  text:c => `가까운 관계에서 자리가 자주 흔들리는 구조야. 상대 문제라기보다 네가 안정보다 자극을 먼저 고르는 편이라 그래. 편안함이 지루함으로 느껴질 때를 스스로 알아채는 게 핵심이야.` },
+{ id:'애정-일지공망', slot:'애정', weight:86,
+  when:c => c.공망자리.indexOf('일') !== -1,
+  text:c => `관계에 마음을 쏟고도 "이게 맞나" 싶은 허전함이 남을 수 있어. 상대가 부족해서가 아니라 네 기대치가 눈에 안 보이는 데 있어서야. 원하는 걸 말로 꺼내면 훨씬 편해져.` },
+{ id:'애정-도화', slot:'애정', weight:80,
+  when:c => !!c.신살['도화살'],
+  text:c => `사람이 잘 붙는 편이야. 관심을 받는 것과 마음을 주는 걸 구분해두면 관계가 훨씬 단순해져.` },
+{ id:'애정-관성많음', slot:'애정', weight:76,
+  when:c => c.그룹수.관성 >= 3,
+  text:c => `관계에서도 책임을 먼저 짊어져. 좋은 사람이 되려다 정작 네가 뭘 원하는지 말하지 못할 수 있어.` },
+{ id:'애정-관성없음', slot:'애정', weight:74,
+  when:c => c.그룹수.관성 === 0,
+  text:c => `관계의 속도와 형태를 네가 정하고 싶어 해. 정해진 순서를 따르는 연애는 답답하게 느껴질 거야.` },
+{ id:'애정-식상많음', slot:'애정', weight:72,
+  when:c => c.그룹수.식상 >= 3,
+  text:c => `표현이 많은 편이라 상대가 편안해해. 다만 반응이 없으면 금방 시들해지니, 조용한 사람과는 속도 조절이 필요해.` },
+{ id:'애정-시간모름', slot:'애정', weight:60,
+  when:c => c.시간모름,
+  text:c => `태어난 시간을 몰라서 이 부분은 넓게만 볼게. 시간을 알면 훨씬 구체적으로 짚어줄 수 있어.` },
+
+// ---------- 갈등과 경계 ----------
+{ id:'갈등-일지십신', slot:'갈등과경계', weight:92,
+  when:c => !!일지십신(c),
+  text:c => {
+    const M = {
+      비견:'네 기준을 지키느라 설명을 생략해. 이유를 한 줄만 붙여도 오해가 크게 줄어.',
+      겁재:'참다가 한 번에 터뜨리는 편이야. 불편함이 30%일 때 말하는 연습이 필요해.',
+      식신:'좋게 넘기려다 정작 서운함은 그대로 남아. 웃으면서 말해도 되는 이야기야.',
+      상관:'맞는 말을 세게 해서 관계가 상해. 내용보다 순서와 온도를 먼저 정해봐.',
+      편재:'감정 문제를 해결책으로만 정리하려 해. "그때 서운했어" 한마디가 먼저야.',
+      정재:'손익을 따지다 마음 이야기를 놓쳐. 옳고 그름보다 감정을 먼저 확인해줘.',
+      편관:'상대를 이기려는 쪽으로 가버려. 이기는 것과 풀리는 건 다른 일이야.',
+      정관:'불편해도 괜찮다고 말해버려. 거절은 관계를 깨는 게 아니라 범위를 알려주는 거야.',
+      편인:'혼자 정리하려고 연락을 끊어. 상대는 이유를 상상하게 돼.',
+      정인:'생각이 끝날 때까지 말을 아껴. "시간이 필요해" 한마디는 남겨줘.'
+    };
+    return M[일지십신(c)] || '';
+  } },
+{ id:'갈등-충많음', slot:'갈등과경계', weight:80,
+  when:c => c.관계.충.length >= 2,
+  text:c => `부딪히는 자리가 여럿이라 감정이 한 번에 커지기 쉬워. 그 자리에서 결론 내지 않고 하루 두는 게 너한테는 특히 잘 들어.` },
+{ id:'갈등-형', slot:'갈등과경계', weight:74,
+  when:c => c.관계.형.length >= 1,
+  text:c => `가까운 사이일수록 말이 꼬이는 구조야. 오래 알던 사람과의 갈등이 오히려 풀기 어려울 수 있어.` },
+
+// ---------- 회복 방법 ----------
+{ id:'회복-용신조후', slot:'회복방법', weight:94,
+  when:c => c.용신.basis === '조후' && c.용신.johu,
+  text:c => `${c.용신.johu.reason}. 컨디션이 떨어질 때 ${c.용신.johu.need === '화' ? '몸을 따뜻하게 하고 햇빛을 보는 것' : '조용하고 시원한 곳에서 물을 충분히 마시는 것'}부터 챙기면 회복이 확실히 빨라.` },
+{ id:'회복-인성무', slot:'회복방법', weight:86,
+  when:c => c.그룹수.인성 === 0,
+  text:c => `쉬는 걸 성과처럼 여기지 않는 게 중요해. 사주에 회복 담당이 없어서, 휴식은 일정에 넣어야 실제로 생겨.` },
+{ id:'회복-인성많음', slot:'회복방법', weight:82,
+  when:c => c.그룹수.인성 >= 3,
+  text:c => `혼자 생각을 정리하는 시간이 확보되면 금방 회복돼. 다만 생각이 길어지면 회복이 아니라 소모가 되니 시간을 끊어줘.` },
+{ id:'회복-화개', slot:'회복방법', weight:78,
+  when:c => !!c.신살['화개살'],
+  text:c => `사람에게서 잠깐 떨어지는 게 가장 빠른 회복이야. 미안해할 일이 아니라 네 방식이야.` },
+{ id:'회복-신약', slot:'회복방법', weight:76,
+  when:c => c.강약.weak,
+  text:c => `힘이 떨어졌을 때 더 밀어붙이면 판단까지 흐려져. 멈추는 것도 일의 일부라고 생각하는 게 좋아.` },
+{ id:'회복-일간무근', slot:'회복방법', weight:74,
+  when:c => c.일간무근,
+  text:c => `주변 환경에 컨디션이 크게 흔들려. 자는 시간과 먹는 시간을 고정하는 것만으로도 체감이 달라져.` },
+
+// ---------- 찔리는 한마디 ----------
+{ id:'찔림-격국', slot:'찔리는한마디', weight:90,
+  when:c => !!GYEOK[c.격국.name],
+  text:c => {
+    const M = {
+      정관격:'남들 기준에 맞추느라, 정작 네가 뭘 원하는지 물어본 게 언제야?',
+      편관격:'긴장이 없으면 불안해서 일부러 일을 만드는 거 아니야?',
+      정재격:'안전한 선택만 하면서 그걸 신중함이라고 부르고 있진 않아?',
+      편재격:'벌여놓은 것 중에 끝까지 간 게 몇 개나 돼?',
+      식신격:'재미가 떨어졌을 뿐인데, 재능이 없다고 결론 내린 적 있지?',
+      상관격:'맞는 말이었는데 왜 관계가 상했는지 생각해본 적 있어?',
+      정인격:'준비가 부족한 게 아니라, 틀릴까 봐 시간을 끄는 거 아니야?',
+      편인격:'깊게 파는 건 잘하는데, 끝까지 간 게 몇 개야?',
+      건록격:'도와달라고 말하는 게 지는 것 같아서 안 하는 거지?',
+      양인격:'속도를 줄여야 할 때를 늘 지나고 나서 알아차리잖아.',
+      월겁격:'같이 하자고 해놓고 몫 이야기는 미루다가 서운해진 적 있지?'
+    };
+    return M[c.격국.name] || '';
+  } },
+{ id:'찔림-일지충', slot:'찔리는한마디', weight:72,
+  when:c => c.자리충.has('일'),
+  text:c => `편해지면 오히려 불안해서, 멀쩡한 걸 흔들어본 적 있잖아.` },
+{ id:'찔림-무근', slot:'찔리는한마디', weight:68,
+  when:c => c.일간무근,
+  text:c => `환경 탓이 아니라고 하면서, 사실 환경이 바뀔 때마다 사람이 달라지는 거 알고 있지?` },
+
+// ---------- 총평 ----------
+{ id:'총평-격국강약', slot:'총평', weight:96,
+  when:c => !!GYEOK[c.격국.name],
+  text:c => {
+    const 강 = c.강약.strong ? '자기 힘으로 밀고 가는' : c.강약.weak ? '환경과 사람을 잘 빌리는' : '상황에 맞춰 방식을 바꾸는';
+    return `${GYEOK[c.격국.name].이름.replace(' 유형','')}, ${강} 사람`;
+  } }
+
+];
+
+// ===== 해석 컨텍스트 =====
+// 규칙들이 참조할 사주 정보를 한 곳에 모은다.
+// 지금까지는 십신 그룹 5개만 봤지만, 여기서는 자리(궁위)·뿌리(통근)·격국·합충·신살까지 담는다.
+const GUNG = ['연', '월', '일', '시'];
+const GUNG_MEANING = {
+  연: { 자리: '어릴 때와 집안', 폭: '초년과 뿌리' },
+  월: { 자리: '일과 사회', 폭: '직업과 부모' },
+  일: { 자리: '나 자신과 가까운 사람', 폭: '배우자와 일상' },
+  시: { 자리: '나중과 결과', 폭: '말년과 자식' }
+};
+
+function buildContext() {
+  const r = S.saju, y = S.yong, dm = r.dayMaster;
+  const P = r.pillars;
+
+  // 궁위: 각 자리에 어떤 십신이 앉아 있는가
+  const 궁위 = {};
+  GUNG.forEach((g, i) => {
+    const p = P[i];
+    궁위[g] = p.missing ? { missing: true } : {
+      stem: p.stem, branch: p.branch,
+      stemGod: p.stemGod, branchGod: p.branchGod,
+      stemGroup: GROUP_OF[p.stemGod] || null,
+      branchGroup: GROUP_OF[p.branchGod] || null,
+      stemElem: p.stemElem, branchElem: p.branchElem,
+      stage12: p.stage12, twelveSal: p.twelveSal,
+      sals: p.specialSals || []
+    };
+  });
+
+  // 십신 10종 카운트 (그룹 5종으로 뭉개지 않는다)
+  const 십신 = {
+    비견:0, 겁재:0, 식신:0, 상관:0, 편재:0,
+    정재:0, 편관:0, 정관:0, 편인:0, 정인:0
+  };
+  P.forEach(p => {
+    if (p.missing) return;
+    if (p.stemGod && 십신[p.stemGod] !== undefined) 십신[p.stemGod]++;
+    if (p.branchGod && 십신[p.branchGod] !== undefined) 십신[p.branchGod]++;
+  });
+
+  // 통근: 천간이 지지 어딘가에 뿌리를 두고 있는가
+  const rooted = KSaju.rootedElements(r.ksajuPillars);
+  const 무근천간 = [];
+  P.forEach((p, i) => {
+    if (p.missing || i === 2) return;
+    if (!rooted[p.stemElem]) 무근천간.push({ 자리: GUNG[i], 글자: p.stem, 십신: p.stemGod, 오행: p.stemElem });
+  });
+  const 일간무근 = !rooted[dm.elem];
+
+  // 투출: 지지 속에 숨어 있던 글자가 천간으로 드러났는가
+  const 천간들 = P.filter(p => !p.missing).map(p => p.stem);
+  const 투출 = [];
+  P.forEach((p, i) => {
+    if (p.missing) return;
+    (KSaju.HIDDEN[p.branch] || []).forEach(h => {
+      if (천간들.indexOf(h[0]) !== -1) {
+        투출.push({ 자리: GUNG[i], 글자: h[0], 십신: KSaju.tenGod(dm.stem, h[0]) });
+      }
+    });
+  });
+
+  // 합충형파해 — 사주 안에서 글자끼리 부딪히거나 묶이는 지점
+  const KEYMAP = { year:'연', month:'월', day:'일', hour:'시' };
+  const 관계 = { 충:[], 합:[], 형:[], 파:[], 해:[], 원진:[], 귀문:[], 삼합:[], 육합:[], 방합:[], 반합:[] };
+  (r.stemRelations || []).forEach(x => {
+    const 자리 = (x.pillars || []).map(k => KEYMAP[k]).filter(Boolean);
+    if (관계[x.type]) 관계[x.type].push({ 위치:'천간', 자리, 설명:x.desc });
+  });
+  Object.keys(r.branchRelations || {}).forEach(type => {
+    if (type === '지장간' || !관계[type]) return;
+    Object.keys(r.branchRelations[type] || {}).forEach(k => {
+      관계[type].push({ 위치:'지지', 자리:[KEYMAP[k]].filter(Boolean), 설명:r.branchRelations[type][k] });
+    });
+  });
+  const 자리충 = new Set(관계.충.filter(x => x.위치 === '지지').flatMap(x => x.자리));
+
+  // 신살 — 어느 자리에 붙었는지까지 본다
+  const 신살 = {};
+  P.forEach((p, i) => {
+    if (p.missing) return;
+    (p.specialSals || []).forEach(s => { (신살[s] = 신살[s] || []).push(GUNG[i]); });
+    if (p.twelveSal) (신살[p.twelveSal] = 신살[p.twelveSal] || []).push(GUNG[i]);
+  });
+
+  // 공망이 어느 자리에 걸렸는가
+  const 공망지지 = r.voidBranches || [];
+  const 공망자리 = [];
+  P.forEach((p, i) => { if (!p.missing && 공망지지.indexOf(p.branch) !== -1) 공망자리.push(GUNG[i]); });
+
+  const 오행 = r.elems;
+  const 없는오행 = ['목','화','토','금','수'].filter(e => 오행[e] === 0);
+  const ranked = rankedGroups(y.g);
+
+  return {
+    일간: dm.stem, 일간오행: dm.elem, 양간: dm.yang,
+    격국: y.gyeokguk, 강약: { label:y.label, strong:y.strong, weak:y.weak, score:y.score, 득령:y.득령, 득지:y.득지 },
+    용신: { elem:y.elem, group:y.group, rooted:y.rooted, basis:y.basis, supplement:y.supplement, johu:y.johu },
+    십신: 십신, 그룹: y.g, 그룹수: y.gc,
+    dom: ranked[0], second: ranked[1], weak: ranked[ranked.length - 1],
+    궁위: 궁위, 통근: rooted, 무근천간: 무근천간, 일간무근: 일간무근, 투출: 투출,
+    관계: 관계, 자리충: 자리충, 신살: 신살,
+    공망: 공망지지, 공망자리: 공망자리,
+    오행: 오행, 없는오행: 없는오행,
+    월지: P[1] ? P[1].branch : '', 일지: P[2] ? P[2].branch : '',
+    시간모름: !r.hasTime,
+    대운: r.daeun, 나이: currentAge()
+  };
+}
+
+// ===== 규칙 엔진 =====
+// 문장마다 "언제 이 말을 하는가"를 조건으로 달아둔다.
+// 사주에 맞는 규칙만 골라 점수순으로 조합하므로, 규칙을 늘리면 나올 수 있는 글도 함께 늘어난다.
+function buildSlot(slot, ctx, limit) {
+  const hits = [];
+  for (let i = 0; i < RULES.length; i++) {
+    const rule = RULES[i];
+    if (rule.slot !== slot) continue;
+    let ok = false;
+    try { ok = rule.when(ctx); } catch (e) { ok = false; }
+    if (!ok) continue;
+    let text;
+    try { text = typeof rule.text === 'function' ? rule.text(ctx) : rule.text; } catch (e) { continue; }
+    if (!text) continue;
+    hits.push({ id: rule.id, weight: rule.weight, text: text });
+  }
+  hits.sort((a, b) => b.weight - a.weight);
+  return hits.slice(0, limit || 3);
+}
+function slotText(slot, ctx, limit) {
+  return buildSlot(slot, ctx, limit).map(h => h.text);
+}
+
 localReading=function(){
   const r=S.saju, dm=r.dayMaster, ranks=v5Rank(), dom=ranks[0], second=ranks[1], weak=ranks[ranks.length-1];
   const core=V5_STEM[dm.stem], d=V5_DOM[dom], season=SEASON_BY_BRANCH[r.pillars[1]?.branch]||'계절이 바뀌는 때';
@@ -1461,7 +1965,37 @@ localReading=function(){
   const bad=v5Voice(`${d.bad} 대신 네 속도와 조건을 먼저 알아주는 조언이 필요해.`,`${d.bad} 대신 “어디까지 하면 끝인지”를 정해주는 말이 더 도움이 돼.`,`${d.bad} 듣고 억지로 버티지 마. 너한테 맞는 방법이 따로 있어.`);
   const action=v5Voice(practice.week,d.action,`${d.action} 오늘 안 하면 내일도 똑같이 고민할 가능성이 커.`);
   const points=[`결정할 때는 ${dom==='인성'?'충분히 이해할 시간':dom==='관성'?'기준과 책임 범위':dom==='식상'?'내 아이디어가 반영되는지':dom==='재성'?'실제 결과와 비용':'내가 선택할 수 있는 여지'}가 있어야 편해.`,d.stress,`${V5_SECOND[second]}`,weakLine];
-  return {오늘한줄:today,맞춤포인트:points,한눈요약:summary,겉과속:outward,이거너아니야:scenes,잘할때:best,흔들릴때:shake,일과재능:workTalent,일하는방식:workStyle,돈버는방식:earn,돈쓰는방식:spend,애정:love,갈등과경계:conflict,회복방법:recover,올해흐름:year,찔리는한마디:[sting],안맞는조언:[bad],오늘딱하나:[action],총평:V5_SUMMARY[dom],toneIntro,zero};
+  // 규칙 엔진이 사주에서 직접 뽑아낸 문장을 앞에 두고, 기존 유형별 설명을 뒤에 붙인다.
+  // 매칭되는 규칙이 없으면 예전 그대로 나오므로 어떤 사주에서도 빈 섹션이 생기지 않는다.
+  const ctx=buildContext();
+  S.ctx=ctx;
+  const mix=(slot,base,n)=>{
+    const add=slotText(slot,ctx,n||2);
+    if(!add.length) return base;
+    const seen={}, out=[];
+    add.concat(base).forEach(t=>{ const k=String(t).slice(0,24); if(t&&!seen[k]){seen[k]=1;out.push(t)} });
+    return out.slice(0,4);
+  };
+  const 총평규칙=slotText('총평',ctx,1);
+  return {
+    오늘한줄:today, 맞춤포인트:points,
+    한눈요약:mix('한눈요약',summary,2),
+    겉과속:mix('겉과속',outward,2),
+    이거너아니야:mix('이거너아니야',scenes,3),
+    잘할때:best, 흔들릴때:shake,
+    일과재능:mix('일과재능',workTalent,2),
+    일하는방식:mix('일하는방식',workStyle,2),
+    돈버는방식:mix('돈버는방식',earn,2),
+    돈쓰는방식:mix('돈쓰는방식',spend,2),
+    애정:mix('애정',love,2),
+    갈등과경계:mix('갈등과경계',conflict,2),
+    회복방법:mix('회복방법',recover,2),
+    올해흐름:year,
+    찔리는한마디:mix('찔리는한마디',[sting],1),
+    안맞는조언:[bad], 오늘딱하나:[action],
+    총평:총평규칙.length?총평규칙[0]:V5_SUMMARY[dom],
+    toneIntro, zero
+  };
 };
 const V5_SECTIONS=[
  ['한눈요약','🐯','너를 세 줄로 말하면','assets/tiger_wink.png','paragraph'],
