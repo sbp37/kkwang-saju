@@ -194,6 +194,60 @@ describe('입력 처리', () => {
 
 });
 
+describe('음력 달력', () => {
+
+  // index.html의 leapMonthOf / lunarMonthDays가 쓰는 것과 같은 방식.
+  // ssaju가 음력표를 노출하지 않아 유효성 판정을 되물어 알아낸다.
+  const leapMonthOf = y => {
+    for (let m = 1; m <= 12; m++) { try { SSAJU.lunarToSolar(y, m, 1, true); return m; } catch (e) {} }
+    return 0;
+  };
+  const monthDays = (y, m, leap) => {
+    try { SSAJU.lunarToSolar(y, m, 30, !!leap); return 30; } catch (e) { return 29; }
+  };
+
+  it('윤달이 있는 해와 없는 해를 가려낸다', () => {
+    // 한국천문연구원 음양력 기준
+    eq(leapMonthOf(2001), 4);
+    eq(leapMonthOf(2004), 2);
+    eq(leapMonthOf(2023), 2);
+    eq(leapMonthOf(2025), 6);
+    eq(leapMonthOf(1930), 6);
+    eq(leapMonthOf(2026), 0, '2026년은 윤달이 없다');
+    eq(leapMonthOf(2027), 0, '2027년은 윤달이 없다');
+  });
+
+  it('음력 달은 29일 아니면 30일이다', () => {
+    for (let y = 1930; y <= 2026; y++) {
+      for (let m = 1; m <= 12; m++) {
+        const d = monthDays(y, m, false);
+        ok(d === 29 || d === 30, `${y}년 ${m}월이 ${d}일`);
+      }
+    }
+  });
+
+  it('달의 길이가 양력과 다르다 (일 목록을 양력으로 만들면 안 되는 이유)', () => {
+    eq(monthDays(2001, 2, false), 30, '음력 2001년 2월은 30일 — 양력이면 28일');
+    eq(monthDays(2023, 1, false), 29, '음력 2023년 1월은 29일 — 양력이면 31일');
+    eq(monthDays(2001, 4, true), 29, '윤4월은 29일');
+  });
+
+  it('마지막 날짜가 실제로 계산까지 통과한다', () => {
+    for (const [y, m, leap] of [[2001, 2, false], [2001, 4, true], [2023, 1, false], [2025, 6, true]]) {
+      const last = monthDays(y, m, leap);
+      const s = SSAJU.lunarToSolar(y, m, last, leap);
+      ok(s && s.year, `음력 ${y}.${m}${leap ? '(윤)' : ''}.${last} 변환`);
+    }
+  });
+
+  it('그 해에 없는 윤달은 거부된다', () => {
+    let threw = false;
+    try { SSAJU.lunarToSolar(2001, 5, 1, true); } catch (e) { threw = true; }
+    ok(threw, '2001년 윤5월은 존재하지 않으므로 예외가 나야 한다');
+  });
+
+});
+
 describe('알려진 엔진 제약', () => {
 
   it('solarToLunar는 일부 날짜에서 잘못된 값을 낸다 (앱은 쓰지 않음)', () => {

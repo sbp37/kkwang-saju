@@ -669,6 +669,23 @@ const HoraengSaju={
   },
   lunarToSolar(y,m,d,leap){ return {solar:SSAJU.lunarToSolar(y,m,d,!!leap)}; }
 };
+
+// ===== 음력 달력 정보 =====
+// ssaju는 음력표를 직접 노출하지 않는다. 유효/무효 판정만 해주므로
+// 그 판정을 되물어서 달의 길이와 윤달 유무를 알아낸다. (연 단위 캐시)
+const _leapCache = {};
+function leapMonthOf(year){
+  if(year in _leapCache) return _leapCache[year];
+  let found = 0;
+  for(let m=1; m<=12; m++){
+    try{ SSAJU.lunarToSolar(year, m, 1, true); found = m; break; }catch(e){}
+  }
+  return _leapCache[year] = found;   // 윤달이 없는 해는 0
+}
+function lunarMonthDays(year, month, leap){
+  if(leap && leapMonthOf(year)!==month) return 0;   // 그 해에 없는 윤달
+  try{ SSAJU.lunarToSolar(year, month, 30, !!leap); return 30; }catch(e){ return 29; }
+}
 </script>
 <script>
 // ===== 상태 (메모리 전용) =====
@@ -681,13 +698,26 @@ const thisYear = new Date().getFullYear();
 for(let y=thisYear; y>=1930; y--) ySel.add(new Option(y+'년', y));
 ySel.value = 1995;
 for(let m=1;m<=12;m++) mSel.add(new Option(m+'월', m));
+// 달력 기준·연·월이 바뀔 때마다 윤달 체크박스와 일 목록을 다시 맞춘다.
+function syncLeapBox(){
+  const y=+ySel.value, m=+mSel.value;
+  const avail = S.cal==='lunar' && leapMonthOf(y)===m;
+  if(!avail) $('isLeap').checked=false;
+  $('leapWrap').classList.toggle('hidden', !avail);
+}
 function fillDays(){
-  const y=+ySel.value, m=+mSel.value, last=new Date(y,m,0).getDate(), cur=+dSel.value||15;
+  const y=+ySel.value, m=+mSel.value, cur=+dSel.value||15;
+  const last = S.cal==='lunar'
+    ? lunarMonthDays(y, m, $('isLeap').checked)
+    : new Date(y, m, 0).getDate();
   dSel.innerHTML='';
   for(let d=1;d<=last;d++) dSel.add(new Option(d+'일', d));
   dSel.value = Math.min(cur,last);
 }
-ySel.onchange=fillDays; mSel.onchange=fillDays; fillDays(); dSel.value=15;
+function refreshDate(){ syncLeapBox(); fillDays(); }
+ySel.onchange=refreshDate; mSel.onchange=refreshDate;
+$('isLeap').onchange=fillDays;
+refreshDate(); dSel.value=15;
 for(let h=0;h<24;h++) hSel.add(new Option(String(h).padStart(2,'0')+'시', h));
 hSel.value=12;
 for(let mi=0;mi<60;mi+=5) minSel.add(new Option(String(mi).padStart(2,'0')+'분', mi));
@@ -698,7 +728,7 @@ function bindToggle(el, cb){
     b.classList.add('on'); cb(b.dataset.v);
   });
 }
-bindToggle($('calToggle'), v=>{ S.cal=v; $('leapWrap').classList.toggle('hidden', v!=='lunar'); });
+bindToggle($('calToggle'), v=>{ S.cal=v; refreshDate(); });
 bindToggle($('genToggle'), v=>{ S.gender=v; });
 $('noTime').onchange = e=>{
   S.noTime = e.target.checked;
@@ -1196,9 +1226,10 @@ function restoreSaved(){
   try{
     S.cal=d.cal||'solar';
     document.querySelectorAll('#calToggle button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.cal));
-    $('leapWrap').classList.toggle('hidden', S.cal!=='lunar');
-    if(d.leap) $('isLeap').checked=true;
-    ySel.value=d.rawY; mSel.value=d.rawM; fillDays(); dSel.value=d.rawD;
+    ySel.value=d.rawY; mSel.value=d.rawM;
+    syncLeapBox();
+    if(d.leap && !$('leapWrap').classList.contains('hidden')) $('isLeap').checked=true;
+    fillDays(); dSel.value=d.rawD;
     S.noTime=!!d.noTime; $('noTime').checked=S.noTime;
     if(!S.noTime){ hSel.value=d.hour; minSel.value=d.minute; }
     hSel.disabled=minSel.disabled=S.noTime;
@@ -1307,14 +1338,25 @@ const M = { cal:'solar', gender:'M', noTime:false };
   h.value=12;
   for(let v=0;v<60;v+=5) mi.add(new Option(String(v).padStart(2,'0')+'분', v));
   mi.value=0;
+  function syncMLeap(){
+    const avail = M.cal==='lunar' && leapMonthOf(+y.value)===+mo.value;
+    if(!avail) $('mIsLeap').checked=false;
+    $('mLeapWrap').classList.toggle('hidden', !avail);
+  }
   function fillM(){
-    const last=new Date(+y.value, +mo.value, 0).getDate(), cur=+d.value||15;
+    const cur=+d.value||15;
+    const last = M.cal==='lunar'
+      ? lunarMonthDays(+y.value, +mo.value, $('mIsLeap').checked)
+      : new Date(+y.value, +mo.value, 0).getDate();
     d.innerHTML='';
     for(let v=1;v<=last;v++) d.add(new Option(v+'일', v));
     d.value=Math.min(cur,last);
   }
-  y.onchange=fillM; mo.onchange=fillM; fillM();
-  bindToggle($('mCalToggle'), v=>{ M.cal=v; $('mLeapWrap').classList.toggle('hidden', v!=='lunar'); });
+  function refreshM(){ syncMLeap(); fillM(); }
+  y.onchange=refreshM; mo.onchange=refreshM;
+  $('mIsLeap').onchange=fillM;
+  refreshM();
+  bindToggle($('mCalToggle'), v=>{ M.cal=v; refreshM(); });
   bindToggle($('mGenToggle'), v=>{ M.gender=v; });
   $('mNoTime').addEventListener('change', e=>{
     M.noTime=e.target.checked;
