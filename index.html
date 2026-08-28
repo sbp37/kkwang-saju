@@ -171,6 +171,7 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .entry-card i{flex:0 0 auto;margin-left:auto;font-style:normal;font-size:19px;color:var(--red)}
 .mode-toggle{margin-bottom:14px}
 .group-add{margin-bottom:9px}
+#inNick,
 .group-add input{width:100%;padding:12px 12px;font-size:15px;font-family:inherit;background:#FFFDF7;border:1.5px solid rgba(43,35,32,.2);border-radius:11px;color:var(--ink)}
 .group-row{display:flex;align-items:center;gap:10px;padding:11px 12px;margin-bottom:8px;background:#FFFDF7;border:1px solid var(--line);border-radius:14px}
 .group-row b{font-family:'Gowun Batang',serif;font-size:15px}
@@ -413,6 +414,82 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 #matchMePanel .panel-title .num{font-size:14px;letter-spacing:-.5px}
 #matchResult{margin-top:18px}
 @media(max-width:340px){ .match-result-hero h1{font-size:25px} }
+
+/* ===== 타이포·정렬 정돈 =====
+   앞의 규칙들을 덮으려고 맨 뒤에 둔다. 여기만 보면 무엇을 손봤는지 알 수 있다. */
+
+/* 한글은 어절 단위로 끊어야 한다.
+   기본값(break-word)이면 "햇빛 같은 사/람", "생각을 깊게 정리하는/편"처럼
+   단어 중간이 잘려서 다 만들다 만 화면처럼 보인다.
+   keep-all로 띄어쓰기에서만 끊고, 도저히 안 들어가는 긴 문자열만 예외로 쪼갠다. */
+body{word-break:keep-all;overflow-wrap:break-word}
+
+/* 제목은 줄 길이를 고르게, 본문은 마지막 줄에 한 단어만 남지 않게 */
+h1,h2,h3,.result-one,.punch-line,.role-body b,.sc-sum,.section-cap b,
+.consult-point span,.evidence-grid b,.entry-card b{text-wrap:balance}
+p,.speech p,.room-line,.pair-note,.hint,.mini-note,.bubble,.entry-card em{text-wrap:pretty}
+
+/* 히어로 — 마스코트가 글자 자리를 너무 많이 먹어 제목이 매번 두 줄로 깨졌다 */
+.hero-copy{width:64%}
+.hero-copy h1{font-size:27px;line-height:1.3;letter-spacing:-.6px}
+.hero-copy p{font-size:12.5px;line-height:1.7}
+.hero-mascot{width:210px;right:-30px}
+.hero-art{width:44%}
+
+.result-hero{padding:24px 37% 22px 21px}
+.result-mascot{width:218px;right:-40px;bottom:-38px}
+.result-kicker{font-size:10.5px;letter-spacing:.6px;line-height:1.4}
+.result-hero h1{font-size:25px;line-height:1.3;letter-spacing:-.6px;margin-top:6px}
+.result-one{font-size:13px;line-height:1.7;margin-top:9px}
+
+/* 태그는 줄바꿈되는 칩 줄로. 폭이 제각각이라 흐트러져 보였다 */
+.result-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.result-tags span{margin:0;padding:6px 11px;font-size:11px;line-height:1.35;border-radius:999px}
+
+/* 근거 칸 — 글 길이가 달라 칸 높이가 들쭉날쭉했다 */
+.evidence-grid{align-items:stretch}
+.evidence-grid div{display:flex;flex-direction:column;gap:3px;padding:10px 11px}
+.evidence-grid span{font-size:9.5px;letter-spacing:.2px}
+.evidence-grid b{font-size:12.5px;line-height:1.45}
+
+/* 상담 포인트 카드 — 라벨과 문장의 간격을 맞춘다 */
+.consult-point b{letter-spacing:.1px}
+.consult-point span{line-height:1.6}
+
+/* 섹션 머리 — 아이콘 칩 크기와 제목 크기를 통일 */
+.speech .sh{gap:9px;align-items:center}
+.speech .sh .ic{width:26px;height:26px;border-radius:8px;font-size:13px;line-height:1;flex:0 0 auto}
+.speech .sh b{font-size:14.5px;letter-spacing:-.2px;line-height:1.4}
+.speech p{line-height:1.78}
+
+/* 펼침 표시가 열렸을 때 새까매져서 카드 안에서 제일 눈에 띄었다 */
+.speech .acc-mark{width:22px;height:22px;font-size:13px;border-color:rgba(120,100,80,.28)}
+.speech.open .acc-mark{background:rgba(120,100,80,.14);color:var(--brown);border-color:transparent}
+
+/* 섹션 머리 아이콘이 배경에 묻혀 안 보였다 */
+.speech .sh .ic{background:#F0E4CF;color:#8A6A45}
+
+/* 근거 칸 — 오른쪽 그림 자리를 너무 많이 비워 제목이 두 줄로 깨졌다 */
+.evidence{padding-right:74px}
+.evidence h3{font-size:14.5px;line-height:1.45}
+.evidence .asset-mountain{width:118px;right:-30px;bottom:-28px}
+
+/* 중심 기운 카드 — 그림과 글의 첫 줄을 맞춘다 */
+.identity-card{align-items:start}
+.identity-mark{margin-top:2px}
+.identity-copy small{display:block;font-size:10.5px;letter-spacing:.4px;margin-bottom:3px}
+.identity-copy h2{font-size:19px;line-height:1.35;letter-spacing:-.3px}
+.identity-copy p{font-size:12px;line-height:1.65;margin-top:5px}
+
+/* 그림을 float로 흘려놔서 제목·본문과 높이가 안 맞았다. 격자로 자리를 정한다. */
+.today-line{display:grid;grid-template-columns:auto 1fr;column-gap:11px;align-items:center;padding:13px 15px}
+.today-line .inline-asset{float:none;margin:0;width:54px;height:54px;grid-row:span 2;align-self:center}
+.today-line b{align-self:end;font-size:12.5px;letter-spacing:-.1px}
+.today-line span{align-self:start;line-height:1.6}
+
+/* 문단 사이 여백을 일정하게 */
+.v5-body p+p{margin-top:11px}
+.v5-scene+.v5-scene{margin-top:8px}
 </style>
 </head>
 <body>
@@ -426,17 +503,19 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     <div class="stepbar"><span class="on"></span><span></span><span></span></div>
     <div class="hero-card"><img class="asset-decor asset-sun" src="assets/sun.webp" alt=""><img class="asset-decor asset-cloud" src="assets/cloud.webp" alt="">
       <div class="hero-copy">
-        <span class="eyebrow">산신령 수련생 크앙</span>
-        <h1>네 안의 다섯 기운,<br><em>귀엽지만 제대로</em><br>찾아볼게.</h1>
-        <p>어려운 말은 빼고, 성향·일·돈·관계를 친구처럼 풀어줄게.</p>
+        <span class="eyebrow">아기호랑이 크앙</span>
+        <h1>생일 하나로,<br><em>네 성격부터</em><br>올해 흐름까지.</h1>
+        <p>어려운 말은 빼고 친구처럼 풀어줄게.<br>가입도 로그인도 없어.</p>
       </div>
       <div class="hero-art"><img class="hero-mascot" src="assets/tiger_wave.webp" alt="인사하는 아기호랑이 크앙"></div>
     </div>
     <div class="five-preview bright-card"><div class="section-cap"><b>다섯 기운</b><span>생일 속 목·화·토·금·수를 찾아볼게</span></div><div class="five-preview-row"><div><img src="assets/wood.webp" alt="목"><b>목</b></div><div><img src="assets/fire.webp" alt="화"><b>화</b></div><div><img src="assets/earth.webp" alt="토"><b>토</b></div><div><img src="assets/metal.webp" alt="금"><b>금</b></div><div><img src="assets/water.webp" alt="수"><b>수</b></div></div></div>
-    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.webp" alt="궁금해하는 크앙"></div><div class="bubble">생일을 알려주면 네 사주 족보를 차근차근 펼쳐볼게. 어려운 말은 줄이고 필요한 건 솔직하게 말해줄게!</div></div>
+    <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.webp" alt="궁금해하는 크앙"></div><div class="bubble">생일만 알려주면 돼. 어려운 말은 줄이고, 필요한 건 솔직하게 말해줄게!</div></div>
     <div class="form-grid">
       <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
-        <div class="panel-title"><span class="num">1</span><div><h2>태어난 날짜</h2><p>양력과 음력을 먼저 골라줘.</p></div></div>
+        <div class="panel-title"><span class="num">1</span><div><h2>이름과 생년월일</h2><p>이름은 안 적어도 돼. 적으면 그 이름으로 불러줄게.</p></div></div>
+        <span class="field-label" id="lblNick">뭐라고 부를까</span>
+        <input type="text" id="inNick" maxlength="8" placeholder="예: 숩, 지훈, 막내" aria-labelledby="lblNick">
         <span class="field-label" id="lblCal">달력 기준</span>
         <div class="toggle-group" id="calToggle" role="group" aria-labelledby="lblCal"><button type="button" class="on" data-v="solar" aria-pressed="true">양력</button><button type="button" data-v="lunar" aria-pressed="false">음력</button></div>
         <div class="check hidden" id="leapWrap"><input type="checkbox" id="isLeap"><label for="isLeap">윤달에 태어났어요</label></div>
@@ -450,7 +529,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
         <div class="check"><input type="checkbox" id="noTime"><label for="noTime">태어난 시간을 몰라요</label></div>
         <span class="field-label" id="lblGen">성별 <small style="font-weight:400">· 10년 흐름 계산용</small></span>
         <div class="toggle-group" id="genToggle" role="group" aria-labelledby="lblGen"><button type="button" class="on" data-v="F" aria-pressed="true">여성</button><button type="button" data-v="M" aria-pressed="false">남성</button></div>
-        <button class="btn" id="btnCalc">내 사주 족보 펼치기</button>
+        <button class="btn" id="btnCalc">내 사주 보기</button>
       </div>
     </div>
     <button type="button" class="entry-card" id="btnGoGroup">
@@ -469,17 +548,17 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.webp" alt="풀이를 시작하는 크앙"></div><div class="bubble" id="chartBubble">생일 속 기운을 펼쳐볼게!</div></div>
     <div class="identity-card"><img class="identity-decor" src="assets/scroll.webp" alt=""><img class="asset-decor asset-plum" src="assets/plum.webp" alt=""><img class="asset-decor asset-moon" src="assets/moon.webp" alt="">
       <div class="identity-mark"><img id="identityIcon" src="assets/wood.webp" alt="나의 중심 기운"></div>
-      <div class="identity-copy"><small>MY CORE ENERGY</small><h2 id="identityTitle">나를 움직이는 중심</h2><p id="identitySub">생일 속 중심 기운</p><div class="quick-tags" id="quickTags"></div></div>
+      <div class="identity-copy"><small>내 중심 기운</small><h2 id="identityTitle">나를 움직이는 중심</h2><p id="identitySub">생일 속 중심 기운</p><div class="quick-tags" id="quickTags"></div></div>
     </div>
     <div class="panel">
       <h2><span class="dot"></span>내 사주의 네 기둥 <span id="birthLabel" style="font-size:10px;color:var(--muted);font-weight:400;margin-left:auto"></span></h2>
       <p class="chart-guide" id="chartGuide"></p>
-      <div class="engine-badge" id="engineBadge">정밀 만세력 엔진 준비 중</div>
+      <div class="engine-badge" id="engineBadge">만세력으로 계산했어</div>
       <div class="pillars" id="pillarGrid"></div>
       <details class="technical-details"><summary>계산표의 전문 용어도 보기</summary><div id="technicalSummary"></div></details>
     </div>
     <div class="panel">
-      <h2><span class="dot"></span>오행의 배치</h2>
+      <h2><span class="dot"></span>다섯 기운의 균형</h2>
       <div class="elembar" id="elemBar"></div><div class="elemtags" id="elemTags"></div><div class="missing-note" id="missingNote"></div>
       <div class="element-grid" id="elementCards"></div>
     </div>
@@ -500,7 +579,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
 
   <section id="scrLoading" class="hidden">
     <div class="stepbar"><span class="on"></span><span class="on"></span><span class="on"></span></div>
-    <div class="loading-scene"><div class="loading-art"><img src="assets/tiger_read.webp" alt="족보를 읽는 크앙"></div><div class="loading-dots"><i></i><i></i><i></i></div><h2>크앙이가 족보를 읽는 중</h2><p id="loadMsg">네 사주의 중심 기운을 찾는 중…</p></div>
+    <div class="loading-scene"><div class="loading-art"><img src="assets/tiger_read.webp" alt="계산 중인 크앙"></div><div class="loading-dots"><i></i><i></i><i></i></div><h2>크앙이가 족보를 읽는 중</h2><p id="loadMsg">네 사주의 중심 기운을 찾는 중…</p></div>
   </section>
 
   <section id="scrResult" class="hidden">
@@ -510,7 +589,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
       <button type="button" id="btnMineToo">내 것도 보기</button>
     </div>
     <div class="result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt=""><img class="asset-decor asset-plum-result" src="assets/plum.webp" alt=""><img class="result-mascot" src="assets/tiger_pouch.webp" alt="복주머니를 든 크앙">
-      <div class="result-kicker">크앙이가 읽어온 나의 사주</div>
+      <div class="result-kicker">크앙이가 본 내 사주</div>
       <h1 id="resultName">나의 사주</h1>
       <div class="result-one">“<span id="resultOneLine">나를 이해하는 한 문장</span>”</div>
       <div class="result-tags" id="resultTags"></div>
@@ -528,16 +607,16 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
       </div>
       <div id="punchImgWrap"></div>
     </section>
-    <div class="consult-card" id="consultCard"><img class="asset-decor asset-plum-consult" src="assets/plum.webp" alt=""><h3>크앙이가 콕 집은 ‘나 같은 포인트’</h3><div class="consult-points" id="consultPoints"></div></div>
+    <div class="consult-card" id="consultCard"><img class="asset-decor asset-plum-consult" src="assets/plum.webp" alt=""><h3>먼저 짚고 갈 네 가지</h3><div class="consult-points" id="consultPoints"></div></div>
     <div class="action-card" id="actionCard"><img class="asset-decor asset-talisman" src="assets/talisman.webp" alt=""></div>
     <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>왜 이런 풀이가 나왔을까?</h3><div class="evidence-grid" id="evidenceGrid"></div></div>
     <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_pouch.webp" alt="행운을 건네는 크앙"></div><div class="bubble" id="resultBubble">다 읽었어!</div></div>
     <div id="sections"></div>
     <div class="result-layout">
-      <div class="panel" id="graphPanel"><h2><span class="dot"></span>10년 단위 기운 변화</h2><svg id="lifeSvg" viewBox="0 0 320 130"></svg><div class="hint" id="graphNote"></div></div>
-      <div class="panel" id="luckPanel"><h2><span class="dot"></span>내가 편해지는 보완 기운</h2><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><div id="yongStamp" class="yong-stamp"></div><div id="yongDesc" style="font-size:12px"></div></div><div class="lucktable" id="luckTable"></div></div>
+      <div class="panel" id="graphPanel"><h2><span class="dot"></span>10년 단위 흐름</h2><svg id="lifeSvg" viewBox="0 0 320 130"></svg><div class="hint" id="graphNote"></div></div>
+      <div class="panel" id="luckPanel"><h2><span class="dot"></span>요즘 챙기면 좋은 것</h2><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><div id="yongStamp" class="yong-stamp"></div><div id="yongDesc" style="font-size:12px"></div></div><div class="lucktable" id="luckTable"></div></div>
     </div>
-    <div class="panel"><h2><span class="dot"></span>크앙의 오늘 부적</h2><div id="shareCard"><img class="share-plum" src="assets/plum.webp" alt=""><img class="share-tiger" src="assets/tiger_wave.webp" alt=""><div class="sc-top"><div><div class="sc-title">크앙사주</div><div class="sc-date" id="scDate"></div></div><div class="sc-seal">虎</div></div><div class="sc-pillars" id="scPillars"></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:8px 0 12px"><div id="scChar" class="yong-stamp" style="width:52px;height:52px;font-size:29px"></div><div id="scCharLabel" style="font-size:9px;color:var(--muted)"></div></div><div class="sc-sum" id="scSum"></div><div class="sc-foot">아기호랑이 크앙이가 물어온 오늘의 부적</div></div><button class="btn red" id="btnCard">부적 카드 저장하기</button><div id="cardImgWrap"></div></div>
+    <div class="panel"><h2><span class="dot"></span>내 사주 카드</h2><div id="shareCard"><img class="share-plum" src="assets/plum.webp" alt=""><img class="share-tiger" src="assets/tiger_wave.webp" alt=""><div class="sc-top"><div><div class="sc-title">크앙사주</div><div class="sc-date" id="scDate"></div></div><div class="sc-seal">虎</div></div><div class="sc-pillars" id="scPillars"></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin:8px 0 12px"><div id="scChar" class="yong-stamp" style="width:52px;height:52px;font-size:29px"></div><div id="scCharLabel" style="font-size:9px;color:var(--muted)"></div></div><div class="sc-sum" id="scSum"></div><div class="sc-foot">크앙사주에서 뽑은 내 사주 카드</div></div><button class="btn red" id="btnCard">카드 저장하기</button><div id="cardImgWrap"></div></div>
     <button class="btn ghost" id="btnOther">다른 말투로 다시 듣기</button><button class="btn ghost" id="btnRestart" style="margin-top:9px">처음부터 다시</button>
   </section>
 
@@ -546,7 +625,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     <div class="hero-card match-hero"><img class="asset-decor asset-plum-top" src="assets/plum.webp" alt="">
       <div class="hero-copy">
         <span class="eyebrow">둘의 기운 맞춰보기</span>
-        <h1>우리 둘은<br><em>어떤 결</em>일까?</h1>
+        <h1>우리 둘은<br><em>어떻게</em> 맞을까?</h1>
         <p>몇 점인지 매기지 않을게. 어디서 잘 맞고 어디서 부딪히는지만 짚어줄게.</p>
       </div>
       <div class="hero-art"><img class="hero-mascot" src="assets/tiger_pouch.webp" alt="복주머니를 든 크앙"></div>
@@ -576,7 +655,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
       <div class="check"><input type="checkbox" id="mNoTime"><label for="mNoTime">태어난 시간을 몰라요</label></div>
       <span class="field-label" id="mLblGen">성별</span>
       <div class="toggle-group" id="mGenToggle" role="group" aria-labelledby="mLblGen"><button type="button" class="on" data-v="M" aria-pressed="true">남성</button><button type="button" data-v="F" aria-pressed="false">여성</button></div>
-      <button class="btn" id="btnMatch">둘의 결 맞춰보기</button>
+      <button class="btn" id="btnMatch">둘이 맞춰보기</button>
     </div>
 
     <div id="groupWrap" class="hidden">
@@ -639,12 +718,12 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     <div id="matchResult" class="two-only hidden">
       <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt="">
         <div class="result-kicker">크앙이가 본 둘의 궁합</div>
-        <h1 id="matchTitle">우리 둘의 결</h1>
+        <h1 id="matchTitle">우리 둘 사이</h1>
         <div class="result-one">“<span id="matchOneLine"></span>”</div>
         <div class="result-tags" id="matchTags"></div>
       </div>
       <div id="matchSections"></div>
-      <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>이건 뭘 보고 말한 거야?</h3><div class="evidence-grid" id="matchEvidence"></div></div>
+      <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>크앙이는 이걸 보고 말했어</h3><div class="evidence-grid" id="matchEvidence"></div></div>
       <div class="mini-note">궁합은 두 사람이 어떤 지점에서 서로 애써야 하는지를 보는 참고표예요. 맞고 안 맞고가 정해져 있다는 뜻이 아닙니다.</div>
       <button class="btn ghost" id="btnMatchAgain">다른 사람과 맞춰보기</button>
     </div>
@@ -658,7 +737,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     </div>
     <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.webp" alt="윙크하는 크앙"></div><div class="bubble">오늘 기운이 네 사주를 어떻게 건드리는지 봤어. 하루 참고용이야!</div></div>
     <div id="todaySections"></div>
-    <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>이건 뭘 보고 말한 거야?</h3><div class="evidence-grid" id="todayEvidence"></div></div>
+    <div class="evidence"><img class="asset-decor asset-mountain" src="assets/mountain.webp" alt=""><h3>크앙이는 이걸 보고 말했어</h3><div class="evidence-grid" id="todayEvidence"></div></div>
     <div class="mini-note">오늘 운세는 하루의 기운이 내 사주와 어떻게 만나는지를 보는 참고표예요. 무슨 일이 일어날지 정해두는 게 아닙니다.</div>
   </section>
 
@@ -666,7 +745,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
     <div class="hero-card"><img class="asset-decor asset-plum-top" src="assets/plum.webp" alt="">
       <div class="hero-copy">
         <span class="eyebrow">마이</span>
-        <h1>내 정보와<br><em>기억해 둔 것</em></h1>
+        <h1><em>저장된</em><br>내 정보</h1>
         <p>이 기기에만 저장되고, 어디로도 보내지 않아.</p>
       </div>
       <div class="hero-art"><img class="hero-mascot" src="assets/tiger_read.webp" alt="책 읽는 크앙"></div>
@@ -683,7 +762,7 @@ select,input[type=number],input[type=password]{height:55px;font-size:16px;border
       <button class="btn ghost" id="btnMyClear" style="margin-top:12px">저장된 내용 지우기</button>
     </div>
     <div class="panel">
-      <div class="panel-title"><span class="num">3</span><div><h2>크앙사주는</h2><p>이 앱이 무엇을 보고 풀이하는지</p></div></div>
+      <div class="panel-title"><span class="num">3</span><div><h2>크앙사주는</h2><p>무엇을 보고 풀이할까</p></div></div>
       <div id="myAbout"></div>
     </div>
   </section>
@@ -842,7 +921,7 @@ function lunarMonthDays(year, month, leap){
 </script>
 <script>
 // ===== 상태 (메모리 전용) =====
-const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null };
+const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null, nick:'' };
 const V5_LEVELS = ['몽글몽글','솔직하게 콕','돌직구 크앙'];
 
 // ===== 입력 초기화 =====
@@ -1035,7 +1114,7 @@ function drawTigerSeal(ctx,cx,cy,size){
   ctx.restore();
 }
 $('btnCard').onclick = async ()=>{
-  const btn=$('btnCard'); btn.textContent='부적을 그리는 중…'; btn.disabled=true;
+  const btn=$('btnCard'); btn.textContent='카드를 그리는 중…'; btn.disabled=true;
   try{
     const canvas=document.createElement('canvas'); canvas.width=1080; canvas.height=1350;
     const ctx=canvas.getContext('2d');
@@ -1073,24 +1152,25 @@ $('btnCard').onclick = async ()=>{
     $('cardImgWrap').innerHTML=`<img src="${url}" alt="크앙사주 부적 카드"><div class="hint">이미지를 길게 눌러 저장하거나 공유해줘 🐾</div>`;
     const a=document.createElement('a');a.href=url;a.download='크앙사주_부적.png';document.body.appendChild(a);a.click();a.remove();
   }catch(e){alert('카드 생성 실패: '+e.message);}
-  btn.textContent='부적 카드 저장하기';btn.disabled=false;
+  btn.textContent='카드 저장하기';btn.disabled=false;
 };
 
 
 // ===== 결과 공유 =====
 // 서버가 없으므로 결과를 저장하지 않는다. 대신 생년월일을 주소 뒤에 붙여서
 // 링크를 연 사람의 브라우저가 같은 계산을 다시 한다. 어디에도 남지 않는다.
-const SHARE_VER = '1';
+const SHARE_VER = '2';   // 2부터 이름이 붙는다. 1로 만든 링크도 계속 열린다.
 
-function encodeBirth(b, level){
-  // 예: 1|19890307|0700|F|s|0|1  →  base64url
+function encodeBirth(b, level, nick){
+  // 예: 2|19890307|0700|F|s|1|숩  →  base64url
   const raw = [
     SHARE_VER,
     `${b.rawY}${String(b.rawM).padStart(2,'0')}${String(b.rawD).padStart(2,'0')}`,
     b.noTime ? '----' : `${String(b.hour).padStart(2,'0')}${String(b.minute).padStart(2,'0')}`,
     b.gender,
     b.calRaw === 'lunar' ? (b.leap ? 'L' : 'l') : 's',
-    String(V5_LEVELS.indexOf(level))
+    String(V5_LEVELS.indexOf(level)),
+    (nick || '').replace(/\|/g, '')
   ].join('|');
   return btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
@@ -1098,8 +1178,8 @@ function decodeBirth(token){
   try{
     const b64 = token.replace(/-/g,'+').replace(/_/g,'/');
     const raw = decodeURIComponent(escape(atob(b64)));
-    const [ver, ymd, hm, gender, cal, lv] = raw.split('|');
-    if(ver !== SHARE_VER) return null;
+    const [ver, ymd, hm, gender, cal, lv, nick] = raw.split('|');
+    if(ver !== '1' && ver !== '2') return null;
     if(!/^\d{8}$/.test(ymd) || !/^(\d{4}|----)$/.test(hm)) return null;
     if(gender !== 'F' && gender !== 'M') return null;
     if(['s','l','L'].indexOf(cal) === -1) return null;
@@ -1108,7 +1188,8 @@ function decodeBirth(token){
       rawY:+ymd.slice(0,4), rawM:+ymd.slice(4,6), rawD:+ymd.slice(6,8),
       hour: noTime ? null : +hm.slice(0,2), minute: noTime ? null : +hm.slice(2,4),
       noTime, gender, cal: cal === 's' ? 'solar' : 'lunar', leap: cal === 'L',
-      level: V5_LEVELS[+lv] || V5_LEVELS[1]
+      level: V5_LEVELS[+lv] || V5_LEVELS[1],
+      nick: (nick || '').slice(0, 8)
     };
     if(out.rawY < 1930 || out.rawY > new Date().getFullYear()) return null;
     if(out.rawM < 1 || out.rawM > 12 || out.rawD < 1 || out.rawD > 31) return null;
@@ -1119,7 +1200,7 @@ function decodeBirth(token){
 function shareUrl(){
   if(!S.birth) return location.href;
   const base = location.href.split('#')[0];
-  return `${base}#r=${encodeBirth(S.birth, S.level)}`;
+  return `${base}#r=${encodeBirth(S.birth, S.level, S.nick)}`;
 }
 
 // 링크를 열었을 때: 보낸 사람의 결과를 그대로 보여주고, 위에 "나도 보기"를 띄운다.
@@ -1138,6 +1219,7 @@ function openSharedResult(){
     S.saju = adaptSaju(res, d.noTime);
     S.yong = findYongshin(S.saju);
     S.level = d.level;
+    S.nick = d.nick || '';
     S.shared = true;
     S.reading = localReading();
     renderChart();
@@ -1179,7 +1261,7 @@ async function drawPunchCard(){
 
   ctx.fillStyle = '#F6C96F';
   ctx.font = `700 34px ${SANS}`;
-  ctx.fillText('크앙의 한 방', 96, 158);
+  ctx.fillText(S.nick ? `${S.nick}에게 크앙의 한 방` : '크앙의 한 방', 96, 158);
 
   // 문장 길이에 맞춰 글자를 줄인다. 넉 줄이 넘어가면 카드가 답답해진다.
   const line = (S.reading && S.reading.한방 && S.reading.한방[0]) || '';
@@ -1290,7 +1372,8 @@ function saveBirth(){
       rawY:S.birth.rawY, rawM:S.birth.rawM, rawD:S.birth.rawD,
       hour:S.birth.hour, minute:S.birth.minute,
       noTime:S.birth.noTime, gender:S.birth.gender, cal:S.birth.calRaw,
-      leap:$('isLeap').checked, level:S.level||null, savedAt:new Date().toISOString()
+      leap:$('isLeap').checked, level:S.level||null, nick:S.nick||'',
+      savedAt:new Date().toISOString()
     }));
   }catch(e){ /* 저장 실패는 조용히 넘긴다 — 기능이 막히면 안 된다 */ }
 }
@@ -1307,6 +1390,7 @@ function restoreSaved(){
   try{
     S.cal=d.cal||'solar';
     setToggle($('calToggle'), S.cal);
+    S.nick=d.nick||''; $('inNick').value=S.nick;
     ySel.value=d.rawY; mSel.value=d.rawM;
     syncLeapBox();
     if(d.leap && !$('leapWrap').classList.contains('hidden')) $('isLeap').checked=true;
@@ -1326,7 +1410,7 @@ function renderMy(){
   const saved=loadSaved();
   const box=$('mySavedInfo'), detail=$('myDetail');
   if(S.saju){
-    box.textContent=`${S.birth.rawY}.${S.birth.rawM}.${S.birth.rawD}${S.birth.noTime?' · 시간 모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`} · ${S.birth.gender==='F'?'여성':'남성'}`;
+    box.textContent=`${S.nick?S.nick+' · ':''}${S.birth.rawY}.${S.birth.rawM}.${S.birth.rawD}${S.birth.noTime?' · 시간 모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`} · ${S.birth.gender==='F'?'여성':'남성'}`;
     detail.classList.remove('hidden');
     detail.innerHTML=`<div class="evidence-grid">${[
       ['사주', S.saju.pillars.map(p=>p.missing?'시간미상':p.stem+p.branch).join(' ')],
@@ -1389,8 +1473,8 @@ function renderToday(){
     if(!lines.length) return;
     const el=document.createElement('div'); el.className='speech'+(i<3?' open':'');
     el.innerHTML=`<img class="section-asset" src="${asset}" alt="">`
-      +`<div class="sh"><span class="ic">${icon}</span><b>${title}</b><span class="acc-mark">+</span></div>`
-      +`<div class="v5-body">${lines.map(x=>`<p>${x}</p>`).join('')}</div>`;
+      +`<div class="sh"><span class="ic">${icon}</span><b>${personalize(title,S.nick)}</b><span class="acc-mark">+</span></div>`
+      +`<div class="v5-body">${lines.map(x=>`<p>${personalize(x,S.nick)}</p>`).join('')}</div>`;
     el.querySelector('.sh').onclick=()=>el.classList.toggle('open');
     box.appendChild(el);
   });
@@ -1846,7 +1930,7 @@ restoreSaved();
 $('btnPunchShare').onclick=sharePunch;
 $('btnPunchLink').onclick=copyShareLink;
 $('btnMineToo').onclick=()=>{
-  S.shared=false;
+  S.shared=false; S.nick=''; $('inNick').value='';
   $('fromFriend').classList.add('hidden');
   history.replaceState(null,'',location.href.split('#')[0]);
   show('scrInput');
@@ -1884,12 +1968,14 @@ const V5_DOM={
   관성:{outer:'믿음직하고 알아서 잘하는 사람처럼 보여.',inner:'속으로는 실수하면 안 된다는 긴장을 꽤 오래 안고 있어. 칭찬보다 “이제 네가 안 챙겨도 돼”라는 말이 더 필요할 때가 있어.',scenes:['일이 애매하게 남아 있으면 쉬면서도 계속 생각해.','부탁을 거절하지 못하고 다 해준 뒤 혼자 피곤해진 적이 많아.','규칙을 잘 지키지만 말이 안 되는 기준에는 속으로 화가 오래 남아.'],best:'책임 범위와 기준이 분명할 때 안정적으로 끝까지 끌고 가.',stress:'기준은 없는데 책임만 떠넘기는 상황에서 가장 많이 지쳐.',job:'품질을 지키고 마감을 관리하며, 사람들에게 믿음을 주는 능력이 커.',env:'역할과 권한이 같이 주어지는 곳이 좋아. 책임만 있고 결정권이 없으면 오래 버티기 어려워.',earn:'신뢰, 꾸준함, 전문성을 오래 쌓는 방식이 잘 맞아. 단기 승부보다 “이 사람에게 맡기면 된다”는 평판이 자산이 돼.',spend:'필요한 사람과 일에는 책임감 때문에 계획보다 더 쓰기 쉬워. 네 몫의 여유 비용도 예산에 포함해야 해.',love:'약속을 가볍게 여기지 않고, 말과 행동이 비슷한 사람이 편해.',conflict:'괜찮다고 말하면서 표정이 굳는 습관부터 줄여봐. 거절은 관계를 깨는 말이 아니라 범위를 알려주는 말이야.',bad:'“네가 좀 더 참으면 다 괜찮아질 거야.” 이미 충분히 참았을 가능성이 커.',sting:'누가 시키지도 않았는데 혼자 책임자처럼 다 짊어지고 있지?',action:'오늘 부탁 하나에는 바로 답하지 말고 “확인하고 말해줄게”라고 해봐.'},
   인성:{outer:'차분하고 생각이 깊은 사람처럼 보여.',inner:'속에서는 계속 자료를 맞춰보고 의미를 찾고 있어. 준비가 느린 게 아니라, 납득이 돼야 마음이 움직이는 편이야.',scenes:['시작 전에 검색과 자료 정리는 많이 했는데 첫 행동은 늦어진 적이 있어.','혼자 생각할 시간이 없으면 사람을 싫어해서가 아니라 머리가 꽉 차서 말수가 줄어.','잘 모르는 상태로 대답하는 걸 싫어해서, 이미 아는 것도 한 번 더 확인해.'],best:'정보를 깊게 이해하고 자기 언어로 정리할 때 강해.',stress:'생각할 틈 없이 즉답을 요구받거나, 이유 없는 일을 반복하면 쉽게 지쳐.',job:'복잡한 정보를 해석하고 맥락을 찾아, 다른 사람이 이해할 수 있게 정리하는 재주가 있어.',env:'집중할 수 있는 시간과 조용한 공간이 필요해. 회의보다 미리 자료를 받고 생각한 뒤 말할 때 훨씬 정확해.',earn:'쌓인 지식과 경험을 문서, 교육, 기획, 전문 서비스로 바꿀 때 안정적인 수입이 만들어져.',spend:'배움, 자료, 마음이 편해지는 물건에는 아끼지 않는 편이야. 실제로 쓰는지 한 달 뒤 점검하면 좋아.',love:'재촉하지 않고 네 생각을 끝까지 들어주는 사람과 있을 때 마음이 열려.',conflict:'정리될 때까지 연락을 끊으면 상대는 이유를 상상하게 돼. “생각할 시간이 필요해” 한마디는 남겨줘.',bad:'“생각하지 말고 무조건 시작해.” 네겐 시작 기준을 작게 정해주는 말이 더 도움이 돼.',sting:'준비가 부족한 게 아니라, 틀린 선택을 할까 봐 시간을 끄는 거 아니야?',action:'오늘은 더 검색하지 말고, 지금 아는 것만으로 첫 초안을 만들어봐.'}
 };
+// 앞 문장이 매번 달라서 "여기에 ~가 더해져서"로 이으면 앞뒤가 안 맞았다.
+// 앞에 뭐가 오든 혼자 읽히게 쓴다.
 const V5_SECOND={
-  비겁:'여기에 자기 기준이 더해져서, 결국 네 방식으로 결론을 내야 마음이 놓여.',
-  식상:'여기에 표현력이 붙어서, 생각만 하는 것보다 직접 만들어봐야 답을 찾는 편이야.',
-  재성:'여기에 현실 감각이 붙어서, 좋은 생각도 실제로 쓸 수 있어야 만족해.',
-  관성:'여기에 책임감이 붙어서, 시작한 일은 제대로 마무리하려고 해.',
-  인성:'여기에 깊이 생각하는 성향이 붙어서, 충분히 이해한 뒤 움직일 때 실수가 적어.'
+  비겁:'자기 기준도 뚜렷한 편이라, 결국 네 방식으로 결론을 내야 마음이 놓여.',
+  식상:'표현하는 힘도 같이 있어서, 생각만 하는 것보다 직접 만들어봐야 답을 찾아.',
+  재성:'현실 감각도 좋은 편이라, 좋은 생각도 실제로 쓸 수 있어야 만족해.',
+  관성:'책임감도 큰 편이라, 시작한 일은 제대로 마무리하려고 해.',
+  인성:'깊이 생각하는 성향도 있어서, 충분히 이해한 뒤 움직일 때 실수가 적어.'
 };
 const V5_WEAK={
   비겁:'내 생각보다 주변 반응을 먼저 보다가, 뒤늦게 “나는 뭘 원했지?” 싶을 수 있어.',
@@ -1942,6 +2028,41 @@ function v5CurrentYearTopic(god){
 </script>
 <script src="rules/reading.js"></script>
 <script>
+// ===== 이름으로 부르기 =====
+// 이름을 적으면 "너/네" 대신 그 이름으로 부른다. 안 적으면 그대로 둔다.
+// 풀이 문장에만 쓴다. 화면 제목의 "네 기둥"(숫자 4)까지 바꾸면 안 되기 때문이다.
+const NICK_COUNTER = ['가지','개','칸','기둥','글자','명','번','줄','살','겹','자'];
+function personalize(text, name){
+  if(!name || typeof text !== 'string') return text;
+  return text
+    // 조사가 붙은 긴 형태부터 잡는다. 짧은 것을 먼저 바꾸면 뒷부분이 남는다.
+    .replace(/너한테/g, name+'한테')
+    .replace(/너에게/g, name+'에게')
+    .replace(/네게/g,   name+'에게')
+    .replace(/너보다/g, name+'보다')
+    .replace(/너처럼/g, name+'처럼')
+    .replace(/너까지/g, name+'까지')
+    .replace(/너랑/g,  () => josa(name,'이랑/랑'))
+    .replace(/너와/g,  () => josa(name,'과/와'))
+    .replace(/너도/g,   name+'도')
+    .replace(/너만/g,   name+'만')
+    .replace(/너의/g,   name+'의')
+    .replace(/너야/g,  () => josa(name,'이야/야'))
+    .replace(/(?:너를|널(?![가-힣]))/g, () => josa(name,'을/를'))
+    .replace(/(?:너는|넌(?![가-힣]))/g, () => josa(name,'은/는'))
+    .replace(/네가/g,  () => josa(name,'이/가'))
+    // 관형 "네 방식" → "숩의 방식". "네 가지"처럼 수를 세는 말은 건드리지 않는다.
+    .replace(/네 ([가-힣]+)/g, (m, w) =>
+      NICK_COUNTER.some(c => w === c || w.indexOf(c) === 0) ? m : name+'의 '+w)
+    // 남은 단독 "너"
+    .replace(/너(?![가-힣])/g, name);
+}
+function personalizeAll(v, name){
+  if(!name) return v;
+  if(Array.isArray(v)) return v.map(x => personalize(x, name));
+  return personalize(v, name);
+}
+
 // ===== 같은 말 반복 막기 =====
 // 규칙 문장과 유형별 설명이 겹치면 한 사람의 결과 안에서 같은 문장이 여러 번 나온다.
 // 글자 2-gram 유사도로 걸러낸다. 완전히 같은 문장뿐 아니라
@@ -2002,7 +2123,7 @@ localReading=function(){
   const practice=V5_ELEMENT_PRACTICE[S.yong.elem]||V5_ELEMENT_PRACTICE[v5MinElement()];
   const zero=['목','화','토','금','수'].filter(e=>r.elems[e]===0);
   const currentYear=new Date().getFullYear();
-  const seasonLine=`${season}에 태어난 영향까지 더해져, 상황을 충분히 살핀 뒤 움직일 때 네 장점이 안정적으로 나와.`;
+  const seasonLine=`${season}에 태어난 영향으로, 상황을 충분히 살핀 뒤 움직일 때 네 장점이 안정적으로 나와.`;
   const weakLine=V5_WEAK[weak];
   const toneIntro=v5Voice(
     '너는 서두르지 않아도 괜찮아. 네 방식에는 이유가 있고, 그 이유를 알면 훨씬 편하게 움직일 수 있어.',
@@ -2070,10 +2191,14 @@ localReading=function(){
     toneIntro, zero
   };
   // 총평은 맨 위에 이미 보이므로 기준으로만 쓴다.
-  return dedupeReading(out, V5_SECTIONS.map(x=>x[0]), ['총평','한방']);
+  dedupeReading(out, V5_SECTIONS.map(x=>x[0]), ['총평','한방']);
+  // 이름은 중복 판정이 끝난 뒤에 넣는다. 먼저 넣으면 이름이 들어간 만큼
+  // 글자가 달라져서 같은 말인데도 중복으로 안 잡힌다.
+  if(S.nick) Object.keys(out).forEach(k => { out[k] = personalizeAll(out[k], S.nick); });
+  return out;
 };
 const V5_SECTIONS=[
- ['한눈요약','🐯','너를 세 줄로 말하면','assets/tiger_wink.webp','paragraph'],
+ ['한눈요약','✦','너를 세 줄로 말하면','assets/tiger_wink.webp','paragraph'],
  ['겉과속','❀','겉으로 보이는 너, 실제 속마음','assets/plum.webp','paragraph'],
  ['이거너아니야','☁','이거 너 아니야?','assets/cloud.webp','scenes'],
  ['잘할때','☀','네가 제일 잘할 때','assets/sun.webp','paragraph'],
@@ -2100,21 +2225,23 @@ renderResult=function(){
   $('todayLine').classList.remove('hidden');
   $('todayLine').innerHTML=`<img class="inline-asset" src="assets/pouch.webp" alt=""><b>오늘의 한마디</b><span>${rd.오늘한줄}</span>`;
   $('resultName').textContent=V5_SHORT[r.dayMaster.stem];
+  document.querySelector('.result-kicker').textContent = S.nick ? `크앙이가 본 ${S.nick} 사주` : '크앙이가 본 내 사주';
   $('resultOneLine').textContent=rd.총평;
   $('resultTags').innerHTML=[V5_GROUP_TAG[dom],V5_GROUP_TAG[second],V5_ELEMENT_PRACTICE[y.elem].title].map(x=>`<span>${x}</span>`).join('');
-  $('resultBubble').textContent=rd.toneIntro;
+  $('resultBubble').textContent=personalize(rd.toneIntro, S.nick);
+  $('punchLabel').textContent = S.nick ? `${S.nick}에게 크앙의 한 방` : '크앙의 한 방';
   $('punchLine').textContent=(rd.한방&&rd.한방[0])||rd.찔리는한마디[0]||'';
   $('punchImgWrap').innerHTML='';
-  $('consultCard').querySelector('h3').textContent='크앙이가 먼저 짚은 “딱 너 같은 부분”';
+  $('consultCard').querySelector('h3').textContent='먼저 짚고 갈 네 가지';
   $('consultPoints').innerHTML=(rd.맞춤포인트||[]).map((x,i)=>`<div class="consult-point"><b>${['결정할 때','쉽게 지칠 때','같이 붙는 장점','반복되는 숙제'][i]}</b><span>${x}</span></div>`).join('');
   $('actionCard').innerHTML=`<img class="asset-decor asset-talisman" src="assets/talisman.webp" alt=""><span class="action-label">오늘 딱 하나만</span><b>${rd.오늘딱하나[0]}</b><small>거창하게 바꾸지 말고, 오늘 확인할 수 있는 크기로 해보자.</small>`;
   document.querySelector('.evidence h3').textContent='크앙이는 이런 부분을 보고 풀었어';
-  $('evidenceGrid').innerHTML=[['생일의 중심',V5_STEM[r.dayMaster.stem].name],['자주 쓰는 방식',V5_GROUP_NAME[dom]],['함께 붙는 장점',V5_GROUP_NAME[second]],['요즘 챙길 감각',V5_ELEMENT_PRACTICE[y.elem].title]].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
+  $('evidenceGrid').innerHTML=[['생일의 중심',V5_SHORT[r.dayMaster.stem]],['자주 쓰는 방식',V5_GROUP_NAME[dom]],['함께 붙는 장점',V5_GROUP_NAME[second]],['요즘 챙길 감각',V5_ELEMENT_PRACTICE[y.elem].title]].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
   const box=$('sections');box.innerHTML='';
   V5_SECTIONS.forEach(([key,icon,title,asset,type],i)=>{
     if(!rd[key]) return;
     const el=document.createElement('div');el.className='speech';
-    el.innerHTML=`<img class="section-asset" src="${asset}" alt=""><div class="sh"><span class="ic">${icon}</span><b>${title}</b><span class="acc-mark">+</span></div>${v5SectionHTML(rd[key],type)}`;
+    el.innerHTML=`<img class="section-asset" src="${asset}" alt=""><div class="sh"><span class="ic">${icon}</span><b>${personalize(title,S.nick)}</b><span class="acc-mark">+</span></div>${v5SectionHTML(rd[key],type)}`;
     box.appendChild(el);
   });
   document.querySelectorAll('#sections .speech').forEach((el,i)=>{
@@ -2183,7 +2310,7 @@ renderChart=function(){
   $('identityTitle').textContent=V5_STEM[dm.stem].name;
   $('identitySub').textContent='어려운 이름보다 실제 생활에서 보이는 모습을 먼저 보여줄게.';
   $('quickTags').innerHTML=[V5_GROUP_TAG[dom],V5_GROUP_TAG[second],V5_ELEMENT_PRACTICE[S.yong.elem].title].map(x=>`<span>${x}</span>`).join('');
-  $('chartGuide').textContent='생일과 태어난 시간을 네 가지 자리로 나눈 계산이야. 아래에는 한자 대신 각 자리가 생활에서 어떤 모습을 보태는지 적었어.';
+  $('chartGuide').textContent='생일과 태어난 시간을 연·월·일·시 네 칸으로 나눈 거야. 한자 대신, 각 칸이 생활에서 어떤 모습으로 나오는지 적었어.';
   (function(){
     const c=S.saju.corrected||{}, bits=[];
     if(c.dstApplied) bits.push('서머타임');
@@ -2231,13 +2358,14 @@ renderChart=function(){
       편인:['파고들기','관심·전환'],정인:['배우고 기대기','공부·문서']};
     $('daeunScroll').innerHTML=r.daeun.list.map(d=>{const t=map[d.stemGod]||map['비견'];const stg=d.stage12?`<div class="flow-stage">${d.stage12}</div>`:'';return `<div class="dchip"><div class="age">${d.age}세 전후</div><div class="flow-title">${t[0]}</div><div class="flow-sub">${t[1]}</div>${stg}</div>`}).join('');
   }
-  $('chartBubble').textContent=`계산은 끝났어. 이제 ${V5_STEM[dm.stem].name}이 실제 생활에서 어떻게 나타나는지 친구처럼 풀어줄게.`;
+  $('chartBubble').textContent=personalize(`계산은 끝났어. 네 중심은 ${V5_SHORT[dm.stem]}이야. 이게 실제 생활에서 어떻게 나오는지 풀어줄게.`, S.nick);
 };
 $('btnCalc').onclick=async()=>{
-  const btn=$('btnCalc'),original=btn.textContent;btn.disabled=true;btn.textContent='족보를 펼치는 중…';
+  const btn=$('btnCalc'),original=btn.textContent;btn.disabled=true;btn.textContent='계산하는 중…';
   try{
     const rawY=+ySel.value,rawM=+mSel.value,rawD=+dSel.value,hour=S.noTime?12:+hSel.value,minute=S.noTime?0:+minSel.value;
     S.shared=false; $('fromFriend').classList.add('hidden');
+    S.nick=$('inNick').value.trim().replace(/\s+/g,' ').slice(0,8);
     const res=computeSaju({year:rawY,month:rawM,day:rawD,hour,minute,noTime:S.noTime,gender:S.gender,cal:S.cal,leap:$('isLeap').checked});
     const solar=res.solar;
     S.birth={y:solar.year,m:solar.month,d:solar.day,rawY,rawM,rawD,hour:S.noTime?null:hour,minute:S.noTime?null:minute,noTime:S.noTime,gender:S.gender,calRaw:S.cal};

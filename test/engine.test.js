@@ -383,6 +383,77 @@ describe('단톡사주 링크', () => {
 
 });
 
+describe('이름으로 부르기', () => {
+
+  // index.html의 personalize와 같은 규칙.
+  // "너/네"를 적어준 이름으로 바꾼다. 조사는 받침에 맞춰 고른다.
+  const hasJong = w => {
+    const c = w.charCodeAt(w.length - 1);
+    return c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 !== 0;
+  };
+  const josa = (w, pair) => { const p = pair.split('/'); return w + (hasJong(w) ? p[0] : p[1]); };
+  const COUNTER = ['가지', '개', '칸', '기둥', '글자', '명', '번', '줄', '살', '겹', '자'];
+  const personalize = (text, name) => {
+    if (!name) return text;
+    return text
+      .replace(/너한테/g, name + '한테').replace(/너에게/g, name + '에게').replace(/네게/g, name + '에게')
+      .replace(/너보다/g, name + '보다').replace(/너처럼/g, name + '처럼').replace(/너까지/g, name + '까지')
+      .replace(/너랑/g, () => josa(name, '이랑/랑')).replace(/너와/g, () => josa(name, '과/와'))
+      .replace(/너도/g, name + '도').replace(/너만/g, name + '만').replace(/너의/g, name + '의')
+      .replace(/너야/g, () => josa(name, '이야/야'))
+      .replace(/(?:너를|널(?![가-힣]))/g, () => josa(name, '을/를'))
+      .replace(/(?:너는|넌(?![가-힣]))/g, () => josa(name, '은/는'))
+      .replace(/네가/g, () => josa(name, '이/가'))
+      .replace(/네 ([가-힣]+)/g, (m, w) => COUNTER.some(c => w === c || w.indexOf(c) === 0) ? m : name + '의 ' + w)
+      .replace(/너(?![가-힣])/g, name);
+  };
+
+  it('받침에 맞는 조사를 붙인다', () => {
+    eq(personalize('너는 이해가 돼야 움직여.', '숩'), '숩은 이해가 돼야 움직여.');
+    eq(personalize('너는 이해가 돼야 움직여.', '수연'), '수연은 이해가 돼야 움직여.');
+    eq(personalize('네가 먼저 말해.', '숩'), '숩이 먼저 말해.');
+    eq(personalize('네가 먼저 말해.', '하늘'), '하늘이 먼저 말해.');
+    eq(personalize('너랑 잘 맞아.', '민재'), '민재랑 잘 맞아.');
+    eq(personalize('너랑 잘 맞아.', '지훈'), '지훈이랑 잘 맞아.');
+  });
+
+  it('줄임말과 관형형도 잡는다', () => {
+    eq(personalize('널 위한 말이야. 넌 괜찮아.', '하늘'), '하늘을 위한 말이야. 하늘은 괜찮아.');
+    eq(personalize('네 방식으로 결론을 내.', '지훈'), '지훈의 방식으로 결론을 내.');
+    eq(personalize('이거 너 아니야?', '숩'), '이거 숩 아니야?');
+  });
+
+  it('수를 세는 "네"와 "너무"는 건드리지 않는다', () => {
+    // 화면에는 "네 기둥", "네 가지", "네 칸" 같은 숫자 표현이 있다
+    eq(personalize('생일을 네 칸으로 나눈 거야.', '숩'), '생일을 네 칸으로 나눈 거야.');
+    eq(personalize('먼저 짚고 갈 네 가지', '숩'), '먼저 짚고 갈 네 가지');
+    eq(personalize('내 사주의 네 기둥', '숩'), '내 사주의 네 기둥');
+    eq(personalize('너무 애쓰지 마. 너희 얘기가 아니야.', '숩'), '너무 애쓰지 마. 너희 얘기가 아니야.');
+  });
+
+  it('이름을 안 적으면 문장이 그대로다', () => {
+    const t = '너는 네 방식대로 하는 게 편해.';
+    eq(personalize(t, ''), t);
+  });
+
+  it('바꾼 뒤에 "너"나 "네가"가 남지 않는다', () => {
+    const 문장들 = [
+      '너는 이해가 돼야 움직이는 유형이야.',
+      '네가 먼저 보여주지 않으면 지나칠 수 있어.',
+      '너한테 별로 안 맞는 조언이야.',
+      '네 기운은 이제 막 올라오는 중이야.',
+      '너도 그렇지? 너랑 있으면 편해.',
+      '널 위해서야. 넌 이미 알고 있잖아.'
+    ];
+    문장들.forEach(t => {
+      const out = personalize(t, '숩');
+      ok(!/너(?![가-힣])|너는|너를|네가|네 [가-힣]/.test(out.replace(/너무|너희/g, '')),
+         `2인칭이 남았다: ${out}`);
+    });
+  });
+
+});
+
 describe('알려진 엔진 제약', () => {
 
   it('solarToLunar는 일부 날짜에서 잘못된 값을 낸다 (앱은 쓰지 않음)', () => {
