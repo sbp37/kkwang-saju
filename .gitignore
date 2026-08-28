@@ -1,3 +1,6 @@
 .DS_Store
 Thumbs.db
 *.log
+
+# 단일 파일 빌드 결과 (tools/build-single.js)
+dist/
