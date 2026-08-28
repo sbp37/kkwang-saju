@@ -411,6 +411,36 @@ describe('결과 화면 접기', () => {
   });
 });
 
+describe('대운 열 칸 접기', () => {
+
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+  const fn = src.slice(src.indexOf('renderGraph=function'), src.indexOf('renderLuck=function'));
+
+  it('지금 나이 칸은 항상 먼저 보이는 두 칸에 든다', () => {
+    // 접었을 때 지금 칸이 숨으면 접는 의미가 없다.
+    const m = /const near = nowIndex\+1 < list\.length \? \[nowIndex, nowIndex\+1\]\s*:\s*\[Math\.max\(0, nowIndex-1\), nowIndex\];/.exec(fn);
+    ok(m, '먼저 보일 두 칸을 고르는 코드를 못 찾았다');
+  });
+
+  it('지금이 마지막 칸이어도 두 칸이 남는다', () => {
+    // nowIndex+1이 없으면 앞 칸을 대신 쓴다. 안 그러면 한 칸만 보인다.
+    const near = (nowIndex, len) => nowIndex+1 < len ? [nowIndex, nowIndex+1]
+                                                    : [Math.max(0, nowIndex-1), nowIndex];
+    eq(near(0, 10), [0, 1], '첫 칸일 때');
+    eq(near(4, 10), [4, 5], '중간일 때');
+    eq(near(9, 10), [8, 9], '마지막 칸일 때');
+    eq(near(0, 1),  [0, 0], '칸이 하나뿐일 때');
+  });
+
+  it('나머지 칸은 지우지 않고 감추기만 한다', () => {
+    // 버튼으로 다시 펼 수 있어야 하므로 DOM에는 남아 있어야 한다.
+    ok(/' off'/.test(fn), '감출 칸에 붙일 표시가 없다');
+    ok(/period-grid folded/.test(fn), '접힌 상태 표시가 없다');
+    ok(/\.period-grid\.folded \.period-card\.off\{display:none\}/.test(src), '감추는 CSS가 없다');
+    ok(/btnMorePeriods/.test(fn), '다시 펼 버튼이 없다');
+  });
+});
+
 describe('우리끼리 입력 — 인원과 음력', () => {
 
   const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
