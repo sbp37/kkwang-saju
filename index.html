@@ -127,9 +127,9 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .tengod{font-size:9px;color:var(--muted);line-height:1.45;margin-top:5px}
 .pillar .q{font-size:25px;color:#A9A097;padding:17px 0}
 .elembar{display:flex;height:10px;border-radius:99px;overflow:hidden;margin:10px 0 9px;background:#E9E1D5}
-.elemtags{display:flex;gap:5px;flex-wrap:wrap}
-.etag{font-size:10px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 7px;display:flex;align-items:center;gap:4px}
-.etag .sw{width:7px;height:7px;border-radius:50%}.etag.zero{opacity:.48;text-decoration:line-through}
+
+
+
 .missing-note{font-size:11px;color:var(--red);margin-top:8px}
 .element-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:14px}
 .element-card{min-width:0;background:#fff;border:1px solid var(--line);border-radius:13px;padding:9px 7px}
@@ -139,6 +139,8 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .element-name{font-size:9px;color:var(--muted);margin-top:3px;white-space:nowrap}
 .mini-track{height:4px;background:#ECE5DB;border-radius:9px;margin-top:7px;overflow:hidden}.mini-track i{display:block;height:100%;border-radius:9px}
 .daeun-scroll{display:flex;gap:7px;overflow-x:auto;padding:3px 0 7px;scrollbar-width:none}.daeun-scroll::-webkit-scrollbar{display:none}
+.dchip.now{border-color:var(--red);border-width:1.5px;box-shadow:0 5px 14px rgba(201,76,61,.16)}
+.dnow{display:inline-block;font-size:8.5px;font-weight:700;color:#fff;background:var(--red);border-radius:999px;padding:2px 7px;margin-bottom:4px}
 .dchip{flex:0 0 76px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:8px;text-align:center}
 .dchip .age{font-size:9px;color:var(--muted)}.dchip .dp{font-family:'Nanum Myeongjo',serif;font-size:17px}.dchip .dg{font-size:9px;color:var(--muted)}
 
@@ -568,7 +570,7 @@ p,.speech p,.room-line,.pair-note,.hint,.mini-note,.bubble,.entry-card em{text-w
     </div>
     <div class="panel">
       <h2><span class="dot"></span>다섯 기운의 균형</h2>
-      <div class="elembar" id="elemBar"></div><div class="elemtags" id="elemTags"></div><div class="missing-note" id="missingNote"></div>
+      <div class="elembar" id="elemBar"></div><div class="missing-note" id="missingNote"></div>
       <div class="element-grid" id="elementCards"></div>
     </div>
     <div class="panel" id="daeunPanel">
@@ -1426,12 +1428,12 @@ function renderMy(){
     box.textContent=`${S.nick?S.nick+' · ':''}${S.birth.rawY}.${S.birth.rawM}.${S.birth.rawD}${S.birth.noTime?' · 시간 모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`} · ${S.birth.gender==='F'?'여성':'남성'}`;
     detail.classList.remove('hidden');
     detail.innerHTML=`<div class="evidence-grid">${[
-      ['사주', S.saju.pillars.map(p=>p.missing?'시간미상':p.stem+p.branch).join(' ')],
-      ['중심 기운', `${S.saju.dayMaster.stem}(${S.saju.dayMaster.elem})`],
-      ['사주 유형', S.yong.gyeokguk.name],
-      ['강약', S.yong.label],
-      ['용신', `${S.yong.elem}(${S.yong.hanja})`],
-      ['말투', S.level||'아직 안 고름']
+      ['내 중심', V5_SHORT[S.saju.dayMaster.stem]],
+      ['어떤 유형', (GYEOK[S.yong.gyeokguk.name]||{}).이름 || S.yong.gyeokguk.name],
+      ['힘의 방향', S.yong.strong?'자기 힘으로 밀고 가는 편':S.yong.weak?'환경과 사람을 잘 빌리는 편':'상황에 맞춰 바꾸는 편'],
+      ['챙기면 좋은 것', `${S.yong.elem} 기운`],
+      ['말투', S.level||'아직 안 고름'],
+      ['계산값', S.saju.pillars.map(p=>p.missing?'시간미상':p.stem+p.branch).join(' ')]
     ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>`;
   }else if(saved){
     box.textContent=`${saved.rawY}.${saved.rawM}.${saved.rawD} · 저장됨 (아직 안 펼침)`;
@@ -1450,10 +1452,10 @@ function renderMy(){
   }
 
   $('myAbout').innerHTML=`<div class="evidence-grid">${[
-    ['만세력','ssaju 0.2.0 내장 · 인터넷 없이도 같은 결과'],
-    ['시간 보정','서울 진태양시 · 균시차 · 한국 서머타임 · 과거 표준시'],
-    ['해석 기준','억부 우선, 계절이 극단이면 조후 우선'],
-    ['보는 것','격국 · 궁위 · 통근 · 합충 · 12운성 · 신살 · 공망 · 대운 · 세운']
+    ['계산','만세력을 앱 안에 넣어 뒀어. 인터넷이 없어도 같은 결과가 나와'],
+    ['태어난 시각','서울에서 해가 실제로 지나간 시각으로 바꿔서 봐. 옛날 표준시와 서머타임도 반영해'],
+    ['풀이 기준','기운이 한쪽으로 쏠렸는지를 먼저 보고, 계절이 너무 춥거나 더우면 그걸 먼저 봐'],
+    ['같이 보는 것','여덟 글자가 서로 묶이고 부딪히는 지점, 자리마다 다른 뜻, 10년 흐름과 올해 흐름']
   ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>`;
 }
 
@@ -1491,10 +1493,15 @@ function renderToday(){
     el.querySelector('.sh').onclick=()=>el.classList.toggle('open');
     box.appendChild(el);
   });
+  const 자리말={연:'어릴 때·집안',월:'일과 사회',일:'가까운 사람',시:'앞으로의 계획'};
+  const 관계말={충:'부딪힘',육합:'잘 묶임',삼합:'잘 묶임',방합:'결이 비슷'};
   $('todayEvidence').innerHTML=[
-    ['오늘 일진',`${t.간지H}(${t.간지})`],
-    ['나에게 오는 역할',`${t.stemGod}${t.branchGod&&t.branchGod!==t.stemGod?' · '+t.branchGod:''}`],
-    ['원국과의 관계',t.건드림.length?t.건드림.map(x=>x.자리+' '+x.관계).join(', '):'특별한 관계 없음'],
+    ['오늘 글자',`${t.간지}(${t.간지H})`],
+    ['오늘 오는 기운',[t.stemGod,t.branchGod].filter((g,i,a)=>g&&a.indexOf(g)===i)
+      .map(g=>GOD_SHORT[g]||g).join(' · ')],
+    ['내 사주와 만나는 곳',t.건드림.length
+      ? t.건드림.map(x=>`${자리말[x.자리]||x.자리} ${관계말[x.관계]||x.관계}`).join(', ')
+      : '특별히 부딪히거나 묶이는 곳 없음'],
     ['오늘 기운',t.용신날?'내게 필요한 기운':t.공망일?'손에 잘 안 잡히는 날':'보통']
   ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
   return true;
@@ -1928,12 +1935,16 @@ function renderMatch(m, otherSaju, otherYong, res){
 
   const 보완말={서로:'서로 채워줌', 상대가나를:'상대가 나를 채움', 내가상대를:'내가 상대를 채움', 약함:'서로 채우진 않음'};
   $('matchEvidence').innerHTML=[
-    ['내 중심 기운', `${m.aStem}(${KSaju.STEM_EL[m.aStem]}) · ${m.aStrong}`],
-    ['상대 중심 기운', `${m.bStem}(${KSaju.STEM_EL[m.bStem]}) · ${m.bStrong}`],
-    ['가장 가까운 글자', m.branchRel?`${m.aBranch}·${m.bBranch} ${m.branchRel}`:m.sameBranch?`${m.aBranch}·${m.bBranch} 같은 글자`:`${m.aBranch}·${m.bBranch} 특별한 관계 없음`],
+    ['내 중심', V5_SHORT[m.aStem]],
+    ['상대 중심', V5_SHORT[m.bStem]],
+    ['가장 가까운 글자', `${m.aBranch}·${m.bBranch} — ` + (
+      m.branchRel==='충' ? '서로 자극하는 짝'
+      : m.branchRel ? '서로 묶이는 짝'
+      : m.sameBranch ? '같은 글자'
+      : '특별히 묶이거나 부딪히지 않음')],
     ['필요한 기운', 보완말[m.보완]],
-    ['내 사주 유형', m.aGyeok],
-    ['상대 사주 유형', m.bGyeok]
+    ['내 유형', (GYEOK[m.aGyeok]||{}).이름 || m.aGyeok],
+    ['상대 유형', (GYEOK[m.bGyeok]||{}).이름 || m.bGyeok]
   ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
 
   $('matchResult').classList.remove('hidden');
@@ -1975,6 +1986,13 @@ const V5_GROUP_TAG={
   비겁:'내 방식이 분명한 편',식상:'만들어 보여줄 때 빛남',재성:'현실 감각이 빠른 편',관성:'맡은 건 끝까지 하는 편',인성:'생각을 깊게 정리하는 편'
 };
 const V5_GROUP_NAME={비겁:'내 선택',식상:'표현과 결과물',재성:'생활과 돈',관성:'책임과 기준',인성:'이해와 회복'};
+// 12운성은 한자 그대로 보여주면 아무 뜻도 안 통한다. 흐름의 세기로 바꾼다.
+const STAGE_PLAIN={
+  장생:'막 올라오는 때', 목욕:'자리를 잡아가는 때', 관대:'본격적으로 쓰는 때',
+  건록:'가장 안정적인 때', 제왕:'힘이 제일 센 때', 쇠:'힘을 아껴 쓰는 때',
+  병:'섬세해지는 때', 사:'안으로 파고드는 때', 묘:'갈무리하는 때',
+  절:'비우고 새로 시작하는 때', 태:'씨를 뿌리는 때', 양:'조용히 길러지는 때'
+};
 const V5_GOD_PLAIN={
   비견:'내 생각을 지키려는 마음',겁재:'사람 사이에서 내 몫을 챙기는 마음',식신:'차근차근 만들고 보여주는 힘',상관:'답답한 걸 바꾸고 싶어 하는 마음',편재:'기회를 빠르게 알아보는 감각',정재:'생활을 안정적으로 꾸리는 감각',편관:'압박이 와도 버티는 힘',정관:'약속과 기준을 지키려는 마음',편인:'남들과 다르게 보고 파고드는 성향',정인:'배우고 정리하며 안정을 찾는 성향','일간(나)':'나를 움직이는 중심'
 };
@@ -2345,12 +2363,15 @@ renderChart=function(){
     if(c.dstApplied) bits.push('서머타임');
     if(c.standardMeridian===127.5) bits.push('당시 표준시(UTC+8:30)');
     bits.push('진태양시');
-    $('engineBadge').textContent=`정밀 계산 완료 · ${bits.join('·')} 보정 ${c.shiftMinutes>0?'+':''}${c.shiftMinutes}분`;
+    $('engineBadge').textContent=`계산 완료 · 서울 기준 실제 태양 시각으로 ${c.shiftMinutes>0?'+':''}${c.shiftMinutes}분 보정`;
   })();
   const placeNames=['처음 만난 사람들이 보는 모습','일과 사회에서 익숙한 방식','나를 움직이는 중심','가까운 관계에서 보이는 모습'];
   $('pillarGrid').innerHTML=r.pillars.map((p,i)=>{
     if(p.missing)return `<div class="pillar"><div class="pname">${placeNames[i]}</div><div class="q">?</div><div class="tengod">시간을 몰라 이 부분은 조심스럽게 비워둘게.</div></div>`;
-    const a=V5_GOD_PLAIN[p.stemGod]||'겉으로 드러나는 태도',b0=V5_GOD_PLAIN[p.branchGod]||'익숙하게 반복하는 태도';
+    const a=(p.stemGod==='일간(나)')
+      ? V5_SHORT[p.stem]
+      : (V5_GOD_PLAIN[p.stemGod]||'겉으로 드러나는 태도');
+    const b0=V5_GOD_PLAIN[p.branchGod]||'익숙하게 반복하는 태도';
     // 겉(천간)과 속(지지)이 같은 십신이면 같은 문장이 두 번 찍히므로 한 줄로 합친다
     const b=(b0===a)?'':'<br>'+b0;
     const same=(b0===a)?'<div class="pillar-v5-same">겉과 속이 같은 방향이야</div>':'';
@@ -2375,7 +2396,6 @@ renderChart=function(){
   renderElementCards();
   const total=Object.values(r.elems).reduce((a,b)=>a+b,0)||1;
   $('elemBar').innerHTML=['목','화','토','금','수'].filter(e=>r.elems[e]>0).map(e=>`<div style="width:${r.elems[e]/total*100}%;background:${r.elemColor[e]}"></div>`).join('');
-  $('elemTags').innerHTML=['목','화','토','금','수'].map(e=>`<span class="etag ${r.elems[e]===0?'zero':''}"><span class="sw" style="background:${r.elemColor[e]}"></span>${e} ${r.elems[e]}개</span>`).join('');
   const zero=['목','화','토','금','수'].filter(e=>r.elems[e]===0);
   $('missingNote').textContent=zero.length?`${josa(zero.join('·'),'이/가')} 적게 보인다고 나쁜 사주는 아니야. 그 방식은 자동으로 나오기보다 생활 속에서 의식적으로 배울 때 편하다는 뜻이야.`:'다섯 가지 방식이 모두 보여. 상황에 따라 여러 방식을 바꿔 쓰는 편이야.';
   if(r.daeun){
@@ -2385,7 +2405,16 @@ renderChart=function(){
       편재:['넓게 잡기','기회·확장'],정재:['차곡차곡','수입·관리'],
       편관:['버티기','압박·돌파'],정관:['자리와 이름','직책·계약'],
       편인:['파고들기','관심·전환'],정인:['배우고 기대기','공부·문서']};
-    $('daeunScroll').innerHTML=r.daeun.list.map(d=>{const t=map[d.stemGod]||map['비견'];const stg=d.stage12?`<div class="flow-stage">${d.stage12}</div>`:'';return `<div class="dchip"><div class="age">${d.age}세 전후</div><div class="flow-title">${t[0]}</div><div class="flow-sub">${t[1]}</div>${stg}</div>`}).join('');
+    const nowAge = r.daeunCurrent ? r.daeunCurrent.age : null;
+    $('daeunScroll').innerHTML=r.daeun.list.map(d=>{
+      const t=map[d.stemGod]||map['비견'];
+      const stg=STAGE_PLAIN[d.stage12]?`<div class="flow-stage">${STAGE_PLAIN[d.stage12]}</div>`:'';
+      const now=(d.age===nowAge);
+      return `<div class="dchip${now?' now':''}">${now?'<div class="dnow">지금</div>':''}<div class="age">${d.age}세 전후</div><div class="flow-title">${t[0]}</div><div class="flow-sub">${t[1]}</div>${stg}</div>`;
+    }).join('');
+    // 지금 구간이 화면 밖에 있으면 보이게 밀어준다
+    setTimeout(()=>{ const el=$('daeunScroll').querySelector('.dchip.now');
+      if(el) $('daeunScroll').scrollLeft = Math.max(0, el.offsetLeft - 90); }, 60);
   }
   $('chartBubble').textContent=personalize(`계산은 끝났어. 네 중심은 ${V5_SHORT[dm.stem]}이야. 이게 실제 생활에서 어떻게 나오는지 풀어줄게.`, S.nick);
 };
