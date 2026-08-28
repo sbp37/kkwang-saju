@@ -1482,7 +1482,7 @@ function renderToday(){
     ['오늘 일진',`${t.간지H}(${t.간지})`],
     ['나에게 오는 역할',`${t.stemGod}${t.branchGod&&t.branchGod!==t.stemGod?' · '+t.branchGod:''}`],
     ['원국과의 관계',t.건드림.length?t.건드림.map(x=>x.자리+' '+x.관계).join(', '):'특별한 관계 없음'],
-    ['오늘 기운',t.용신날?'내게 필요한 기운':t.공망일?'비어 있는 자리':'보통']
+    ['오늘 기운',t.용신날?'내게 필요한 기운':t.공망일?'손에 잘 안 잡히는 날':'보통']
   ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
   return true;
 }
@@ -1881,8 +1881,8 @@ function renderMatch(m, otherSaju, otherYong, res){
   $('matchOneLine').textContent=m.결설명;
   $('matchTags').innerHTML=[
     `${m.aTti}띠 × ${m.bTti}띠`,
-    m.stemHap?'중심 기운이 합':m.stemChung?'중심 기운이 충':`상대는 나에게 ${m.aToB}`,
-    m.branchRel?`가까운 자리 ${m.branchRel}`:m.sameBranch?'가까운 자리가 같은 글자':'가까운 자리는 무난'
+    m.stemHap?'서로 끌어당기는 사이':m.stemChung?'서로 자극하는 사이':`상대가 주는 건 ${GOD_SHORT[m.aToB]||m.aToB}`,
+    m.branchRel==='충'?'가까이 붙으면 자극':m.branchRel?'가까이 붙으면 편함':m.sameBranch?'닮은 구석이 많음':'가까운 사이는 무난'
   ].map(x=>`<span>${x}</span>`).join('');
 
   const box=$('matchSections'); box.innerHTML='';
@@ -1892,7 +1892,7 @@ function renderMatch(m, otherSaju, otherYong, res){
     const el=document.createElement('div'); el.className='speech'+(i<2?' open':'');
     el.innerHTML=`<img class="section-asset" src="${asset}" alt="">`
       +`<div class="sh"><span class="ic">${icon}</span><b>${title}</b><span class="acc-mark">+</span></div>`
-      +`<div class="v5-body">${lines.map(t=>`<p>${t}</p>`).join('')}</div>`;
+      +`<div class="v5-body">${lines.map(t=>`<p>${personalize(t,S.nick)}</p>`).join('')}</div>`;
     el.querySelector('.sh').onclick=()=>el.classList.toggle('open');
     box.appendChild(el);
   });
@@ -1901,7 +1901,7 @@ function renderMatch(m, otherSaju, otherYong, res){
   $('matchEvidence').innerHTML=[
     ['내 중심 기운', `${m.aStem}(${KSaju.STEM_EL[m.aStem]}) · ${m.aStrong}`],
     ['상대 중심 기운', `${m.bStem}(${KSaju.STEM_EL[m.bStem]}) · ${m.bStrong}`],
-    ['가까운 자리', m.branchRel?`${m.aBranch}·${m.bBranch} ${m.branchRel}`:m.sameBranch?`${m.aBranch}·${m.bBranch} 같은 글자`:`${m.aBranch}·${m.bBranch} 특별한 관계 없음`],
+    ['가장 가까운 글자', m.branchRel?`${m.aBranch}·${m.bBranch} ${m.branchRel}`:m.sameBranch?`${m.aBranch}·${m.bBranch} 같은 글자`:`${m.aBranch}·${m.bBranch} 특별한 관계 없음`],
     ['필요한 기운', 보완말[m.보완]],
     ['내 사주 유형', m.aGyeok],
     ['상대 사주 유형', m.bGyeok]

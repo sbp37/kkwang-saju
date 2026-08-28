@@ -63,7 +63,7 @@ const TODAY_GOD_TOPIC={
 const TODAY_RULES=[
 { id:'오늘-주제', slot:'오늘주제', weight:98,
   when:t=>!!TODAY_GOD_TOPIC[t.stemGod],
-  text:t=>`오늘은 ${TODAY_GOD_TOPIC[t.stemGod][0]}이야. ${TODAY_GOD_TOPIC[t.stemGod][1]}` },
+  text:t=>TODAY_GOD_TOPIC[t.stemGod][1] },
 { id:'오늘-속주제', slot:'오늘주제', weight:88,
   when:t=>!!TODAY_GOD_TOPIC[t.branchGod]&&t.branchGod!==t.stemGod,
   text:t=>`속으로는 ${TODAY_GOD_TOPIC[t.branchGod][0].replace(' 날','')} 기운이 같이 움직여서, 겉으로 하는 일과 마음이 가는 곳이 다를 수 있어.` },
@@ -85,7 +85,7 @@ const TODAY_RULES=[
     return `오늘 기운이 ${말[g[0]]}을 정면으로 건드려. 예정이 틀어지거나 말이 부딪히기 쉬우니, 큰 결정은 하루 미루는 게 나아.`;} },
 { id:'오늘-공망', slot:'오늘조심', weight:88,
   when:t=>t.공망일,
-  text:t=>`오늘은 네 사주 기준으로 비어 있는 자리에 해당해. 애써도 손에 안 잡히는 느낌이 들 수 있는데, 결과를 재촉하지 않으면 그만이야.` },
+  text:t=>`오늘 오는 글자가 네 사주에서 비어 있는 쪽이야. 애써도 손에 잘 안 잡히는 느낌이 들 수 있는데, 결과를 재촉하지 않으면 그만이야.` },
 { id:'오늘-편관', slot:'오늘조심', weight:76,
   when:t=>t.stemGod==='편관'||t.branchGod==='편관',
   text:t=>`부담스러운 연락이나 갑작스러운 요청이 올 수 있어. 바로 답하지 말고 한 박자 두는 게 좋아.` },
