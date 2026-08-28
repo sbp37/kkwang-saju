@@ -28,8 +28,19 @@ node tools/build-single.js
 2. Framework Preset은 **Other**, Build Command와 Output Directory는 **비워둡니다**
 3. Deploy
 
-이후 `main`에 push할 때마다 자동으로 다시 배포됩니다. 캐시 헤더는
-`vercel.json`에 있습니다 (에셋은 하루, 화면과 규칙은 매번 확인).
+저장소를 나중에 연결했다면 이미 있는 커밋은 배포되지 않습니다.
+Deployments → **Create Deployment** 에 `main`을 넣어 한 번 밀어주세요.
+
+이후 `main`에 push할 때마다 자동으로 다시 배포됩니다.
+
+캐시 헤더는 `vercel.json`에 있습니다.
+
+- `/assets/*` — 하루 캐시하고 뒤에서 갱신합니다. 파일 이름에 해시가 없어서
+  영구 캐시를 걸면 그림을 바꿔도 옛것이 계속 남습니다.
+- 그 밖의 전부 — 화면과 규칙은 자주 바뀌므로 매번 확인하고 받습니다.
+
+`vercel.json`은 스키마에 없는 속성을 거부합니다. 설명을 달겠다고 `comment`
+같은 키를 넣으면 배포가 통째로 막히니, 설명은 여기에 적습니다.
 
 ### 도메인이 정해지면 고쳐야 할 곳
 
