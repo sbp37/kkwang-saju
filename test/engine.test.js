@@ -462,6 +462,104 @@ describe('이름으로 부르기', () => {
 
 });
 
+describe('우리끼리 — 상황별 반응', () => {
+
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'rules', 'group.js'), 'utf8');
+  // 규칙 파일은 브라우저용 클래식 스크립트라 require로 못 불러온다. 하네스가 vm에 올려준다.
+  const { analyzeGroup } = H.loadRules(H.loadEngine());
+
+  // 규칙표를 그대로 쓰는 사람 하나. 사주 계산을 거치지 않고 원하는 글자를 직접 준다.
+  const 사람 = (name, o) => ({
+    name,
+    saju: {
+      dayMaster: { stem: o.일간 },
+      elems: Object.assign({ 목:2, 화:2, 토:2, 금:1, 수:1 }, o.오행 || {}),
+      pillars: [
+        { branch:'자', specialSals:[], twelveSal:'' },
+        { branch:'축', specialSals:[], twelveSal:'' },
+        { branch:o.일지, stage12:o.운성 || '건록', specialSals:o.신살 || [], twelveSal:'' },
+        { branch:'묘', specialSals:[], twelveSal:'' }
+      ]
+    },
+    yong: {
+      g: Object.assign({ 비겁:2, 식상:2, 재성:2, 관성:2, 인성:2 }, o.십신 || {}),
+      elem: o.용신 || '목', weak: !!o.신약
+    }
+  });
+  const 대사들 = sit => sit.rows.map(r => r.say);
+
+  it('상황 다섯 개가 서로 다른 축을 본다', () => {
+    // 축이 겹치면 그 방에서 제일 센 사람이 매번 같은 자리를 가져가,
+    // 다섯 개를 읽어도 사람마다 성격 하나가 다섯 번 반복된다.
+    const axes = (src.match(/axis: '([^']+)'/g) || []).map(x => x.slice(8, -1));
+    eq(axes.length, 5, '상황 수');
+    eq(new Set(axes).size, 5, '서로 다른 축의 수');
+  });
+
+  it('절대 축은 그 글자 수만큼 반응을 갖는다', () => {
+    const 반응수 = axis => {
+      const a = src.indexOf(`axis: '${axis}'`);
+      const b = src.indexOf('  {\n    id:', a), end = b === -1 ? src.indexOf('];', a) : b;
+      return (src.slice(a, end).match(/^\s{6}\S+: \{ say:/gm) || []).length;
+    };
+    eq(반응수('일간'), 10, '일간 반응 수');   // 갑을병정무기경신임계
+    eq(반응수('일지'), 12, '일지 반응 수');   // 자축인묘진사오미신유술해
+  });
+
+  it('한 사람이 다섯 상황에서 다섯 가지 다른 얼굴로 나온다', () => {
+    const 방 = [사람('가', { 일간:'갑', 일지:'자' }), 사람('나', { 일간:'경', 일지:'오' })];
+    const r = analyzeGroup(방);
+    ['가', '나'].forEach(who => {
+      const 말 = r.situations.map(s => s.rows.find(x => x.name === who).say);
+      eq(new Set(말).size, 5, `${who}의 서로 다른 대사 수`);
+    });
+  });
+
+  it('같은 일간을 셋이 가져도 대사가 겹치지 않는다', () => {
+    const 방 = ['가', '나', '다'].map(n => 사람(n, { 일간:'임', 일지:'진' }));
+    const r = analyzeGroup(방);
+    r.situations.forEach(s => {
+      eq(new Set(대사들(s)).size, 3, `${s.title} 서로 다른 대사 수`);
+    });
+  });
+
+  it('여섯 명이면 반응 다섯 개가 동나도 대사가 겹치지 않는다', () => {
+    // GROUP_MAX가 6인데 상대 축 반응은 다섯 개뿐이라, 남는 사람이 반드시 생긴다.
+    const 오행들 = [{목:6}, {화:6}, {토:6}, {금:6}, {수:6}, {목:5}];
+    const 방 = 오행들.map((e, i) => 사람('P' + i, { 일간:'갑', 일지:'자', 오행:e }));
+    const r = analyzeGroup(방);
+    const 여행 = r.situations.find(s => s.title.indexOf('여행') !== -1);
+    eq(여행.rows.length, 6, '줄 수');
+    eq(new Set(대사들(여행)).size, 6, '서로 다른 대사 수');
+  });
+
+  it('대사 속 ○○ 자리는 같은 방 사람 이름으로 채워진다', () => {
+    // 자리표가 그대로 남으면 "○○ 요즘 바쁜가?"가 화면에 나간다.
+    const 방 = [사람('숩', { 일간:'정', 일지:'자' }), 사람('막내', { 일간:'계', 일지:'오' })];
+    const r = analyzeGroup(방);
+    const 전부 = r.situations.flatMap(대사들).join(' ');
+    ok(전부.indexOf('○○') === -1, '남은 자리표: ' + 전부);
+    ok(/숩|막내/.test(전부), '이름이 대사에 들어가야 한다');
+  });
+
+  it('두 사람 이상이면 상황마다 마무리 한 줄이 붙는다', () => {
+    const 방 = [사람('가', { 일간:'갑', 일지:'자' }), 사람('나', { 일간:'경', 일지:'오' })];
+    analyzeGroup(방).situations.forEach(s => {
+      ok(s.close && s.close.indexOf('결국') === 0, `${s.title} 마무리: ${s.close}`);
+      ok(/\*[^*]+\*/.test(s.close), `${s.title} 마무리에 강조가 있어야 한다`);
+    });
+  });
+
+  it('마무리 줄은 서로 다른 두 행동을 짝짓는다', () => {
+    // 같은 행동 둘을 붙이면 "결국 가는 X, 나는 X"가 되어 장면이 안 된다.
+    const 방 = ['가', '나', '다'].map(n => 사람(n, { 일간:'임', 일지:'진' }));
+    analyzeGroup(방).situations.forEach(s => {
+      const m = s.close.match(/^결국 .+?[은는] (.+?), .+?[은는] (.+?)\. /);
+      if (m) ok(m[1] !== m[2], `${s.title} 같은 행동이 두 번: ${s.close}`);
+    });
+  });
+});
+
 describe('알려진 엔진 제약', () => {
 
   it('solarToLunar는 일부 날짜에서 잘못된 값을 낸다 (앱은 쓰지 않음)', () => {

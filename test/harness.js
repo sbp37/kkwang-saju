@@ -26,7 +26,7 @@ function loadRules(ctx) {
   ctx.rankedGroups = g => Object.entries(g).sort((a, b) => b[1] - a[1]).map(([k]) => k);
   ctx.currentAge = () => 30;
   ctx.S = {};
-  ['rules/reading.js', 'rules/match.js', 'rules/today.js'].forEach(f => {
+  ['rules/reading.js', 'rules/match.js', 'rules/today.js', 'rules/group.js'].forEach(f => {
     vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
   });
   return ctx;
