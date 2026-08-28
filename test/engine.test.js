@@ -391,6 +391,48 @@ describe('우리끼리 링크 (이어달리기)', () => {
 
 });
 
+describe('우리끼리 입력 — 인원과 음력', () => {
+
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+  const body = src.slice(src.indexOf('function addGroupPerson'), src.indexOf('function groupChart'));
+
+  it('사람을 넣는 함수 자체가 인원 상한을 막는다', () => {
+    // 버튼은 6명이 되면 잠기지만 이름칸 엔터로도 같은 함수가 불린다.
+    // 여기서 안 막으면 7명짜리 링크가 만들어지고, 받는 쪽 decodeGroup이 거부해서
+    // 아무 안내 없이 방이 끊긴다.
+    ok(/G\.people\.length\s*>=\s*GROUP_MAX/.test(body), 'addGroupPerson에 상한 검사가 없다');
+  });
+
+  it('넣는 쪽 상한과 받는 쪽 상한이 같은 값을 본다', () => {
+    const dec = src.slice(src.indexOf('function decodeGroup'), src.indexOf('function groupShareUrl'));
+    ok(/parts\.length\s*>\s*GROUP_MAX/.test(dec), 'decodeGroup이 GROUP_MAX를 안 본다');
+  });
+
+  it('음력으로 넣으면 링크에는 양력으로 담긴다', () => {
+    // 링크 모양을 그대로 두려고 넣는 순간 바꾼다. 옛 링크도 계속 열려야 한다.
+    ok(/G\.cal\s*===\s*'lunar'/.test(body), '음력 분기가 없다');
+    ok(/SSAJU\.lunarToSolar/.test(body), 'lunarToSolar 변환이 없다');
+  });
+
+  it('2001년 윤4월 15일은 양력 2001년 6월 6일이다', () => {
+    // 한국천문연구원 음양력 변환 기준. 이어달리기가 이 값을 저장한다.
+    const s = SSAJU.lunarToSolar(2001, 4, 15, true);
+    eq([s.year, s.month, s.day], [2001, 6, 6]);
+  });
+
+  it('한 기기에서 넣고 나면 입력 폼을 접는다', () => {
+    // 열어둔 채로 두면 이름만 바꿔 남의 생일을 대신 넣을 수 있다.
+    const render = src.slice(src.indexOf('function renderGroupList'), src.indexOf('function addGroupPerson'));
+    ok(/G\.mine/.test(render), 'renderGroupList가 G.mine을 안 본다');
+    ok(/groupForm'\)\.classList\.toggle\('hidden'/.test(render), '폼을 접는 코드가 없다');
+  });
+
+  it('링크로 들어온 사람은 아직 안 넣은 상태로 시작한다', () => {
+    const open = src.slice(src.indexOf('function openSharedGroup'), src.indexOf('async function drawGroupCard'));
+    ok(/G\.mine\s*=\s*''/.test(open), 'openSharedGroup이 G.mine을 비우지 않는다');
+  });
+});
+
 describe('이름으로 부르기', () => {
 
   // index.html의 personalize와 같은 규칙.

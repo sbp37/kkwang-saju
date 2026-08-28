@@ -182,6 +182,12 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .group-row span{font-size:13px;color:var(--muted);margin-left:auto}
 .group-row button{flex:0 0 auto;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:#fff;color:var(--muted);font-size:17px;line-height:1;cursor:pointer}
 .relay{display:flex;flex-direction:column;gap:3px;background:#FFF6E4;border:1px solid #E8CFA4;border-radius:16px;padding:13px 15px;margin-bottom:13px}
+/* 자기 것을 넣고 나면 폼 대신 이 줄이 남는다. */
+.mine-bar{display:flex;align-items:center;gap:12px;background:#F2F7F0;border:1px solid #CBDCC4;border-radius:16px;padding:13px 15px}
+.mine-bar>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.mine-bar b{font-family:'Gowun Batang',serif;font-size:15px;color:#3E5A3A}
+.mine-bar span{font-size:12.5px;color:var(--muted);line-height:1.6}
+.mine-bar button{flex:0 0 auto;border:1px solid #B7CDAE;background:#fff;color:#3E5A3A;border-radius:999px;padding:9px 15px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
 .relay b{font-family:'Gowun Batang',serif;font-size:14px;color:var(--brown)}
 .relay span{font-size:13.5px;color:var(--muted);line-height:1.6}
 .joined{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
@@ -688,20 +694,33 @@ p,.speech p,.room-line,.pair-note,.hint,.mini-note,.bubble,.entry-card em{text-w
       </div>
 
       <div class="panel" id="groupJoinPanel">
-        <div class="panel-title"><span class="num">＋</span><div><h2 id="groupJoinTitle">내 생일 넣기</h2><p>각자 자기 생일만 넣어줘. 남의 건 그 사람이 직접 넣는 거야.</p></div></div>
+        <div class="panel-title"><span class="num" id="groupJoinNum">＋</span><div><h2 id="groupJoinTitle">내 생일 넣기</h2><p id="groupJoinSub">각자 자기 생일만 넣어줘. 남의 건 그 사람이 직접 넣는 거야.</p></div></div>
         <div id="groupList"></div>
-        <div class="row group-add">
-          <input type="text" id="gName" maxlength="8" placeholder="뭐라고 부를까 (예: 숩, 막내)" aria-label="별명">
+        <div id="groupForm">
+          <div class="row group-add">
+            <input type="text" id="gName" maxlength="8" placeholder="뭐라고 부를까 (예: 숩, 막내)" aria-label="별명">
+          </div>
+          <span class="field-label" id="gLblCal">달력 기준</span>
+          <div class="toggle-group" id="gCalToggle" role="group" aria-labelledby="gLblCal">
+            <button type="button" class="on" data-v="solar" aria-pressed="true">양력</button>
+            <button type="button" data-v="lunar" aria-pressed="false">음력</button>
+          </div>
+          <div class="check hidden" id="gLeapWrap"><input type="checkbox" id="gLeap"><label for="gLeap">윤달에 태어났어요</label></div>
+          <span class="field-label" id="gLblBirth">생년월일</span>
+          <div class="row" role="group" aria-labelledby="gLblBirth"><select id="gY" aria-label="태어난 연도"></select><select id="gM" aria-label="태어난 월"></select><select id="gD" aria-label="태어난 일"></select></div>
+          <div class="check"><input type="checkbox" id="gKnowTime"><label for="gKnowTime">태어난 시간도 알아</label></div>
+          <div class="row hidden" id="gTimeRow"><select id="gH" aria-label="태어난 시"></select><select id="gMin" aria-label="태어난 분"></select></div>
+          <span class="field-label" id="gLblGen">성별</span>
+          <div class="toggle-group" id="gGenToggle" role="group" aria-labelledby="gLblGen">
+            <button type="button" class="on" data-v="F" aria-pressed="true">여성</button>
+            <button type="button" data-v="M" aria-pressed="false">남성</button>
+          </div>
+          <button type="button" class="btn" id="btnGroupAdd">넣고 결과 보기</button>
         </div>
-        <div class="row"><select id="gY" aria-label="태어난 연도"></select><select id="gM" aria-label="태어난 월"></select><select id="gD" aria-label="태어난 일"></select></div>
-        <div class="check"><input type="checkbox" id="gKnowTime"><label for="gKnowTime">태어난 시간도 알아</label></div>
-        <div class="row hidden" id="gTimeRow"><select id="gH" aria-label="태어난 시"></select><select id="gMin" aria-label="태어난 분"></select></div>
-        <span class="field-label" id="gLblGen">성별</span>
-        <div class="toggle-group" id="gGenToggle" role="group" aria-labelledby="gLblGen">
-          <button type="button" class="on" data-v="F" aria-pressed="true">여성</button>
-          <button type="button" data-v="M" aria-pressed="false">남성</button>
+        <div class="mine-bar hidden" id="groupMineBar">
+          <div><b id="groupMineWho"></b><span>잘못 넣었으면 고쳐도 돼.</span></div>
+          <button type="button" id="btnGroupMineEdit">고치기</button>
         </div>
-        <button type="button" class="btn" id="btnGroupAdd">넣고 결과 보기</button>
         <div class="hint" id="groupHint">먼저 네 생일을 넣어봐.</div>
       </div>
 
@@ -1565,7 +1584,9 @@ const M = { cal:'solar', gender:'M', noTime:false };
 // 각자 자기 생일만 넣는다. 넣으면 링크가 하나 나오고, 그 링크를 받은 사람이
 // 자기 걸 이어서 넣는다. 서버가 없어도 방 전체가 모이고, 남의 생일을
 // 대신 넣는 일이 없다.
-const G = { people: [], gender: 'F', result: null, from: '' };
+// mine — 이 기기에서 넣은 사람. 남의 생일을 대신 넣지 않도록,
+// 한 번 넣고 나면 입력 폼을 접고 "고치기"만 남긴다.
+const G = { people: [], gender: 'F', cal: 'solar', result: null, from: '', mine: '' };
 const GROUP_MAX = 6;
 
 (function initGroupForm(){
@@ -1578,13 +1599,22 @@ const GROUP_MAX = 6;
   for(let v=0;v<=23;v++) h.add(new Option(String(v).padStart(2,'0')+'시', v));
   h.value=12;
   for(let v=0;v<60;v+=5) mi.add(new Option(String(v).padStart(2,'0')+'분', v));
-  function fillG(){
-    const last=new Date(+y.value, +mo.value, 0).getDate(), cur=+d.value||15;
+  // 음력 달은 29일이거나 30일이고, 윤달이 있는 해도 있다. 본 입력 화면과 같은 규칙을 쓴다.
+  function syncG(){
+    const yy=+y.value, mm=+mo.value;
+    const avail = G.cal==='lunar' && leapMonthOf(yy)===mm;
+    if(!avail) $('gLeap').checked=false;
+    $('gLeapWrap').classList.toggle('hidden', !avail);
+    const last = G.cal==='lunar' ? lunarMonthDays(yy, mm, $('gLeap').checked)
+                                 : new Date(yy, mm, 0).getDate();
+    const cur=+d.value||15;
     d.innerHTML='';
     for(let v=1;v<=last;v++) d.add(new Option(v+'일', v));
     d.value=Math.min(cur,last);
   }
-  y.onchange=fillG; mo.onchange=fillG; fillG();
+  y.onchange=syncG; mo.onchange=syncG; $('gLeap').onchange=syncG;
+  bindToggle($('gCalToggle'), v=>{ G.cal=v; syncG(); });
+  syncG();
   bindToggle($('gGenToggle'), v=>{ G.gender=v; });
   $('gKnowTime').addEventListener('change', e=>{
     $('gTimeRow').classList.toggle('hidden', !e.target.checked);
@@ -1611,32 +1641,74 @@ function renderGroupList(){
   $('relayBar').classList.toggle('hidden', !G.from);
   if(G.from){
     $('relayWho').textContent = `${josa(G.from,'이/가')} 시작한 방이야`;
-    $('relayHow').textContent = n===1
+    $('relayHow').textContent = G.mine
+      ? `지금 ${n}명이 같이 보는 중. 링크를 다음 사람한테 넘기면 이어서 붙어.`
+      : n===1
       ? '아래에 네 생일을 넣으면 둘이 같이 볼 수 있어.'
       : `지금 ${n}명. 네 생일을 넣으면 같이 볼 수 있어.`;
   }
-  $('groupJoinTitle').textContent = n ? '내 생일도 넣기' : '내 생일 넣기';
+  // 이 기기에서 이미 넣었으면 폼을 접는다. 열어두면 이름만 바꿔 남의 생일을
+  // 대신 넣게 되는데, 그건 이 화면이 하지 않기로 한 일이다.
+  const done = !!G.mine;
+  $('groupForm').classList.toggle('hidden', done);
+  $('groupMineBar').classList.toggle('hidden', !done);
+  if(done) $('groupMineWho').textContent = `${josa(G.mine,'은/는')} 넣었어`;
+
+  $('groupJoinNum').textContent = done ? '✓' : '＋';
+  $('groupJoinTitle').textContent = done ? '이 방에 들어온 사람'
+    : n ? '내 생일도 넣기' : '내 생일 넣기';
+  $('groupJoinSub').textContent = done
+    ? '링크를 받은 사람이 자기 것을 이어서 넣어.'
+    : '각자 자기 생일만 넣어줘. 남의 건 그 사람이 직접 넣는 거야.';
   $('btnGroupAdd').disabled = n>=GROUP_MAX;
   $('groupHint').textContent = n>=GROUP_MAX
     ? `${GROUP_MAX}명까지 볼 수 있어. 새로 시작하려면 아래 "처음부터 다시"를 눌러.`
+    : done ? `지금 ${n}명 — ${G.people.map(p=>p.name).join(', ')}. 링크를 다음 사람한테 넘겨줘.`
     : n===0 ? '먼저 네 생일을 넣어봐.'
     : `지금 ${n}명 — ${G.people.map(p=>p.name).join(', ')}`;
 }
 
 function addGroupPerson(){
+  // 버튼은 6명이 되면 잠기지만 이름칸 엔터로도 들어온다. 여기서 한 번 더 막는다.
+  // 넘겨서 만든 링크는 받는 쪽이 못 읽어서, 방이 조용히 끊긴다.
+  if(G.people.length >= GROUP_MAX) return toast(`${GROUP_MAX}명까지 볼 수 있어`);
   const name = $('gName').value.trim().replace(/[|~]/g,'').slice(0,8);
   if(!name) return toast('뭐라고 부를지 적어줘');
   if(G.people.some(p=>p.name===name)) return toast('그 이름은 이미 있어. 다르게 적어줘');
   const knowTime = $('gKnowTime').checked;
+
+  // 음력으로 넣었으면 여기서 양력으로 바꿔 담는다. 링크에는 양력만 들어가므로
+  // 링크 모양이 그대로고, 옛 링크도 계속 열린다.
+  let y=+$('gY').value, m=+$('gM').value, d=+$('gD').value;
+  if(G.cal==='lunar'){
+    try{
+      const sol = SSAJU.lunarToSolar(y, m, d, $('gLeap').checked);
+      y=sol.year; m=sol.month; d=sol.day;
+    }catch(e){ return toast('그 음력 날짜는 없는 날이야. 다시 골라줘'); }
+  }
+
   G.people.push({
-    name, y:+$('gY').value, m:+$('gM').value, d:+$('gD').value,
+    name, y, m, d,
     hour: knowTime ? +$('gH').value : null,
     minute: knowTime ? +$('gMin').value : null,
     noTime: !knowTime, gender: G.gender
   });
+  G.mine = name;
   $('gName').value='';
   renderGroupList();
   runGroup();
+}
+
+// 잘못 넣었을 때 자기 것만 빼고 폼을 다시 연다. 남의 줄은 건드리지 않는다.
+function editMyGroupEntry(){
+  if(!G.mine) return;
+  const i = G.people.findIndex(p=>p.name===G.mine);
+  if(i !== -1) G.people.splice(i,1);
+  $('gName').value = G.mine;
+  G.mine = '';
+  renderGroupList();
+  if(G.people.length) runGroup(); else $('groupResult').classList.add('hidden');
+  $('groupJoinPanel').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
 function groupChart(p){
@@ -1759,6 +1831,7 @@ function openSharedGroup(){
   // 링크에는 앞사람들이 이미 들어 있다. 여기 온 사람은 자기 것만 더하면 된다.
   G.people = people;
   G.from = people[0] ? people[0].name : '';
+  G.mine = '';           // 링크로 들어온 사람은 아직 자기 것을 안 넣었다
   showGroupMode();
   renderGroupList();
   show('scrMatch');
@@ -1907,11 +1980,12 @@ bindToggle($('relToggle'), v=>{
   window.scrollTo({top:0,behavior:'smooth'});
 });
 $('btnGroupAdd').onclick=addGroupPerson;
+$('btnGroupMineEdit').onclick=editMyGroupEntry;
 $('btnGoGroup').onclick=()=>{ showGroupMode(); renderGroupList(); show('scrMatch'); };
 $('btnGroupShare').onclick=shareGroup;
 $('btnGroupLink').onclick=copyGroupLink;
 $('btnGroupReset').onclick=()=>{
-  G.people=[]; G.result=null; G.from='';
+  G.people=[]; G.result=null; G.from=''; G.mine='';
   history.replaceState(null,'',location.href.split('#')[0]);
   $('groupResult').classList.add('hidden');
   renderGroupList();
