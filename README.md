@@ -6,7 +6,29 @@
 
 정적 웹앱이라 `index.html`을 브라우저에서 열면 됩니다. 빌드 도구가 필요 없고, 인터넷 연결 없이도 같은 결과가 나옵니다.
 
-GitHub Pages 또는 Vercel에 배포할 때는 저장소 루트를 그대로 올리면 됩니다.
+## 배포 (Vercel)
+
+빌드 단계가 없으므로 저장소 루트를 그대로 올리면 됩니다.
+
+1. [vercel.com/new](https://vercel.com/new) → GitHub에서 `sbp37/kkwang-saju` 선택
+2. Framework Preset은 **Other**, Build Command와 Output Directory는 **비워둡니다**
+3. Deploy
+
+이후 `main`에 push할 때마다 자동으로 다시 배포됩니다. 캐시 헤더는
+`vercel.json`에 있습니다 (에셋은 하루, 화면과 규칙은 매번 확인).
+
+### 도메인이 정해지면 고쳐야 할 곳
+
+카카오톡 링크 미리보기용 태그는 스크래퍼가 자바스크립트를 실행하지 않아
+절대 주소여야 합니다. `index.html` 맨 위 세 곳이 `https://kkwang-saju.vercel.app`
+으로 되어 있으니, 실제 도메인이 다르면 같이 바꿔주세요.
+
+```
+grep -n "kkwang-saju.vercel.app" index.html
+```
+
+미리보기가 제대로 뜨는지는 [카카오 디버거](https://developers.kakao.com/tool/debugger/sharing)에서 확인할 수 있습니다.
+캐시가 남아 있으면 같은 화면에서 초기화하면 됩니다.
 
 ## 파일 구성
 
@@ -20,6 +42,9 @@ rules/today.js        오늘운세 규칙
 rules/group.js        단톡사주 규칙
 assets/               배경 · 캐릭터 · 오행 이미지 (WebP)
 assets/card-tiger.js  공유 카드에 그리는 크앙 (data URI)
+assets/og.jpg         링크 미리보기 이미지 (1200×630)
+manifest.webmanifest  홈 화면에 추가했을 때의 이름·아이콘
+vercel.json           배포 시 캐시 헤더
 ```
 
 이미지는 화면에서 쓰이는 크기(레티나 2배 기준)에 맞춰 WebP로 저장했습니다. 전체 에셋이 0.9MB라 모바일에서도 첫 화면이 금방 뜹니다.
