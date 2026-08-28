@@ -171,6 +171,7 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .entry-card i{flex:0 0 auto;margin-left:auto;font-style:normal;font-size:19px;color:var(--red)}
 .mode-toggle{margin-bottom:14px}
 .group-add{margin-bottom:9px}
+#inNick,
 .group-add input{width:100%;padding:12px 12px;font-size:15px;font-family:inherit;background:#FFFDF7;border:1.5px solid rgba(43,35,32,.2);border-radius:11px;color:var(--ink)}
 .group-row{display:flex;align-items:center;gap:10px;padding:11px 12px;margin-bottom:8px;background:#FFFDF7;border:1px solid var(--line);border-radius:14px}
 .group-row b{font-family:'Gowun Batang',serif;font-size:15px}
@@ -512,7 +513,9 @@ p,.speech p,.room-line,.pair-note,.hint,.mini-note,.bubble,.entry-card em{text-w
     <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_curious.webp" alt="궁금해하는 크앙"></div><div class="bubble">생일만 알려주면 돼. 어려운 말은 줄이고, 필요한 건 솔직하게 말해줄게!</div></div>
     <div class="form-grid">
       <div class="panel"><img class="asset-decor asset-scroll" src="assets/scroll.webp" alt="">
-        <div class="panel-title"><span class="num">1</span><div><h2>태어난 날짜</h2><p>양력과 음력을 먼저 골라줘.</p></div></div>
+        <div class="panel-title"><span class="num">1</span><div><h2>이름과 생년월일</h2><p>이름은 안 적어도 돼. 적으면 그 이름으로 불러줄게.</p></div></div>
+        <span class="field-label" id="lblNick">뭐라고 부를까</span>
+        <input type="text" id="inNick" maxlength="8" placeholder="예: 숩, 지훈, 막내" aria-labelledby="lblNick">
         <span class="field-label" id="lblCal">달력 기준</span>
         <div class="toggle-group" id="calToggle" role="group" aria-labelledby="lblCal"><button type="button" class="on" data-v="solar" aria-pressed="true">양력</button><button type="button" data-v="lunar" aria-pressed="false">음력</button></div>
         <div class="check hidden" id="leapWrap"><input type="checkbox" id="isLeap"><label for="isLeap">윤달에 태어났어요</label></div>
@@ -918,7 +921,7 @@ function lunarMonthDays(year, month, leap){
 </script>
 <script>
 // ===== 상태 (메모리 전용) =====
-const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null };
+const S = { cal:'solar', gender:'F', noTime:false, saju:null, birth:null, level:null, reading:null, nick:'' };
 const V5_LEVELS = ['몽글몽글','솔직하게 콕','돌직구 크앙'];
 
 // ===== 입력 초기화 =====
@@ -1156,17 +1159,18 @@ $('btnCard').onclick = async ()=>{
 // ===== 결과 공유 =====
 // 서버가 없으므로 결과를 저장하지 않는다. 대신 생년월일을 주소 뒤에 붙여서
 // 링크를 연 사람의 브라우저가 같은 계산을 다시 한다. 어디에도 남지 않는다.
-const SHARE_VER = '1';
+const SHARE_VER = '2';   // 2부터 이름이 붙는다. 1로 만든 링크도 계속 열린다.
 
-function encodeBirth(b, level){
-  // 예: 1|19890307|0700|F|s|0|1  →  base64url
+function encodeBirth(b, level, nick){
+  // 예: 2|19890307|0700|F|s|1|숩  →  base64url
   const raw = [
     SHARE_VER,
     `${b.rawY}${String(b.rawM).padStart(2,'0')}${String(b.rawD).padStart(2,'0')}`,
     b.noTime ? '----' : `${String(b.hour).padStart(2,'0')}${String(b.minute).padStart(2,'0')}`,
     b.gender,
     b.calRaw === 'lunar' ? (b.leap ? 'L' : 'l') : 's',
-    String(V5_LEVELS.indexOf(level))
+    String(V5_LEVELS.indexOf(level)),
+    (nick || '').replace(/\|/g, '')
   ].join('|');
   return btoa(unescape(encodeURIComponent(raw))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
@@ -1174,8 +1178,8 @@ function decodeBirth(token){
   try{
     const b64 = token.replace(/-/g,'+').replace(/_/g,'/');
     const raw = decodeURIComponent(escape(atob(b64)));
-    const [ver, ymd, hm, gender, cal, lv] = raw.split('|');
-    if(ver !== SHARE_VER) return null;
+    const [ver, ymd, hm, gender, cal, lv, nick] = raw.split('|');
+    if(ver !== '1' && ver !== '2') return null;
     if(!/^\d{8}$/.test(ymd) || !/^(\d{4}|----)$/.test(hm)) return null;
     if(gender !== 'F' && gender !== 'M') return null;
     if(['s','l','L'].indexOf(cal) === -1) return null;
@@ -1184,7 +1188,8 @@ function decodeBirth(token){
       rawY:+ymd.slice(0,4), rawM:+ymd.slice(4,6), rawD:+ymd.slice(6,8),
       hour: noTime ? null : +hm.slice(0,2), minute: noTime ? null : +hm.slice(2,4),
       noTime, gender, cal: cal === 's' ? 'solar' : 'lunar', leap: cal === 'L',
-      level: V5_LEVELS[+lv] || V5_LEVELS[1]
+      level: V5_LEVELS[+lv] || V5_LEVELS[1],
+      nick: (nick || '').slice(0, 8)
     };
     if(out.rawY < 1930 || out.rawY > new Date().getFullYear()) return null;
     if(out.rawM < 1 || out.rawM > 12 || out.rawD < 1 || out.rawD > 31) return null;
@@ -1195,7 +1200,7 @@ function decodeBirth(token){
 function shareUrl(){
   if(!S.birth) return location.href;
   const base = location.href.split('#')[0];
-  return `${base}#r=${encodeBirth(S.birth, S.level)}`;
+  return `${base}#r=${encodeBirth(S.birth, S.level, S.nick)}`;
 }
 
 // 링크를 열었을 때: 보낸 사람의 결과를 그대로 보여주고, 위에 "나도 보기"를 띄운다.
@@ -1214,6 +1219,7 @@ function openSharedResult(){
     S.saju = adaptSaju(res, d.noTime);
     S.yong = findYongshin(S.saju);
     S.level = d.level;
+    S.nick = d.nick || '';
     S.shared = true;
     S.reading = localReading();
     renderChart();
@@ -1255,7 +1261,7 @@ async function drawPunchCard(){
 
   ctx.fillStyle = '#F6C96F';
   ctx.font = `700 34px ${SANS}`;
-  ctx.fillText('크앙의 한 방', 96, 158);
+  ctx.fillText(S.nick ? `${S.nick}에게 크앙의 한 방` : '크앙의 한 방', 96, 158);
 
   // 문장 길이에 맞춰 글자를 줄인다. 넉 줄이 넘어가면 카드가 답답해진다.
   const line = (S.reading && S.reading.한방 && S.reading.한방[0]) || '';
@@ -1366,7 +1372,8 @@ function saveBirth(){
       rawY:S.birth.rawY, rawM:S.birth.rawM, rawD:S.birth.rawD,
       hour:S.birth.hour, minute:S.birth.minute,
       noTime:S.birth.noTime, gender:S.birth.gender, cal:S.birth.calRaw,
-      leap:$('isLeap').checked, level:S.level||null, savedAt:new Date().toISOString()
+      leap:$('isLeap').checked, level:S.level||null, nick:S.nick||'',
+      savedAt:new Date().toISOString()
     }));
   }catch(e){ /* 저장 실패는 조용히 넘긴다 — 기능이 막히면 안 된다 */ }
 }
@@ -1383,6 +1390,7 @@ function restoreSaved(){
   try{
     S.cal=d.cal||'solar';
     setToggle($('calToggle'), S.cal);
+    S.nick=d.nick||''; $('inNick').value=S.nick;
     ySel.value=d.rawY; mSel.value=d.rawM;
     syncLeapBox();
     if(d.leap && !$('leapWrap').classList.contains('hidden')) $('isLeap').checked=true;
@@ -1402,7 +1410,7 @@ function renderMy(){
   const saved=loadSaved();
   const box=$('mySavedInfo'), detail=$('myDetail');
   if(S.saju){
-    box.textContent=`${S.birth.rawY}.${S.birth.rawM}.${S.birth.rawD}${S.birth.noTime?' · 시간 모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`} · ${S.birth.gender==='F'?'여성':'남성'}`;
+    box.textContent=`${S.nick?S.nick+' · ':''}${S.birth.rawY}.${S.birth.rawM}.${S.birth.rawD}${S.birth.noTime?' · 시간 모름':` · ${String(S.birth.hour).padStart(2,'0')}:${String(S.birth.minute).padStart(2,'0')}`} · ${S.birth.gender==='F'?'여성':'남성'}`;
     detail.classList.remove('hidden');
     detail.innerHTML=`<div class="evidence-grid">${[
       ['사주', S.saju.pillars.map(p=>p.missing?'시간미상':p.stem+p.branch).join(' ')],
@@ -1465,8 +1473,8 @@ function renderToday(){
     if(!lines.length) return;
     const el=document.createElement('div'); el.className='speech'+(i<3?' open':'');
     el.innerHTML=`<img class="section-asset" src="${asset}" alt="">`
-      +`<div class="sh"><span class="ic">${icon}</span><b>${title}</b><span class="acc-mark">+</span></div>`
-      +`<div class="v5-body">${lines.map(x=>`<p>${x}</p>`).join('')}</div>`;
+      +`<div class="sh"><span class="ic">${icon}</span><b>${personalize(title,S.nick)}</b><span class="acc-mark">+</span></div>`
+      +`<div class="v5-body">${lines.map(x=>`<p>${personalize(x,S.nick)}</p>`).join('')}</div>`;
     el.querySelector('.sh').onclick=()=>el.classList.toggle('open');
     box.appendChild(el);
   });
@@ -1922,7 +1930,7 @@ restoreSaved();
 $('btnPunchShare').onclick=sharePunch;
 $('btnPunchLink').onclick=copyShareLink;
 $('btnMineToo').onclick=()=>{
-  S.shared=false;
+  S.shared=false; S.nick=''; $('inNick').value='';
   $('fromFriend').classList.add('hidden');
   history.replaceState(null,'',location.href.split('#')[0]);
   show('scrInput');
@@ -2020,6 +2028,41 @@ function v5CurrentYearTopic(god){
 </script>
 <script src="rules/reading.js"></script>
 <script>
+// ===== 이름으로 부르기 =====
+// 이름을 적으면 "너/네" 대신 그 이름으로 부른다. 안 적으면 그대로 둔다.
+// 풀이 문장에만 쓴다. 화면 제목의 "네 기둥"(숫자 4)까지 바꾸면 안 되기 때문이다.
+const NICK_COUNTER = ['가지','개','칸','기둥','글자','명','번','줄','살','겹','자'];
+function personalize(text, name){
+  if(!name || typeof text !== 'string') return text;
+  return text
+    // 조사가 붙은 긴 형태부터 잡는다. 짧은 것을 먼저 바꾸면 뒷부분이 남는다.
+    .replace(/너한테/g, name+'한테')
+    .replace(/너에게/g, name+'에게')
+    .replace(/네게/g,   name+'에게')
+    .replace(/너보다/g, name+'보다')
+    .replace(/너처럼/g, name+'처럼')
+    .replace(/너까지/g, name+'까지')
+    .replace(/너랑/g,  () => josa(name,'이랑/랑'))
+    .replace(/너와/g,  () => josa(name,'과/와'))
+    .replace(/너도/g,   name+'도')
+    .replace(/너만/g,   name+'만')
+    .replace(/너의/g,   name+'의')
+    .replace(/너야/g,  () => josa(name,'이야/야'))
+    .replace(/(?:너를|널(?![가-힣]))/g, () => josa(name,'을/를'))
+    .replace(/(?:너는|넌(?![가-힣]))/g, () => josa(name,'은/는'))
+    .replace(/네가/g,  () => josa(name,'이/가'))
+    // 관형 "네 방식" → "숩의 방식". "네 가지"처럼 수를 세는 말은 건드리지 않는다.
+    .replace(/네 ([가-힣]+)/g, (m, w) =>
+      NICK_COUNTER.some(c => w === c || w.indexOf(c) === 0) ? m : name+'의 '+w)
+    // 남은 단독 "너"
+    .replace(/너(?![가-힣])/g, name);
+}
+function personalizeAll(v, name){
+  if(!name) return v;
+  if(Array.isArray(v)) return v.map(x => personalize(x, name));
+  return personalize(v, name);
+}
+
 // ===== 같은 말 반복 막기 =====
 // 규칙 문장과 유형별 설명이 겹치면 한 사람의 결과 안에서 같은 문장이 여러 번 나온다.
 // 글자 2-gram 유사도로 걸러낸다. 완전히 같은 문장뿐 아니라
@@ -2148,7 +2191,11 @@ localReading=function(){
     toneIntro, zero
   };
   // 총평은 맨 위에 이미 보이므로 기준으로만 쓴다.
-  return dedupeReading(out, V5_SECTIONS.map(x=>x[0]), ['총평','한방']);
+  dedupeReading(out, V5_SECTIONS.map(x=>x[0]), ['총평','한방']);
+  // 이름은 중복 판정이 끝난 뒤에 넣는다. 먼저 넣으면 이름이 들어간 만큼
+  // 글자가 달라져서 같은 말인데도 중복으로 안 잡힌다.
+  if(S.nick) Object.keys(out).forEach(k => { out[k] = personalizeAll(out[k], S.nick); });
+  return out;
 };
 const V5_SECTIONS=[
  ['한눈요약','✦','너를 세 줄로 말하면','assets/tiger_wink.webp','paragraph'],
@@ -2178,9 +2225,11 @@ renderResult=function(){
   $('todayLine').classList.remove('hidden');
   $('todayLine').innerHTML=`<img class="inline-asset" src="assets/pouch.webp" alt=""><b>오늘의 한마디</b><span>${rd.오늘한줄}</span>`;
   $('resultName').textContent=V5_SHORT[r.dayMaster.stem];
+  document.querySelector('.result-kicker').textContent = S.nick ? `크앙이가 본 ${S.nick} 사주` : '크앙이가 본 내 사주';
   $('resultOneLine').textContent=rd.총평;
   $('resultTags').innerHTML=[V5_GROUP_TAG[dom],V5_GROUP_TAG[second],V5_ELEMENT_PRACTICE[y.elem].title].map(x=>`<span>${x}</span>`).join('');
-  $('resultBubble').textContent=rd.toneIntro;
+  $('resultBubble').textContent=personalize(rd.toneIntro, S.nick);
+  $('punchLabel').textContent = S.nick ? `${S.nick}에게 크앙의 한 방` : '크앙의 한 방';
   $('punchLine').textContent=(rd.한방&&rd.한방[0])||rd.찔리는한마디[0]||'';
   $('punchImgWrap').innerHTML='';
   $('consultCard').querySelector('h3').textContent='먼저 짚고 갈 네 가지';
@@ -2192,7 +2241,7 @@ renderResult=function(){
   V5_SECTIONS.forEach(([key,icon,title,asset,type],i)=>{
     if(!rd[key]) return;
     const el=document.createElement('div');el.className='speech';
-    el.innerHTML=`<img class="section-asset" src="${asset}" alt=""><div class="sh"><span class="ic">${icon}</span><b>${title}</b><span class="acc-mark">+</span></div>${v5SectionHTML(rd[key],type)}`;
+    el.innerHTML=`<img class="section-asset" src="${asset}" alt=""><div class="sh"><span class="ic">${icon}</span><b>${personalize(title,S.nick)}</b><span class="acc-mark">+</span></div>${v5SectionHTML(rd[key],type)}`;
     box.appendChild(el);
   });
   document.querySelectorAll('#sections .speech').forEach((el,i)=>{
@@ -2309,13 +2358,14 @@ renderChart=function(){
       편인:['파고들기','관심·전환'],정인:['배우고 기대기','공부·문서']};
     $('daeunScroll').innerHTML=r.daeun.list.map(d=>{const t=map[d.stemGod]||map['비견'];const stg=d.stage12?`<div class="flow-stage">${d.stage12}</div>`:'';return `<div class="dchip"><div class="age">${d.age}세 전후</div><div class="flow-title">${t[0]}</div><div class="flow-sub">${t[1]}</div>${stg}</div>`}).join('');
   }
-  $('chartBubble').textContent=`계산은 끝났어. 네 중심은 ${V5_SHORT[dm.stem]}이야. 이게 실제 생활에서 어떻게 나오는지 풀어줄게.`;
+  $('chartBubble').textContent=personalize(`계산은 끝났어. 네 중심은 ${V5_SHORT[dm.stem]}이야. 이게 실제 생활에서 어떻게 나오는지 풀어줄게.`, S.nick);
 };
 $('btnCalc').onclick=async()=>{
   const btn=$('btnCalc'),original=btn.textContent;btn.disabled=true;btn.textContent='계산하는 중…';
   try{
     const rawY=+ySel.value,rawM=+mSel.value,rawD=+dSel.value,hour=S.noTime?12:+hSel.value,minute=S.noTime?0:+minSel.value;
     S.shared=false; $('fromFriend').classList.add('hidden');
+    S.nick=$('inNick').value.trim().replace(/\s+/g,' ').slice(0,8);
     const res=computeSaju({year:rawY,month:rawM,day:rawD,hour,minute,noTime:S.noTime,gender:S.gender,cal:S.cal,leap:$('isLeap').checked});
     const solar=res.solar;
     S.birth={y:solar.year,m:solar.month,d:solar.day,rawY,rawM,rawD,hour:S.noTime?null:hour,minute:S.noTime?null:minute,noTime:S.noTime,gender:S.gender,calRaw:S.cal};
