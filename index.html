@@ -177,6 +177,15 @@ select:focus,input:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(86,1
 .group-row b{font-family:'Gowun Batang',serif;font-size:15px}
 .group-row span{font-size:11.5px;color:var(--muted);margin-left:auto}
 .group-row button{flex:0 0 auto;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:#fff;color:var(--muted);font-size:17px;line-height:1;cursor:pointer}
+.relay{display:flex;flex-direction:column;gap:3px;background:#FFF6E4;border:1px solid #E8CFA4;border-radius:16px;padding:13px 15px;margin-bottom:13px}
+.relay b{font-family:'Gowun Batang',serif;font-size:14px;color:var(--brown)}
+.relay span{font-size:12px;color:var(--muted);line-height:1.6}
+.joined{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+.joined span{font-size:12px;padding:6px 11px;border-radius:999px;background:#F1EAD9;color:#6C5844;font-weight:700}
+.who-row{display:flex;gap:11px;padding:10px 0;border-bottom:1px dashed rgba(120,100,80,.2)}
+.who-row:last-child{border-bottom:0;padding-bottom:0}
+.who-row b{flex:0 0 54px;font-family:'Gowun Batang',serif;font-size:14px;color:var(--red);word-break:keep-all}
+.who-row p{flex:1;font-size:12.5px;line-height:1.7;color:var(--brown)}
 .role-card{display:flex;gap:12px;padding:14px 0;border-bottom:1px dashed rgba(120,100,80,.22)}
 .role-card:last-child{border-bottom:0;padding-bottom:0}
 .role-who{flex:0 0 62px;font-family:'Gowun Batang',serif;font-size:15px;color:var(--red);padding-top:1px;word-break:keep-all}
@@ -535,8 +544,8 @@ p,.speech p,.room-line,.pair-note,.hint,.mini-note,.bubble,.entry-card em{text-w
     <button type="button" class="entry-card" id="btnGoGroup">
       <img src="assets/tiger_wave.webp" alt="">
       <span>
-        <b>단톡방 사람들이랑 같이 보기</b>
-        <em>생일만 넣으면 이 방에서 각자 어떤 자리인지 짚어줄게. 나쁘게 말하는 결과는 없어.</em>
+        <b>친구들이랑 같이 보기</b>
+        <em>내 생일만 넣고 링크를 던지면, 친구들이 이어서 넣어. 이럴 때 각자 어떻게 하는지 나와.</em>
       </span>
       <i aria-hidden="true">→</i>
     </button>
@@ -659,13 +668,18 @@ p,.speech p,.room-line,.pair-note,.hint,.mini-note,.bubble,.entry-card em{text-w
     </div>
 
     <div id="groupWrap" class="hidden">
-      <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.webp" alt="장난스러운 크앙"></div><div class="bubble">단톡방 사람들 생일을 넣어봐. 이 방에서 각자 어떤 자리인지 짚어줄게. 나쁘게 말하는 결과는 없어!</div></div>
+      <div class="mascot-line"><div class="mascot-small"><img src="assets/tiger_wink.webp" alt="장난스러운 크앙"></div><div class="bubble" id="groupBubble">각자 자기 생일만 넣으면 돼. 넣고 방에 링크 던지면 다음 사람이 이어서 넣는 식이야.</div></div>
 
-      <div class="panel">
-        <div class="panel-title"><span class="num">＋</span><div><h2>사람 추가</h2><p>2명부터 6명까지. 생일만 알면 돼.</p></div></div>
+      <div class="relay hidden" id="relayBar">
+        <b id="relayWho"></b>
+        <span id="relayHow">아래에 네 생일을 넣으면 같이 볼 수 있어.</span>
+      </div>
+
+      <div class="panel" id="groupJoinPanel">
+        <div class="panel-title"><span class="num">＋</span><div><h2 id="groupJoinTitle">내 생일 넣기</h2><p>남의 생일은 대신 넣지 마. 각자 자기 것만.</p></div></div>
         <div id="groupList"></div>
         <div class="row group-add">
-          <input type="text" id="gName" maxlength="8" placeholder="별명 (예: 지훈, 막내)" aria-label="별명">
+          <input type="text" id="gName" maxlength="8" placeholder="뭐라고 부를까 (예: 숩, 막내)" aria-label="별명">
         </div>
         <div class="row"><select id="gY" aria-label="태어난 연도"></select><select id="gM" aria-label="태어난 월"></select><select id="gD" aria-label="태어난 일"></select></div>
         <div class="check"><input type="checkbox" id="gKnowTime"><label for="gKnowTime">태어난 시간도 알아</label></div>
@@ -675,43 +689,42 @@ p,.speech p,.room-line,.pair-note,.hint,.mini-note,.bubble,.entry-card em{text-w
           <button type="button" class="on" data-v="F" aria-pressed="true">여성</button>
           <button type="button" data-v="M" aria-pressed="false">남성</button>
         </div>
-        <button type="button" class="btn ghost" id="btnGroupAdd" style="margin-top:12px">이 사람 추가</button>
-        <button type="button" class="btn" id="btnGroupGo">우리끼리 보기</button>
-        <div class="hint" id="groupHint">두 명부터 볼 수 있어.</div>
+        <button type="button" class="btn" id="btnGroupAdd">넣고 결과 보기</button>
+        <div class="hint" id="groupHint">먼저 네 생일을 넣어봐.</div>
       </div>
 
       <div id="groupResult" class="hidden">
         <div class="result-hero match-result-hero"><img class="asset-decor asset-moon-result" src="assets/moon.webp" alt="">
           <div class="result-kicker">크앙이가 본 우리 방</div>
-          <h1 id="groupTitle">우리끼리 사주</h1>
+          <h1 id="groupTitle">우리끼리</h1>
           <div class="result-one">“<span id="groupOneLine"></span>”</div>
         </div>
-        <div class="panel">
-          <div class="panel-title"><span class="num">1</span><div><h2>이 방에서 각자의 자리</h2><p>같이 보는 사람이 바뀌면 자리도 바뀌어.</p></div></div>
-          <div id="groupRoles"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-title"><span class="num">2</span><div><h2>이 방의 기운</h2><p>다 합쳐서 보면 어떤 방인지.</p></div></div>
-          <div id="groupRoom"></div>
-        </div>
-        <div class="panel hidden" id="groupPairPanel">
-          <div class="panel-title"><span class="num">3</span><div><h2>둘씩 묶어보면</h2><p>특히 눈에 띄는 조합만.</p></div></div>
-          <div id="groupPairs"></div>
-        </div>
+
         <div class="punch group-share">
           <img class="punch-tiger" src="assets/tiger_wave.webp" alt="">
           <div class="punch-text">
-            <span class="punch-label">단톡방에 던지기</span>
-            <p class="punch-line" id="groupShareLine">각자 자리가 한 장에 다 들어간 카드야.</p>
+            <span class="punch-label" id="groupShareLabel">다음 사람에게 넘기기</span>
+            <p class="punch-line" id="groupShareLine"></p>
           </div>
           <div class="punch-actions">
-            <button type="button" class="btn red" id="btnGroupShare">카드 공유하기</button>
-            <button type="button" class="btn ghost" id="btnGroupLink">링크 복사</button>
+            <button type="button" class="btn red" id="btnGroupLink">링크 복사</button>
+            <button type="button" class="btn ghost" id="btnGroupShare">카드 저장</button>
           </div>
           <div id="groupImgWrap"></div>
-          <p class="share-note">링크에는 넣은 생일이 담겨 있어. 그 방에만 보내줘.</p>
+          <p class="share-note">각자 넣은 생일만 링크에 담겨. 대신 넣어준 사람은 없어.</p>
         </div>
-        <button type="button" class="btn ghost" id="btnGroupReset">사람 다시 넣기</button>
+
+        <div id="groupSituations"></div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="num">기운</span><div><h2>이 방은 어떤 방인가</h2><p>다 합쳐서 보면.</p></div></div>
+          <div id="groupRoom"></div>
+        </div>
+        <div class="panel hidden" id="groupPairPanel">
+          <div class="panel-title"><span class="num">둘</span><div><h2>둘씩 묶어보면</h2><p>특히 눈에 띄는 조합만.</p></div></div>
+          <div id="groupPairs"></div>
+        </div>
+        <button type="button" class="btn ghost" id="btnGroupReset">처음부터 다시</button>
       </div>
     </div>
 
@@ -1531,8 +1544,11 @@ const M = { cal:'solar', gender:'M', noTime:false };
   });
 })();
 
-// ===== 단톡사주 =====
-const G = { people: [], gender: 'F', result: null };
+// ===== 우리끼리 =====
+// 각자 자기 생일만 넣는다. 넣으면 링크가 하나 나오고, 그 링크를 받은 사람이
+// 자기 걸 이어서 넣는다. 서버가 없어도 방 전체가 모이고, 남의 생일을
+// 대신 넣는 일이 없다.
+const G = { people: [], gender: 'F', result: null, from: '' };
 const GROUP_MAX = 6;
 
 (function initGroupForm(){
@@ -1558,48 +1574,48 @@ const GROUP_MAX = 6;
   });
 })();
 
-function groupPersonLabel(p){
-  const t = p.noTime ? '시간 모름' : `${String(p.hour).padStart(2,'0')}:${String(p.minute).padStart(2,'0')}`;
-  return `${p.y}.${p.m}.${p.d} · ${t} · ${p.gender==='F'?'여':'남'}`;
-}
-function renderGroupList(){
-  $('groupList').innerHTML = G.people.map((p,i)=>
-    `<div class="group-row"><b>${escapeHtml(p.name)}</b><span>${groupPersonLabel(p)}</span>` +
-    `<button type="button" data-i="${i}" aria-label="${escapeHtml(p.name)} 빼기">×</button></div>`).join('');
-  $('groupList').querySelectorAll('button').forEach(b=>b.onclick=()=>{
-    G.people.splice(+b.dataset.i,1); G.result=null;
-    $('groupResult').classList.add('hidden');
-    renderGroupList();
-  });
-  const n=G.people.length;
-  $('btnGroupAdd').disabled = n>=GROUP_MAX;
-  $('btnGroupGo').disabled = n<2;
-  $('groupHint').textContent = n>=GROUP_MAX ? `${GROUP_MAX}명까지 볼 수 있어.`
-    : n<2 ? `두 명부터 볼 수 있어. (지금 ${n}명)` : `${n}명 넣었어. 더 넣어도 되고 지금 봐도 돼.`;
-}
 function escapeHtml(t){
   return String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+function groupPersonLabel(p){
+  return `${p.y}.${p.m}.${p.d}${p.noTime?'':' · '+String(p.hour).padStart(2,'0')+':'+String(p.minute).padStart(2,'0')}`;
+}
+function renderGroupList(){
+  const n=G.people.length;
+  $('groupList').innerHTML = n
+    ? `<div class="joined">${G.people.map(p=>`<span>${escapeHtml(p.name)}</span>`).join('')}</div>`
+    : '';
+  $('relayBar').classList.toggle('hidden', !G.from);
+  if(G.from){
+    $('relayWho').textContent = `${josa(G.from,'이/가')} 시작한 방이야`;
+    $('relayHow').textContent = n===1
+      ? '아래에 네 생일을 넣으면 둘이 같이 볼 수 있어.'
+      : `지금 ${n}명. 네 생일을 넣으면 같이 볼 수 있어.`;
+  }
+  $('groupJoinTitle').textContent = n ? '내 생일도 넣기' : '내 생일 넣기';
+  $('btnGroupAdd').disabled = n>=GROUP_MAX;
+  $('groupHint').textContent = n>=GROUP_MAX
+    ? `${GROUP_MAX}명까지 볼 수 있어. 새로 시작하려면 아래 "처음부터 다시"를 눌러.`
+    : n===0 ? '먼저 네 생일을 넣어봐.'
+    : `지금 ${n}명 — ${G.people.map(p=>p.name).join(', ')}`;
+}
 
 function addGroupPerson(){
-  const name = $('gName').value.trim() || `${G.people.length+1}번`;
-  if(G.people.some(p=>p.name===name)) return toast('별명이 겹쳐. 다르게 적어줘');
+  const name = $('gName').value.trim().replace(/[|~]/g,'').slice(0,8);
+  if(!name) return toast('뭐라고 부를지 적어줘');
+  if(G.people.some(p=>p.name===name)) return toast('그 이름은 이미 있어. 다르게 적어줘');
   const knowTime = $('gKnowTime').checked;
   G.people.push({
-    name,
-    y:+$('gY').value, m:+$('gM').value, d:+$('gD').value,
+    name, y:+$('gY').value, m:+$('gM').value, d:+$('gD').value,
     hour: knowTime ? +$('gH').value : null,
     minute: knowTime ? +$('gMin').value : null,
     noTime: !knowTime, gender: G.gender
   });
-  G.result=null;
-  $('groupResult').classList.add('hidden');
   $('gName').value='';
   renderGroupList();
-  toast(`${name} 추가했어 🐾`);
+  runGroup();
 }
 
-// 사람 하나를 계산 결과로 바꾼다
 function groupChart(p){
   const res = computeSaju({ year:p.y, month:p.m, day:p.d,
     hour: p.noTime?12:p.hour, minute: p.noTime?0:p.minute,
@@ -1609,40 +1625,64 @@ function groupChart(p){
 }
 
 const ROOM_COLOR = { 목:'#62873A', 화:'#E66B36', 토:'#A97738', 금:'#D79D22', 수:'#3D86A8' };
+const SIT_ICON = { 힘들때:'☾', 메뉴:'囊', 여행:'⛰', 단체방:'☀', 취소:'☁' };
+const SIT_ASSET = { 힘들때:'assets/moon.webp', 메뉴:'assets/pouch.webp', 여행:'assets/mountain.webp',
+                    단체방:'assets/sun.webp', 취소:'assets/cloud.webp' };
 
 function runGroup(){
-  if(G.people.length < 2) return;
+  const n = G.people.length;
+  if(n < 1) return;
   let charts;
   try{ charts = G.people.map(groupChart); }
   catch(e){ return toast('계산하다 넘어졌어… '+e.message); }
-  const r = analyzeGroup(charts);
+
+  // 혼자면 아직 볼 게 없다. 링크만 만들어 넘긴다.
+  $('groupSituations').classList.toggle('hidden', n < 2);
+  $('groupPairPanel').classList.add('hidden');
+
+  const r = n >= 2 ? analyzeGroup(charts) : null;
   G.result = r;
 
-  $('groupTitle').textContent = `${G.people.length}명이 모인 방`;
-  $('groupOneLine').textContent = `${r.room.많} 기운이 도는 방`;
+  $('groupTitle').textContent = n < 2 ? `${G.people[0].name} 혼자 있는 방` : `${n}명이 모인 방`;
+  $('groupOneLine').textContent = n < 2
+    ? '링크를 던져서 한 명만 더 채워봐'
+    : `${r.room.많} 기운이 도는 방`;
 
-  $('groupRoles').innerHTML = r.roles.map(x =>
-    `<div class="role-card"><div class="role-who">${escapeHtml(x.name)}</div>` +
-    `<div class="role-body"><b>${x.role.name}</b><p>${x.role.desc}</p></div></div>`).join('');
+  $('groupShareLabel').textContent = n < 2 ? '방에 링크 던지기' : '다음 사람에게 넘기기';
+  $('groupShareLine').textContent = n < 2
+    ? '이 링크를 방에 올리면, 열어본 사람이 자기 생일을 이어서 넣어.'
+    : `지금까지 ${n}명. 링크를 다시 던지면 다음 사람이 이어서 넣어.`;
 
-  const max = Math.max(1, ...Object.values(r.room.merged));
-  $('groupRoom').innerHTML =
-    `<div class="room-bars">${['목','화','토','금','수'].map(e=>{
-      const n=r.room.merged[e], pct=Math.round(n/max*100);
-      return `<div class="room-bar"><i><em style="height:${Math.max(6,pct)}%;background:${ROOM_COLOR[e]}"></em></i>${e} ${n}</div>`;
-    }).join('')}</div>` +
-    r.room.lines.map(l=>`<p class="room-line">${l}</p>`).join('');
+  if(r){
+    $('groupSituations').innerHTML = r.situations.map((sit,i)=>
+      `<div class="speech${i<2?' open':''}">`
+      + `<img class="section-asset" src="${SIT_ASSET[sit.id]||'assets/cloud.webp'}" alt="">`
+      + `<div class="sh"><span class="ic">${SIT_ICON[sit.id]||'✦'}</span><b>${sit.title}</b><span class="acc-mark">+</span></div>`
+      + `<div class="v5-body">${sit.rows.map(x=>
+          `<div class="who-row"><b>${escapeHtml(x.name)}</b><p>${x.text}</p></div>`).join('')}</div>`
+      + `</div>`).join('');
+    document.querySelectorAll('#groupSituations .speech').forEach(el=>{
+      el.querySelector('.sh').onclick=()=>el.classList.toggle('open');
+    });
 
-  $('groupPairPanel').classList.toggle('hidden', !r.pairs.length);
-  $('groupPairs').innerHTML = r.pairs.map(x=>
-    `<p class="pair-note"><b>${escapeHtml(x.a)} × ${escapeHtml(x.b)}</b><br>${escapeHtml(x.text)}</p>`).join('');
+    const max = Math.max(1, ...Object.values(r.room.merged));
+    $('groupRoom').innerHTML =
+      `<div class="room-bars">${['목','화','토','금','수'].map(e=>{
+        const v=r.room.merged[e], pct=Math.round(v/max*100);
+        return `<div class="room-bar"><i><em style="height:${Math.max(6,pct)}%;background:${ROOM_COLOR[e]}"></em></i>${e} ${v}</div>`;
+      }).join('')}</div>` + r.room.lines.map(l=>`<p class="room-line">${l}</p>`).join('');
+
+    $('groupPairPanel').classList.toggle('hidden', !r.pairs.length);
+    $('groupPairs').innerHTML = r.pairs.map(x=>
+      `<p class="pair-note"><b>${escapeHtml(x.a)} × ${escapeHtml(x.b)}</b><br>${escapeHtml(x.text)}</p>`).join('');
+  }
 
   $('groupImgWrap').innerHTML='';
   $('groupResult').classList.remove('hidden');
   $('groupResult').scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
-// ----- 단톡사주 공유 -----
+// ----- 우리끼리 공유 -----
 // 결과를 저장하지 않는다. 넣은 사람들의 생일만 주소 뒤에 담고,
 // 링크를 연 브라우저가 같은 계산을 다시 한다. # 뒤는 서버로 가지 않는다.
 function encodeGroup(people){
@@ -1659,7 +1699,7 @@ function decodeGroup(token){
     const raw = decodeURIComponent(escape(atob(token.replace(/-/g,'+').replace(/_/g,'/'))));
     const parts = raw.split('|');
     if(parts.shift() !== '1') return null;
-    if(parts.length < 2 || parts.length > GROUP_MAX) return null;
+    if(parts.length < 1 || parts.length > GROUP_MAX) return null;
     const out = [];
     for(const chunk of parts){
       const [name, ymd, hm, gender] = chunk.split('~');
@@ -1678,21 +1718,27 @@ function decodeGroup(token){
 function groupShareUrl(){
   return `${location.href.split('#')[0]}#g=${encodeGroup(G.people)}`;
 }
-function openSharedGroup(){
-  const m = /[#&]g=([A-Za-z0-9_-]+)/.exec(location.hash);
-  if(!m) return false;
-  const people = decodeGroup(m[1]);
-  if(!people){ toast('링크가 오래됐거나 잘못됐어'); return false; }
-  G.people = people;
+function showGroupMode(){
   setToggle($('relToggle'), 'group');
   document.querySelectorAll('#scrMatch .two-only').forEach(el=>{
     el.dataset.wasHidden = el.classList.contains('hidden') ? '1' : '0';
     el.classList.add('hidden');
   });
   $('groupWrap').classList.remove('hidden');
+}
+function openSharedGroup(){
+  const m = /[#&]g=([A-Za-z0-9_-]+)/.exec(location.hash);
+  if(!m) return false;
+  const people = decodeGroup(m[1]);
+  if(!people){ toast('링크가 오래됐거나 잘못됐어'); return false; }
+  // 링크에는 앞사람들이 이미 들어 있다. 여기 온 사람은 자기 것만 더하면 된다.
+  G.people = people;
+  G.from = people[0] ? people[0].name : '';
+  showGroupMode();
   renderGroupList();
   show('scrMatch');
   runGroup();
+  $('groupJoinPanel').scrollIntoView({ behavior:'smooth', block:'start' });
   return true;
 }
 
@@ -1710,36 +1756,27 @@ async function drawGroupCard(){
   ctx.strokeStyle = 'rgba(255,253,247,.22)'; ctx.lineWidth = 4;
   roundRect(ctx, 44, 44, W-88, H-88, 40); ctx.stroke();
 
+  // 카드에는 상황 하나만 담는다. 방에 던졌을 때 말이 제일 많이 붙는 대목이다.
+  const sit = G.result.situations[0];
+
   ctx.fillStyle = '#F6C96F'; ctx.font = `700 32px ${SANS}`;
-  ctx.fillText('크앙사주 · 우리끼리', 92, 152);
-  ctx.fillStyle = '#FFFDF7'; ctx.font = `700 58px ${SERIF}`;
-  ctx.fillText(`${G.people.length}명이 모인 방`, 92, 228);
-  ctx.fillStyle = 'rgba(255,253,247,.66)'; ctx.font = `30px ${SANS}`;
-  ctx.fillText(`${G.result.room.많} 기운이 도는 방`, 92, 280);
+  ctx.fillText('크앙사주 · 우리끼리', 92, 148);
+  ctx.fillStyle = '#FFFDF7'; ctx.font = `700 56px ${SERIF}`;
+  ctx.fillText(sit.title, 92, 224);
 
-  // 각자의 자리. 인원이 적어도 허전하지 않게 남는 공간의 가운데에 놓는다.
-  const roles = G.result.roles;
-  const zoneTop = 336, zoneBottom = H - 292;
-  const step = Math.max(104, Math.min(168, (zoneBottom - zoneTop) / roles.length));
-  const rowH = step - 14;
-  const startY = zoneTop + ((zoneBottom - zoneTop) - step * roles.length) / 2;
-  roles.forEach((x, i) => {
-    const y = startY + i * step;
-    ctx.fillStyle = 'rgba(255,253,247,.09)';
-    roundRect(ctx, 92, y, W - 184, rowH, 20); ctx.fill();
-    const baseline = y + rowH / 2 + 13;
+  const top = 300, bottom = H - 250;
+  const slot = Math.min(190, (bottom - top) / sit.rows.length);
+  let y = top;
+  sit.rows.forEach(row => {
     ctx.fillStyle = '#F6C96F'; ctx.font = `700 34px ${SERIF}`;
-    ctx.fillText(x.name, 122, baseline);
-    ctx.fillStyle = '#FFFDF7'; ctx.font = `700 38px ${SERIF}`;
-    ctx.fillText(x.role.name, 300, baseline);
+    ctx.fillText(row.name, 96, y + 44);
+    ctx.fillStyle = 'rgba(255,253,247,.94)'; ctx.font = `31px ${SANS}`;
+    wrapLines(ctx, row.text, W - 200).slice(0, 3)
+      .forEach((t, i) => ctx.fillText(t, 96, y + 92 + i * 44));
+    ctx.strokeStyle = 'rgba(255,253,247,.14)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(96, y + slot - 16); ctx.lineTo(W - 96, y + slot - 16); ctx.stroke();
+    y += slot;
   });
-
-  ctx.strokeStyle = 'rgba(255,253,247,.18)'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(92, H - 250); ctx.lineTo(W - 92, H - 250); ctx.stroke();
-
-  ctx.fillStyle = 'rgba(255,253,247,.72)'; ctx.font = `28px ${SANS}`;
-  wrapLines(ctx, G.result.room.lines[0], W - 380).slice(0, 2)   // 오른쪽 아래 크앙을 피한다
-    .forEach((t, i) => ctx.fillText(t, 92, H - 190 + i * 42));
 
   try{
     const img = await new Promise((ok, no) => {
@@ -1747,26 +1784,27 @@ async function drawGroupCard(){
       im.onload = () => ok(im); im.onerror = no;
       im.src = CARD_TIGER.uri;
     });
-    const h = 168, w = Math.round(CARD_TIGER.w * h / CARD_TIGER.h);
+    const h = 150, w = Math.round(CARD_TIGER.w * h / CARD_TIGER.h);
     ctx.drawImage(img, W - w - 84, H - h - 46, w, h);
   }catch(e){ /* 그림이 없어도 카드는 나온다 */ }
 
   ctx.fillStyle = '#FFFDF7'; ctx.font = `700 34px ${SERIF}`;
-  ctx.fillText('크앙사주', 92, H - 86);
+  ctx.fillText('크앙사주', 92, H - 116);
   ctx.fillStyle = 'rgba(255,253,247,.55)'; ctx.font = `25px ${SANS}`;
-  ctx.fillText('우리 방도 보러 가기 →', 92, H - 48);
+  ctx.fillText('내 생일 넣고 이어서 보기 →', 92, H - 74);
   return canvas;
 }
 
 async function shareGroup(){
-  if(!G.result) return;
+  if(!G.result) return toast('한 명만 더 들어오면 카드가 나와');
   const btn = $('btnGroupShare'), label = btn.textContent;
   btn.disabled = true; btn.textContent = '카드를 그리는 중…';
   try{
     const canvas = await drawGroupCard();
     const blob = await new Promise(ok => canvas.toBlob(ok, 'image/png'));
     const file = blob ? new File([blob], '크앙사주_우리끼리.png', { type:'image/png' }) : null;
-    const text = G.result.roles.map(x => `${x.name} — ${x.role.name}`).join('\n');
+    const sit = G.result.situations[0];
+    const text = `${sit.title}\n` + sit.rows.map(x => `${x.name} — ${x.text}`).join('\n');
     if(file && navigator.canShare && navigator.canShare({ files:[file] })){
       await navigator.share({ files:[file], text, url: groupShareUrl() });
     } else {
@@ -1824,21 +1862,12 @@ bindToggle($('relToggle'), v=>{
   window.scrollTo({top:0,behavior:'smooth'});
 });
 $('btnGroupAdd').onclick=addGroupPerson;
-$('btnGroupGo').onclick=runGroup;
-$('btnGoGroup').onclick=()=>{
-  setToggle($('relToggle'), 'group');
-  document.querySelectorAll('#scrMatch .two-only').forEach(el=>{
-    el.dataset.wasHidden = el.classList.contains('hidden') ? '1' : '0';
-    el.classList.add('hidden');
-  });
-  $('groupWrap').classList.remove('hidden');
-  renderGroupList();
-  show('scrMatch');
-};
+$('btnGoGroup').onclick=()=>{ showGroupMode(); renderGroupList(); show('scrMatch'); };
 $('btnGroupShare').onclick=shareGroup;
 $('btnGroupLink').onclick=copyGroupLink;
 $('btnGroupReset').onclick=()=>{
-  G.people=[]; G.result=null;
+  G.people=[]; G.result=null; G.from='';
+  history.replaceState(null,'',location.href.split('#')[0]);
   $('groupResult').classList.add('hidden');
   renderGroupList();
   $('groupWrap').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1962,11 +1991,11 @@ const V5_STEM={
   계:{name:'조용히 스며들어 마음을 읽는 비 같은 사람',intro:'눈치와 직감이 빨라서 말하지 않은 분위기도 잘 읽어. 겉으로 티 내지 않고 상황을 움직이는 재주가 있어.',inside:'생각이 많아지면 혼자 안으로 들어가 버려. 설명할 힘까지 없어져서 가까운 사람이 이유를 모를 때가 있어.'}
 };
 const V5_DOM={
-  비겁:{outer:'주관이 분명하고 혼자서도 잘 해내는 사람처럼 보여.',inner:'근데 진짜 속마음은 “내 선택을 존중해 줬으면 좋겠다”에 가까워. 반대 의견보다 내 결정권을 빼앗기는 걸 더 답답해해.',scenes:['의견을 물어봤지만 마음속으로는 이미 답을 정해둔 적이 많아.','도와주겠다는 말보다 “네 방식대로 해봐”라는 말을 들을 때 더 힘이 나.','가까운 사람은 많이 챙기는데, 간섭받는 순간 갑자기 거리를 두고 싶어져.'],best:'방향을 직접 정하고 결과까지 책임질 때 네 집중력이 가장 좋아져.',stress:'방법까지 세세하게 통제받거나, 공이 누구에게 가는지 애매하면 의욕이 확 꺼질 수 있어.',job:'남이 만든 답을 따라가는 일보다, 기준을 만들고 방향을 정하는 일에 강해.',env:'목표는 분명하되 방법은 맡겨주는 환경이 좋아. 의견을 내도 실제 결정에 반영되는지가 중요해.',earn:'내 이름, 내 판단, 내 전문성을 분명히 보여줄수록 돈이 붙는 편이야.',spend:'내 사람이라고 느끼면 시간과 돈을 통 크게 쓰기 쉬워. 부탁을 받자마자 답하지 않는 습관이 필요해.',love:'친구처럼 솔직하고 서로의 독립성을 인정해 주는 사람이 편해.',conflict:'참다가 한 번에 선을 긋기보다, 불편함이 30%일 때 미리 말하는 게 관계를 오래 지켜줘.',bad:'“그냥 남들이 하는 대로 맞춰.” 이 조언은 너를 더 답답하게 해.',sting:'조언을 구한 게 아니라 네 결정을 확인받고 싶었던 거 아니야?',action:'오늘 결정 하나는 다른 사람 반응을 보기 전에 네 기준부터 세 줄로 적어봐.'},
-  식상:{outer:'아이디어가 많고 재주가 좋은 사람처럼 보여.',inner:'속으로는 결과물이 사람에게 닿는 순간까지 확인하고 싶어 해. 그냥 잘하는 것보다 “내가 만든 게 살아 움직인다”는 느낌이 중요해.',scenes:['자료를 모으고 아이디어를 낼 때는 빠른데, 마지막 정리에서 갑자기 재미가 떨어진 적이 있어.','머릿속에는 완성된 그림이 있는데 설명하려니 말이 길어져 답답했던 적이 많아.','반응이 좋으면 밤새도 신나지만, 아무 반응이 없으면 능력 전체를 의심하기 쉬워.'],best:'생각을 말·글·그림·기획처럼 눈에 보이는 형태로 바꿀 때 가장 반짝여.',stress:'반복 작업만 계속하거나 표현할 여지가 없으면 속도가 눈에 띄게 떨어져.',job:'관찰한 걸 자기 방식으로 다시 만들고, 복잡한 내용을 보기 좋게 바꾸는 재주가 있어.',env:'짧은 주기로 결과를 보여주고 반응을 받을 수 있는 환경이 좋아. 큰 프로젝트도 중간 완성본이 필요해.',earn:'잘하는 걸 혼자 갖고 있지 말고 포트폴리오, 글, 샘플처럼 보이게 만들수록 수입 통로가 넓어져.',spend:'새로운 경험, 재료, 도구에는 지갑이 쉽게 열려. “지금 필요한가, 신나서 사고 싶은가”만 구분해도 충분해.',love:'대화가 통하고 함께 웃을 수 있는 사람이 좋아. 재미가 사라지면 마음도 같이 멀어질 수 있어.',conflict:'알아주길 기다리기보다 지금 서운한 이유를 한 문장으로 말해. 상대는 네 머릿속 완성본을 볼 수 없어.',bad:'“조용히 참고 시키는 대로 해.” 오래 하면 네 장점부터 말라버려.',sting:'새로운 걸 시작하는 속도만큼, 끝낸 것도 정말 많아?',action:'오늘 벌인 일 중 하나를 골라 “보여줄 수 있는 상태”까지만 끝내봐.'},
-  재성:{outer:'야무지고 현실 감각이 좋은 사람처럼 보여.',inner:'사실 숫자만 따지는 사람은 아니야. 시간과 돈을 쓴 만큼 의미 있는 결과가 남는지 확인하고 싶은 거야.',scenes:['가격 비교는 꼼꼼히 하다가도 “일에 필요해”라고 느끼면 갑자기 크게 써.','해야 할 일을 머릿속으로 빠르게 우선순위 매기지만, 남의 일정까지 챙기다 네 시간이 없어져.','성과가 바로 안 보이면 잘하고 있는 일도 괜히 틀린 길처럼 느껴질 때가 있어.'],best:'흩어진 사람·시간·돈을 실제 결과로 묶을 때 강해.',stress:'목표가 계속 바뀌거나 노력한 만큼 무엇이 남는지 안 보이면 불안해져.',job:'좋은 아이디어를 현실적으로 굴러가는 계획과 결과로 바꾸는 재주가 있어.',env:'목표, 마감, 예산이 어느 정도 보이는 환경이 편해. 대신 자잘한 보고가 너무 많으면 효율이 떨어져.',earn:'사람이 실제로 필요로 하는 걸 알아채고, 그걸 쓸 수 있는 형태로 제공할 때 돈을 잘 벌어.',spend:'평소에는 합리적인데 감정이 움직이는 곳에는 기준이 느슨해져. 돈을 쓰기 전에 하루만 두면 후회가 크게 줄어.',love:'말보다 생활 태도가 안정적인 사람, 약속을 행동으로 보여주는 사람이 편해.',conflict:'감정을 해결책으로만 정리하지 말고, 먼저 “그때 나는 서운했어”라고 말해주는 게 좋아.',bad:'“돈 생각 말고 마음 가는 대로만 해.” 너한테는 오히려 불안을 키울 수 있어.',sting:'쉬는 시간마저 효율적으로 보내야 한다고 생각하는 거 아니야?',action:'이번 주에 쓸 돈 하나와 지킬 돈 하나를 미리 나눠둬.'},
-  관성:{outer:'믿음직하고 알아서 잘하는 사람처럼 보여.',inner:'속으로는 실수하면 안 된다는 긴장을 꽤 오래 안고 있어. 칭찬보다 “이제 네가 안 챙겨도 돼”라는 말이 더 필요할 때가 있어.',scenes:['일이 애매하게 남아 있으면 쉬면서도 계속 생각해.','부탁을 거절하지 못하고 다 해준 뒤 혼자 피곤해진 적이 많아.','규칙을 잘 지키지만 말이 안 되는 기준에는 속으로 화가 오래 남아.'],best:'책임 범위와 기준이 분명할 때 안정적으로 끝까지 끌고 가.',stress:'기준은 없는데 책임만 떠넘기는 상황에서 가장 많이 지쳐.',job:'품질을 지키고 마감을 관리하며, 사람들에게 믿음을 주는 능력이 커.',env:'역할과 권한이 같이 주어지는 곳이 좋아. 책임만 있고 결정권이 없으면 오래 버티기 어려워.',earn:'신뢰, 꾸준함, 전문성을 오래 쌓는 방식이 잘 맞아. 단기 승부보다 “이 사람에게 맡기면 된다”는 평판이 자산이 돼.',spend:'필요한 사람과 일에는 책임감 때문에 계획보다 더 쓰기 쉬워. 네 몫의 여유 비용도 예산에 포함해야 해.',love:'약속을 가볍게 여기지 않고, 말과 행동이 비슷한 사람이 편해.',conflict:'괜찮다고 말하면서 표정이 굳는 습관부터 줄여봐. 거절은 관계를 깨는 말이 아니라 범위를 알려주는 말이야.',bad:'“네가 좀 더 참으면 다 괜찮아질 거야.” 이미 충분히 참았을 가능성이 커.',sting:'누가 시키지도 않았는데 혼자 책임자처럼 다 짊어지고 있지?',action:'오늘 부탁 하나에는 바로 답하지 말고 “확인하고 말해줄게”라고 해봐.'},
-  인성:{outer:'차분하고 생각이 깊은 사람처럼 보여.',inner:'속에서는 계속 자료를 맞춰보고 의미를 찾고 있어. 준비가 느린 게 아니라, 납득이 돼야 마음이 움직이는 편이야.',scenes:['시작 전에 검색과 자료 정리는 많이 했는데 첫 행동은 늦어진 적이 있어.','혼자 생각할 시간이 없으면 사람을 싫어해서가 아니라 머리가 꽉 차서 말수가 줄어.','잘 모르는 상태로 대답하는 걸 싫어해서, 이미 아는 것도 한 번 더 확인해.'],best:'정보를 깊게 이해하고 자기 언어로 정리할 때 강해.',stress:'생각할 틈 없이 즉답을 요구받거나, 이유 없는 일을 반복하면 쉽게 지쳐.',job:'복잡한 정보를 해석하고 맥락을 찾아, 다른 사람이 이해할 수 있게 정리하는 재주가 있어.',env:'집중할 수 있는 시간과 조용한 공간이 필요해. 회의보다 미리 자료를 받고 생각한 뒤 말할 때 훨씬 정확해.',earn:'쌓인 지식과 경험을 문서, 교육, 기획, 전문 서비스로 바꿀 때 안정적인 수입이 만들어져.',spend:'배움, 자료, 마음이 편해지는 물건에는 아끼지 않는 편이야. 실제로 쓰는지 한 달 뒤 점검하면 좋아.',love:'재촉하지 않고 네 생각을 끝까지 들어주는 사람과 있을 때 마음이 열려.',conflict:'정리될 때까지 연락을 끊으면 상대는 이유를 상상하게 돼. “생각할 시간이 필요해” 한마디는 남겨줘.',bad:'“생각하지 말고 무조건 시작해.” 네겐 시작 기준을 작게 정해주는 말이 더 도움이 돼.',sting:'준비가 부족한 게 아니라, 틀린 선택을 할까 봐 시간을 끄는 거 아니야?',action:'오늘은 더 검색하지 말고, 지금 아는 것만으로 첫 초안을 만들어봐.'}
+  비겁:{outer:'주관이 분명하고 혼자서도 잘 해내는 사람처럼 보여.',inner:'근데 진짜 속마음은 “내 선택을 존중해 줬으면 좋겠다”에 가까워. 반대 의견보다 내 결정권을 빼앗기는 걸 더 답답해해.',scenes:['의견을 물어봤지만 마음속으로는 이미 답을 정해둔 적이 많아.','도와주겠다는 말보다 “네 방식대로 해봐”라는 말을 들을 때 더 힘이 나.','가까운 사람은 많이 챙기는데, 간섭받는 순간 갑자기 거리를 두고 싶어져.'],best:'방향을 직접 정하고 결과까지 책임질 때 네 집중력이 가장 좋아져.',stress:'방법까지 세세하게 통제받거나, 공이 누구에게 가는지 애매하면 의욕이 확 꺼질 수 있어.',job:'남이 만든 답을 따라가는 일보다, 기준을 만들고 방향을 정하는 일에 강해.',env:'목표는 분명하되 방법은 맡겨주는 환경이 좋아. 의견을 내도 실제 결정에 반영되는지가 중요해.',earn:'내 이름, 내 판단, 내 전문성을 분명히 보여줄수록 돈이 붙는 편이야.',spend:'내 사람이라고 느끼면 시간과 돈을 통 크게 쓰기 쉬워. 부탁을 받자마자 답하지 않는 습관이 필요해.',love:'친구처럼 솔직하고 서로의 독립성을 인정해 주는 사람이 편해.',conflict:'참다가 한 번에 선을 긋기보다, 불편함이 30%일 때 미리 말하는 게 관계를 오래 지켜줘.',bad:'“그냥 남들이 하는 대로 맞춰.” 이 조언은 너를 더 답답하게 해.',sting:'조언을 구한 게 아니라 네 결정을 확인받고 싶었던 거 아니야?',action:'오늘 결정 하나는 다른 사람 반응을 보기 전에 네 기준부터 세 줄로 적어보자.'},
+  식상:{outer:'아이디어가 많고 재주가 좋은 사람처럼 보여.',inner:'속으로는 결과물이 사람에게 닿는 순간까지 확인하고 싶어 해. 그냥 잘하는 것보다 “내가 만든 게 살아 움직인다”는 느낌이 중요해.',scenes:['자료를 모으고 아이디어를 낼 때는 빠른데, 마지막 정리에서 갑자기 재미가 떨어진 적이 있어.','머릿속에는 완성된 그림이 있는데 설명하려니 말이 길어져 답답했던 적이 많아.','반응이 좋으면 밤새도 신나지만, 아무 반응이 없으면 능력 전체를 의심하기 쉬워.'],best:'생각을 말·글·그림·기획처럼 눈에 보이는 형태로 바꿀 때 가장 반짝여.',stress:'반복 작업만 계속하거나 표현할 여지가 없으면 속도가 눈에 띄게 떨어져.',job:'관찰한 걸 자기 방식으로 다시 만들고, 복잡한 내용을 보기 좋게 바꾸는 재주가 있어.',env:'짧은 주기로 결과를 보여주고 반응을 받을 수 있는 환경이 좋아. 큰 프로젝트도 중간 완성본이 필요해.',earn:'잘하는 걸 혼자 갖고 있지 말고 포트폴리오, 글, 샘플처럼 보이게 만들수록 수입 통로가 넓어져.',spend:'새로운 경험, 재료, 도구에는 지갑이 쉽게 열려. “지금 필요한가, 신나서 사고 싶은가”만 구분해도 충분해.',love:'대화가 통하고 함께 웃을 수 있는 사람이 좋아. 재미가 사라지면 마음도 같이 멀어질 수 있어.',conflict:'알아주길 기다리기보다 지금 서운한 이유를 한 문장으로 말하는 게 빨라. 상대는 네 머릿속 완성본을 볼 수 없어.',bad:'“조용히 참고 시키는 대로 해.” 오래 하면 네 장점부터 말라버려.',sting:'새로운 걸 시작하는 속도만큼, 끝낸 것도 정말 많아?',action:'오늘 벌인 일 중 하나를 골라 “보여줄 수 있는 상태”까지만 끝내보자.'},
+  재성:{outer:'야무지고 현실 감각이 좋은 사람처럼 보여.',inner:'사실 숫자만 따지는 사람은 아니야. 시간과 돈을 쓴 만큼 의미 있는 결과가 남는지 확인하고 싶은 거야.',scenes:['가격 비교는 꼼꼼히 하다가도 “일에 필요해”라고 느끼면 갑자기 크게 써.','해야 할 일을 머릿속으로 빠르게 우선순위 매기지만, 남의 일정까지 챙기다 네 시간이 없어져.','성과가 바로 안 보이면 잘하고 있는 일도 괜히 틀린 길처럼 느껴질 때가 있어.'],best:'흩어진 사람·시간·돈을 실제 결과로 묶을 때 강해.',stress:'목표가 계속 바뀌거나 노력한 만큼 무엇이 남는지 안 보이면 불안해져.',job:'좋은 아이디어를 현실적으로 굴러가는 계획과 결과로 바꾸는 재주가 있어.',env:'목표, 마감, 예산이 어느 정도 보이는 환경이 편해. 대신 자잘한 보고가 너무 많으면 효율이 떨어져.',earn:'사람이 실제로 필요로 하는 걸 알아채고, 그걸 쓸 수 있는 형태로 제공할 때 돈을 잘 벌어.',spend:'평소에는 합리적인데 감정이 움직이는 곳에는 기준이 느슨해져. 돈을 쓰기 전에 하루만 두면 후회가 크게 줄어.',love:'말보다 생활 태도가 안정적인 사람, 약속을 행동으로 보여주는 사람이 편해.',conflict:'감정을 해결책으로만 정리하지 말고, 먼저 “그때 나는 서운했어”라고 말해주는 게 좋아.',bad:'“돈 생각 말고 마음 가는 대로만 해.” 너한테는 오히려 불안을 키울 수 있어.',sting:'쉬는 시간마저 효율적으로 보내야 한다고 생각하는 거 아니야?',action:'이번 주에 쓸 돈 하나와 지킬 돈 하나를 미리 나눠두면 편해.'},
+  관성:{outer:'믿음직하고 알아서 잘하는 사람처럼 보여.',inner:'속으로는 실수하면 안 된다는 긴장을 꽤 오래 안고 있어. 칭찬보다 “이제 네가 안 챙겨도 돼”라는 말이 더 필요할 때가 있어.',scenes:['일이 애매하게 남아 있으면 쉬면서도 계속 생각해.','부탁을 거절하지 못하고 다 해준 뒤 혼자 피곤해진 적이 많아.','규칙을 잘 지키지만 말이 안 되는 기준에는 속으로 화가 오래 남아.'],best:'책임 범위와 기준이 분명할 때 안정적으로 끝까지 끌고 가.',stress:'기준은 없는데 책임만 떠넘기는 상황에서 가장 많이 지쳐.',job:'품질을 지키고 마감을 관리하며, 사람들에게 믿음을 주는 능력이 커.',env:'역할과 권한이 같이 주어지는 곳이 좋아. 책임만 있고 결정권이 없으면 오래 버티기 어려워.',earn:'신뢰, 꾸준함, 전문성을 오래 쌓는 방식이 잘 맞아. 단기 승부보다 “이 사람에게 맡기면 된다”는 평판이 자산이 돼.',spend:'필요한 사람과 일에는 책임감 때문에 계획보다 더 쓰기 쉬워. 네 몫의 여유 비용도 예산에 포함해야 해.',love:'약속을 가볍게 여기지 않고, 말과 행동이 비슷한 사람이 편해.',conflict:'괜찮다고 말하면서 표정이 굳는 습관부터 줄여봐. 거절은 관계를 깨는 말이 아니라 범위를 알려주는 말이야.',bad:'“네가 좀 더 참으면 다 괜찮아질 거야.” 이미 충분히 참았을 가능성이 커.',sting:'누가 시키지도 않았는데 혼자 책임자처럼 다 짊어지고 있지?',action:'오늘 부탁 하나에는 “확인하고 말해줄게”라고 해보는 것도 좋아.'},
+  인성:{outer:'차분하고 생각이 깊은 사람처럼 보여.',inner:'속에서는 계속 자료를 맞춰보고 의미를 찾고 있어. 준비가 느린 게 아니라, 납득이 돼야 마음이 움직이는 편이야.',scenes:['시작 전에 검색과 자료 정리는 많이 했는데 첫 행동은 늦어진 적이 있어.','혼자 생각할 시간이 없으면 사람을 싫어해서가 아니라 머리가 꽉 차서 말수가 줄어.','잘 모르는 상태로 대답하는 걸 싫어해서, 이미 아는 것도 한 번 더 확인해.'],best:'정보를 깊게 이해하고 자기 언어로 정리할 때 강해.',stress:'생각할 틈 없이 즉답을 요구받거나, 이유 없는 일을 반복하면 쉽게 지쳐.',job:'복잡한 정보를 해석하고 맥락을 찾아, 다른 사람이 이해할 수 있게 정리하는 재주가 있어.',env:'집중할 수 있는 시간과 조용한 공간이 필요해. 회의보다 미리 자료를 받고 생각한 뒤 말할 때 훨씬 정확해.',earn:'쌓인 지식과 경험을 문서, 교육, 기획, 전문 서비스로 바꿀 때 안정적인 수입이 만들어져.',spend:'배움, 자료, 마음이 편해지는 물건에는 아끼지 않는 편이야. 실제로 쓰는지 한 달 뒤 점검하면 좋아.',love:'재촉하지 않고 네 생각을 끝까지 들어주는 사람과 있을 때 마음이 열려.',conflict:'정리될 때까지 연락을 끊으면 상대는 이유를 상상하게 돼. “생각할 시간이 필요해” 한마디는 남겨줘.',bad:'“생각하지 말고 무조건 시작해.” 네겐 시작 기준을 작게 정해주는 말이 더 도움이 돼.',sting:'다 알아본 다음에 시작하려다가, 시작할 때를 놓친 적 있지?',action:'오늘은 검색을 잠깐 접고, 지금 아는 것만으로 첫 초안을 만들어보자.'}
 };
 // 앞 문장이 매번 달라서 "여기에 ~가 더해져서"로 이으면 앞뒤가 안 맞았다.
 // 앞에 뭐가 오든 혼자 읽히게 쓴다.
@@ -2008,11 +2037,11 @@ const V5_POINT_HOMEWORK={
   인성:'쉬는 시간을 일정에 먼저 넣기'
 };
 const V5_ELEMENT_PRACTICE={
-  목:{title:'작게 시작하는 감각',intro:'요즘은 더 완벽한 답보다 작은 새 출발이 도움이 돼.',work:'처음부터 큰 계획을 만들지 말고, 20분 안에 첫 모양을 만들어봐.',tired:'집 안에만 있지 말고 나무나 새로운 풍경이 보이는 곳을 잠깐 걸어.',relation:'상대가 바뀌길 기다리기보다 네가 원하는 다음 행동을 먼저 제안해.',space:'책상 위에 작은 식물이나 새 노트를 두고 “시작 자리”를 만들어.',week:'미뤄둔 일 하나를 10분짜리 첫 단계로 쪼개기'},
-  화:{title:'마음을 밖으로 보여주는 감각',intro:'요즘은 혼자 품는 것보다 말하고 보여줄수록 답이 빨리 보여.',work:'완성 뒤에 공개하려 하지 말고 중간 상태를 한 번 보여줘.',tired:'햇빛을 받고 좋아하는 사람과 짧게라도 웃는 시간을 만들어.',relation:'서운함만 말하지 말고 “나는 이렇게 해주면 좋겠어”까지 붙여 말해.',space:'빛이 잘 들어오는 자리나 따뜻한 색 소품으로 시선을 깨워.',week:'좋은 생각 하나를 메시지·메모·이미지로 밖에 꺼내기'},
-  토:{title:'하나를 끝내는 감각',intro:'요즘은 새로운 걸 더 벌이기보다 흔들리지 않을 작은 기반이 필요해.',work:'오늘 끝낼 일 하나만 정하고 나머지는 보류 목록으로 옮겨.',tired:'공간 한 칸이나 일정 하나를 정리해서 눈에 보이는 안정감을 만들어.',relation:'감정이 흔들릴수록 결론부터 내지 말고 밥과 잠을 먼저 챙겨.',space:'자주 쓰는 물건의 자리를 정해서 찾는 에너지를 줄여.',week:'서랍이나 폴더 하나를 완전히 정리하기'},
-  금:{title:'덜어내고 기준을 세우는 감각',intro:'요즘은 더 많이 하는 것보다 무엇을 안 할지 정하는 게 중요해.',work:'완성 기준 세 개를 적고, 그 밖의 디테일은 다음으로 넘겨.',tired:'알림과 연락을 잠시 줄여 머릿속 소음을 끊어.',relation:'싫은 걸 돌려 말하지 말고 가능한 범위를 짧고 분명하게 알려줘.',space:'책상 위 물건을 줄이고 자주 보는 화면부터 정돈해.',week:'이번 주 하지 않을 일 세 개 정하기'},
-  수:{title:'멈춰 생각할 여유',intro:'요즘은 빠른 답보다 마음이 가라앉을 시간을 확보하는 게 도움이 돼.',work:'바로 답하지 말고 메모한 뒤 한 번 자고 결정해도 괜찮아.',tired:'조용한 곳에서 물을 마시고 생각을 한 줄씩 적으며 흘려보내.',relation:'감정이 커졌을 땐 결론을 내리지 말고 대화할 시간을 다시 잡아.',space:'소리와 빛이 적은 작은 휴식 자리를 만들어.',week:'자기 전 10분, 오늘 머릿속에 남은 것 적기'}
+  목:{title:'작게 시작하는 감각',intro:'요즘은 더 완벽한 답보다 작은 새 출발이 도움이 돼.',work:'처음부터 큰 계획을 만들지 말고, 20분 안에 첫 모양을 만들어봐.',tired:'집 안에만 있지 말고 나무나 새로운 풍경이 보이는 곳을 잠깐 걸어.',relation:'상대가 바뀌길 기다리기보다 네가 원하는 다음 행동을 먼저 제안해.',space:'책상 위에 작은 식물이나 새 노트를 두고 “시작 자리”를 만들어보자.',week:'미뤄둔 일 하나를 10분짜리 첫 단계로 쪼개기'},
+  화:{title:'마음을 밖으로 보여주는 감각',intro:'요즘은 혼자 품는 것보다 말하고 보여줄수록 답이 빨리 보여.',work:'완성 뒤에 공개하려 하지 말고 중간 상태를 한 번 보여줘.',tired:'햇빛을 받고 좋아하는 사람과 짧게라도 웃는 시간을 만들어보자.',relation:'서운함만 말하기보다 “나는 이렇게 해주면 좋겠어”까지 붙이면 훨씬 잘 통해.',space:'빛이 잘 들어오는 자리나 따뜻한 색 소품으로 시선을 깨워.',week:'좋은 생각 하나를 메시지·메모·이미지로 밖에 꺼내기'},
+  토:{title:'하나를 끝내는 감각',intro:'요즘은 새로운 걸 더 벌이기보다 흔들리지 않을 작은 기반이 필요해.',work:'오늘 끝낼 일 하나만 정하고 나머지는 보류 목록으로 옮겨.',tired:'공간 한 칸이나 일정 하나만 정리해도 눈에 보이는 안정감이 생겨.',relation:'감정이 흔들릴수록 결론보다 밥과 잠을 먼저 챙기는 게 나아.',space:'자주 쓰는 물건의 자리를 정해두면 찾는 데 드는 힘이 줄어.',week:'서랍이나 폴더 하나를 완전히 정리하기'},
+  금:{title:'덜어내고 기준을 세우는 감각',intro:'요즘은 더 많이 하는 것보다 무엇을 안 할지 정하는 게 중요해.',work:'완성 기준 세 개를 적고, 그 밖의 디테일은 다음으로 넘겨.',tired:'알림과 연락을 잠시 줄이면 머릿속 소음이 가라앉아.',relation:'싫은 걸 돌려 말하기보다 가능한 범위를 짧고 분명하게 말해두는 게 편해.',space:'책상 위 물건을 줄이고 자주 보는 화면만 정돈해도 달라져.',week:'이번 주 하지 않을 일 세 개 정하기'},
+  수:{title:'멈춰 생각할 여유',intro:'요즘은 빠른 답보다 마음이 가라앉을 시간을 확보하는 게 도움이 돼.',work:'바로 답하지 말고 메모한 뒤 한 번 자고 결정해도 괜찮아.',tired:'조용한 곳에서 물을 마시고 생각을 한 줄씩 적으며 흘려보내.',relation:'감정이 커졌을 땐 결론을 미루고 대화할 시간을 다시 잡는 게 나아.',space:'소리와 빛이 적은 작은 휴식 자리가 있으면 좋아.',week:'자기 전 10분, 오늘 머릿속에 남은 것 적기'}
 };
 function v5Voice(soft,mid,hot){return S.level==='몽글몽글'?soft:S.level==='돌직구 크앙'?hot:mid}
 function v5Rank(){return rankedGroups(S.yong.g)}
@@ -2133,15 +2162,15 @@ localReading=function(){
   const summary=[V5_SECOND[second],weakLine];
   const outward=[d.outer,core.inside,d.inner];
   const scenes=[...d.scenes, weakLine];
-  const best=[d.best,seasonLine,v5Voice('지금 잘 안 된다고 네 능력까지 의심하지는 마. 조건이 맞으면 힘이 분명히 나오는 사람이야.','잘되는 조건을 반복해서 만드는 게 의지로 버티는 것보다 훨씬 중요해.','환경이 안 맞는데 정신력만 탓하지 마. 네가 잘되는 조건부터 다시 깔아.')];
-  const shake=[d.stress,weakLine,v5Voice('지쳤을 때는 더 열심히 하기보다 회복 순서를 먼저 챙겨줘.','이때 무리하면 판단까지 흐려져. 멈추는 것도 일의 일부야.','방전된 상태에서 인생 결론 내리지 마. 자고 먹고 정리한 뒤 다시 봐.')];
-  const workTalent=[d.job,`${V5_SECOND[second]} 그래서 한 가지 기술보다 “생각을 정리해 실제 결과로 만드는 과정”에서 경쟁력이 보여.`,v5Voice('작은 결과라도 자주 완성하면 자신감이 자연스럽게 따라와.','실력보다 공개 시점이 늦어 손해를 볼 수 있어. 완성도를 조금 남겨두고 먼저 보여줘.','100점짜리 머릿속 결과보다 80점짜리 실제 결과가 훨씬 세.')];
-  const workStyle=[d.env,`특히 ${weak==='관성'?'마감과 중간 확인 날짜를 밖에 걸어두는 것':weak==='식상'?'회의가 끝난 뒤 네 의견을 한 문장으로라도 남기는 것':weak==='재성'?'시간과 범위를 숫자로 먼저 정하는 것':weak==='비겁'?'내가 원하는 방향을 시작 전에 말하는 것':'혼자 정리할 시간을 일정으로 확보하는 것'}이 도움이 돼.`,v5Voice('너한테 맞는 방식을 찾는 건 게으름이 아니라 오래 잘하기 위한 준비야.','모든 환경에 적응하려 하지 말고, 성과가 나는 조건을 스스로 만들어.','안 맞는 방식으로 버티면서 능력 없다고 착각하지 마.')];
-  const earn=[d.earn,dom==='식상'||second==='식상'?'네가 만든 걸 보이게 쌓을수록 “이걸 부탁하고 싶다”는 사람이 생겨.':dom==='관성'||second==='관성'?'꾸준히 약속을 지킨 기록이 곧 가격을 올려주는 근거가 돼.':dom==='인성'||second==='인성'?'배운 걸 혼자 아는 데서 끝내지 않고 문서·기획·설명으로 바꾸면 돈이 돼.':'네가 실제로 해결한 문제를 기록해 두면 다음 기회가 훨씬 빨리 와.',v5Voice('급하게 크게 벌기보다 네 방식이 반복될 통로를 만드는 게 좋아.','한 번의 행운보다 다시 팔 수 있는 실력과 기록을 만들어.','돈은 실력을 알아서 찾아오지 않아. 네가 뭘 해결하는지 보여줘야 와.')];
+  const best=[d.best,seasonLine,v5Voice('지금 잘 안 된다고 네 능력까지 의심하지는 않아도 돼. 조건이 맞으면 힘이 분명히 나오는 사람이야.','잘되는 조건을 반복해서 만드는 게 의지로 버티는 것보다 훨씬 중요해.','환경이 안 맞는데 정신력만 탓하지 마. 네가 잘되는 조건부터 다시 깔아.')];
+  const shake=[d.stress,weakLine,v5Voice('지쳤을 때는 더 열심히 하기보다 회복 순서를 먼저 챙기는 게 나아.','이때 무리하면 판단까지 흐려져. 멈추는 것도 일의 일부야.','방전된 상태에서 인생 결론 내리지 마. 자고 먹고 정리한 뒤 다시 봐.')];
+  const workTalent=[d.job,`${V5_SECOND[second]} 그래서 한 가지 기술보다 “생각을 정리해 실제 결과로 만드는 과정”에서 경쟁력이 보여.`,v5Voice('작은 결과라도 자주 완성하면 자신감이 자연스럽게 따라와.','실력보다 공개 시점이 늦어 손해를 볼 수 있어. 완성도를 조금 남겨두고 먼저 보여줘도 괜찮아.','100점짜리 머릿속 결과보다 80점짜리 실제 결과가 훨씬 세.')];
+  const workStyle=[d.env,`특히 ${weak==='관성'?'마감과 중간 확인 날짜를 밖에 걸어두는 것':weak==='식상'?'회의가 끝난 뒤 네 의견을 한 문장으로라도 남기는 것':weak==='재성'?'시간과 범위를 숫자로 먼저 정하는 것':weak==='비겁'?'내가 원하는 방향을 시작 전에 말하는 것':'혼자 정리할 시간을 일정으로 확보하는 것'}이 도움이 돼.`,v5Voice('너한테 맞는 방식을 찾는 건 게으름이 아니라 오래 잘하기 위한 준비야.','모든 환경에 적응하려 애쓰기보다, 성과가 나는 조건을 스스로 만들어가는 게 나아.','안 맞는 방식으로 버티면서 능력 없다고 착각하지 마.')];
+  const earn=[d.earn,dom==='식상'||second==='식상'?'네가 만든 걸 보이게 쌓을수록 “이걸 부탁하고 싶다”는 사람이 생겨.':dom==='관성'||second==='관성'?'꾸준히 약속을 지킨 기록이 곧 가격을 올려주는 근거가 돼.':dom==='인성'||second==='인성'?'배운 걸 혼자 아는 데서 끝내지 않고 문서·기획·설명으로 바꾸면 돈이 돼.':'네가 실제로 해결한 문제를 기록해 두면 다음 기회가 훨씬 빨리 와.',v5Voice('급하게 크게 벌기보다 네 방식이 반복될 통로를 만드는 게 좋아.','한 번의 행운보다 다시 팔 수 있는 실력과 기록이 오래 남아.','돈은 실력을 알아서 찾아오지 않아. 네가 뭘 해결하는지 보여줘야 와.')];
   const spend=[d.spend,`너는 ${S.yong.gc.재성===0?'돈 자체보다 필요와 마음을 먼저 보는 편':'쓸 곳과 아낄 곳을 나누는 감각은 있지만, 감정이 들어오면 기준이 흔들릴 수 있는 편'}이야. 들어온 뒤 남은 돈을 모으지 말고, 들어오는 날 먼저 나누는 방식이 잘 맞아.`,v5Voice('너를 즐겁게 하는 돈도 예산에 넣어야 오래 지킬 수 있어.','생활비·저축·즐길 돈을 자동으로 나누면 고민이 크게 줄어.','절약 결심 말고 자동 분리부터 해. 의지는 매달 바뀌지만 설정은 남아.')];
   const love=[`좋아하는 사람에게는 ${dom==='비겁'?'친구처럼 편하게 대하면서도 내 영역은 존중받고 싶어 해':dom==='식상'?'대화와 장난으로 마음을 표현해':dom==='재성'?'말보다 챙김과 생활 행동으로 애정을 보여줘':dom==='관성'?'약속을 지키고 책임지는 방식으로 사랑을 보여줘':'상대 이야기를 오래 듣고 조용히 곁을 지켜줘'}.`,v5Voice('마음을 천천히 여는 것도 네 속도야. 다만 상대가 추측만 하게 두지는 말자.','좋아하는 마음과 불편한 마음을 같이 말해야 관계가 오래가.','괜찮은 척하다 갑자기 식는 패턴, 상대는 이유도 몰라. 중간에 말해.')];
-  const conflict=[d.conflict,weak==='비겁'?'상대에게 맞추는 동안 네 기준이 사라지지 않게 “나는 이게 편해”를 먼저 말해.':weak==='식상'?'표정으로 전달하려 하지 말고 짧은 문장으로 알려줘.':weak==='재성'?'누가 맞는지보다 앞으로 무엇을 바꿀지 한 가지 정해.':weak==='관성'?'불편함을 참는 게 착함은 아니야. 가능한 범위를 알려줘.':'생각할 시간이 필요하다고 말한 뒤 돌아올 시간을 약속해.',v5Voice('경계를 말하는 건 상대를 밀어내는 일이 아니야.','좋은 관계는 참는 양이 아니라 조율하는 횟수로 오래가.','말 안 해놓고 알아주길 바라면 둘 다 억울해져. 한 문장이라도 말해.')];
-  const recover=[practice.intro,`${practice.tired} ${practice.space}`,v5Voice('오늘은 회복을 성과처럼 잘하려 하지 않아도 돼. 편해지는 걸 하나만 골라.','휴식을 미루다 한꺼번에 쉬는 것보다 짧게 자주 끊어주는 게 좋아.','폰 보면서 버티는 건 휴식이 아니야. 몸이 진짜 조용해질 시간을 줘.')];
+  const conflict=[d.conflict,weak==='비겁'?'상대에게 맞추는 동안 네 기준이 사라지지 않게 “나는 이게 편해”를 먼저 말해두면 좋아.':weak==='식상'?'표정으로 전달하기보다 짧은 문장으로 말해주는 쪽이 잘 통해.':weak==='재성'?'누가 맞는지보다 앞으로 무엇을 바꿀지 한 가지만 정하면 돼.':weak==='관성'?'불편함을 참는 게 착함은 아니야. 어디까지 되는지만 말해줘도 충분해.':'생각할 시간이 필요하다고 말한 뒤 돌아올 시간을 약속해.',v5Voice('경계를 말하는 건 상대를 밀어내는 일이 아니야.','좋은 관계는 참는 양이 아니라 조율하는 횟수로 오래가.','말 안 해놓고 알아주길 바라면 둘 다 억울해져. 한 문장이라도 말해.')];
+  const recover=[practice.intro,`${practice.tired} ${practice.space}`,v5Voice('오늘은 회복을 성과처럼 잘하려 하지 않아도 돼. 편해지는 걸 하나만 골라보자.','휴식을 미루다 한꺼번에 쉬는 것보다 짧게 자주 끊어주는 게 좋아.','폰 보면서 버티는 건 휴식이 아니야. 몸이 진짜 조용해질 시간을 줘.')];
   const year=[`${currentYear}년의 큰 주제는 ${v5CurrentYearTopic(yearGod)}이야. 올해 갑자기 다른 사람이 되는 게 아니라, 원래 네 안에 있던 이 부분을 더 자주 쓰게 될 가능성이 커.`,curYearAdvice(yearGod),v5Voice('3개월 안에 확인할 수 있는 작은 목표면 충분해.','올해는 “잘될까?”보다 “무엇을 남길까?”를 물어보는 게 좋아.','인생 전체를 바꾸려 하지 말고, 90일 안에 끝낼 한 덩어리부터 잡아.')];
   function curYearAdvice(god){
     if(['식신','상관'].includes(god)) return '숨겨둔 아이디어를 밖에 보여줄수록 반응이 생겨. 말·글·이미지·샘플 중 하나로 꺼내봐.';
