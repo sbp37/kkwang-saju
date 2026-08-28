@@ -1515,7 +1515,7 @@ function renderToday(){
   TODAY_SECTIONS.forEach(([key,icon,title,asset],i)=>{
     const lines=buildTodaySlot(key,t,2);
     if(!lines.length) return;
-    const el=document.createElement('div'); el.className='speech'+(i<3?' open':'');
+    const el=document.createElement('div'); el.className='speech'+(i<2?' open':'');
     el.innerHTML=`<img class="section-asset" src="${asset}" alt="">`
       +`<div class="sh"><span class="ic">${icon}</span><b>${personalize(title,S.nick)}</b><span class="acc-mark">+</span></div>`
       +`<div class="v5-body">${lines.map(x=>`<p>${personalize(x,S.nick)}</p>`).join('')}</div>`;
@@ -2403,8 +2403,10 @@ renderResult=function(){
     el.innerHTML=`<img class="section-asset" src="${asset}" alt=""><div class="sh"><span class="ic">${icon}</span><b>${personalize(title,S.nick)}</b><span class="acc-mark">+</span></div>${v5SectionHTML(rd[key],type)}`;
     box.appendChild(el);
   });
+  // 접힌 채로도 열 화면이 넘어가면 끝까지 읽는 사람이 없다.
+  // 앞의 둘만 펴두고 나머지는 제목만 보여준다.
   document.querySelectorAll('#sections .speech').forEach((el,i)=>{
-    el.classList.toggle('open',i<4);
+    el.classList.toggle('open',i<2);
     el.querySelector('.sh').onclick=()=>el.classList.toggle('open');
   });
   renderGraph();renderLuck();

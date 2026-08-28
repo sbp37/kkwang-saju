@@ -391,6 +391,26 @@ describe('우리끼리 링크 (이어달리기)', () => {
 
 });
 
+describe('결과 화면 접기', () => {
+
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+
+  it('결과 섹션은 앞의 둘만 펴둔다', () => {
+    // 열다섯 섹션을 다 펴두면 접힌 상태로도 아홉 화면이 넘어가 끝까지 읽는 사람이 없다.
+    const m = /#sections \.speech'\)\.forEach\(\(el,i\)=>\{\s*el\.classList\.toggle\('open',i<(\d+)\)/.exec(src);
+    ok(m, '결과 섹션 펼침 코드를 못 찾았다');
+    eq(+m[1], 2, '기본으로 펴두는 섹션 수');
+  });
+
+  it('오늘·궁합 화면도 같은 규칙을 쓴다', () => {
+    // 화면마다 다르게 펴두면 어디는 길고 어디는 짧아 보인다.
+    const counts = (src.match(/className='speech'\+\(i<(\d+)\?' open':''\)/g) || [])
+      .map(x => +/i<(\d+)/.exec(x)[1]);
+    eq(counts.length, 2, '오늘·궁합 두 곳이어야 한다');
+    counts.forEach(c => eq(c, 2, '펴두는 섹션 수'));
+  });
+});
+
 describe('우리끼리 입력 — 인원과 음력', () => {
 
   const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
